@@ -70,6 +70,85 @@
                 </div>
             </div>
         </section>
+
+        <section class="container mx-auto px-4 py-8">
+            <div class="flex justify-center mb-4 gap-4">
+                <button class="text-black font-semibold">
+                    Small
+                </button>
+                <button class="text-gray-500">
+                    Medium
+                </button>
+                <button class="text-gray-500">
+                    Large
+                </button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="border p-2">
+                    <img alt="Woman wearing a casual letter print top" class="w-full h-64 object-cover" height="400"
+                        src="./images/bg-storage-removebg-preview.png" width="400" />
+                    <p class="text-sm mt-2">
+                        Small Storage Unit (50 sq. ft.)
+                    </p>
+                    <p class="text-red-500 font-semibold">
+                        ₱281
+                    </p>
+                </div>
+                <div class="border p-2">
+                    <img alt="Woman wearing a metal V neck blouse" class="w-full h-64 object-cover" height="400"
+                        src="./images/bg-storage-removebg-preview.png" width="400" />
+                    <p class="text-sm mt-2">
+                        Small Storage Unit (55 sq. ft.)
+                    </p>
+                    <p class="text-red-500 font-semibold">
+                        ₱141
+                        <span class="line-through text-gray-500">
+                            ₱395
+                        </span>
+                    </p>
+                </div>
+                <div class="border p-2">
+                    <img alt="Woman wearing a textured pocket decor round neck top" class="w-full h-64 object-cover"
+                        height="400" src="./images/bg-storage-removebg-preview.png" width="400" />
+                    <p class="text-sm mt-2">
+                        Medium Storage Unit (80 sq. ft.)
+                    </p>
+                    <p class="text-red-500 font-semibold">
+                        ₱322
+                        <span class="text-orange-500">
+                            10%
+                        </span>
+                    </p>
+                </div>
+                <div class="border p-2">
+                    <img alt="Vintage racing pattern tee" class="w-full h-64 object-cover" height="400"
+                        src="./images/bg-storage-removebg-preview.png" width="400" />
+                    <p class="text-sm mt-2">
+                        Large Storage Unit (100 sq. ft.)
+                    </p>
+                    <p class="text-red-500 font-semibold">
+                        ₱166
+                        <span class="text-orange-500">
+                            10%
+                        </span>
+                    </p>
+                </div>
+                <div class="border p-2">
+                    <img alt="Women's vacation blouse with blue floral print" class="w-full h-64 object-cover"
+                        height="400" src="./images/bg-storage-removebg-preview.png" width="400" />
+                    <p class="text-sm mt-2">
+                        Large Storage Unit (110 sq. ft.)
+                    </p>
+                    <p class="text-red-500 font-semibold">
+                        ₱163
+                        <span class="text-orange-500">
+                            10%
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </section>
+
         <!-- Testimonial Section -->
         <section class="py-16 bg-gray-100">
             <div class="container mx-auto px-4">
