@@ -1,3 +1,9 @@
+<?php
+
+$isLoginPop = false;
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,7 +15,13 @@
     <link rel="stylesheet" href="./output.css">
 </head>
 
-<body class="min-h-screen flex flex-col bg-slate-100">
+<body class="min-h-screen flex flex-col bg-slate-100 relative">
+    <?php
+    require_once './login.php';
+    require_once './sigup.php';
+    ?>
+
+
     <?php
     include_once './components/header.php';
     ?>
@@ -218,6 +230,24 @@
     <?php
     require_once './components/footer.php'
         ?>
+
+    <script>
+        document.getElementById('login-button').addEventListener('click', () => {
+            document.getElementById('loginModal').classList.remove('hidden');
+            document.getElementById('loginModal').classList.add('flex');
+            console.log("click login");
+        });
+        document.getElementById('login-button-mobile').addEventListener('click', () => {
+            document.getElementById('loginModal').classList.remove('hidden');
+            document.getElementById('loginModal').classList.add('flex');
+            console.log("click login");
+        });
+
+        document.getElementById('closeLogin').addEventListener('click', () => {
+            document.getElementById('loginModal').classList.add('hidden');
+            document.getElementById('loginModal').classList.remove('flex');
+        });
+    </script>
 </body>
 
 </html>
