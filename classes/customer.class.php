@@ -12,7 +12,6 @@ class Customer
     public $address;
     public $email;
     public $password;
-
     public $cpasssword;
 
     private $db;
@@ -22,7 +21,7 @@ class Customer
         $this->db = new Database();
     }
 
-    function create()
+    function signup()
     {
         $sql = "SELECT * FROM customers WHERE email = :email;";
         $stmt = $this->db->connect()->prepare($sql);
@@ -51,6 +50,22 @@ class Customer
                 $stmt->bindParam(':password', $hash);
 
                 return $stmt->execute();
+            }
+        }
+    }
+
+    function login()
+    {
+        $sql = "SELECT * FROM customers WHERE email = :email;";
+        $stmt = $this->db->connect()->prepare($sql);
+        $stmt->bindParam(':email', $this->email);
+
+        if ($stmt->execute()) {
+            if ($stmt->rowCount() > 0) {
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                if (password_verify($this->password, $row['password'])) {
+                    $_SESSION['customer'] = $row;
+                }
             }
         }
     }
