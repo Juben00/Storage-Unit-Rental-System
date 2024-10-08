@@ -36,10 +36,12 @@
     <div id="nav-buttons" class="hidden lg:flex space-x-4">
         <button
             class="bg-transparent duration-150 border border-neutral-600  py-2 px-4 rounded hover:bg-blue-400 hover:text-black">
-            CONTACT US
+            <!-- CONTACT US -->
+            SIGN UP
         </button>
         <button class="bg-blue-500 duration-150 text-white py-2 px-4 rounded hover:bg-blue-600">
-            GET STARTED
+            <!-- GET STARTED -->
+            LOGIN
         </button>
     </div>
 
@@ -52,11 +54,13 @@
 
     <button
         class="w-full bg-transparent text-center block duration-150 border border-neutral-600 py-2 px-4 rounded hover:bg-white hover:text-black">
-        CONTACT US
+        <!-- CONTACT US -->
+        SIGN UP
     </button>
 
     <button class="w-full bg-blue-500 text-center block duration-150 text-white py-2 px-4 rounded hover:bg-blue-600">
-        GET STARTED
+        <!-- GET STARTED -->
+        LOGIN
     </button>
 </div>
 

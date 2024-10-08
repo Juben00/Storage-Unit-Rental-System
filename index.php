@@ -18,60 +18,66 @@
         <?php
         include_once './components/cover.php';
         ?>
-        <section class="relative bg-cover bg-center h-[40vh]"
-            style="background-image: url('./images/Storage-Unit-iStock-1280808958.jpg')">
-            <div class="absolute inset-0 bg-black opacity-50"></div>
-            <div class="relative z-10 flex flex-col items-center justify-center h-full text-center text-white">
-                <h1 class="text-4xl font-bold">
-                    Your Trusted Partner for Secure Storage Solutions.
-                </h1>
-                <p class="mt-4 text-lg">
-                    Safe, affordable, and convenient storage units for all your personal and business needs.
-                </p>
-                <button class="mt-8 px-6 py-3 bg-blue-600 text-white font-semibold rounded">
-                    VIEW AVAILABLE UNITS
-                </button>
-            </div>
-        </section>
+
+
         <!-- Services Section -->
-        <section class="pt-16 pb-4 bg-white">
-            <div class="container mx-auto px-4">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="bg-white shadow-lg rounded-lg p-6 text-center">
-                        <i class="fas fa-box text-4xl text-blue-600 mb-4"></i>
-                        <h3 class="text-xl font-semibold mb-2">Secure Storage</h3>
-                        <p class="text-gray-600 mb-4">
-                            Keep your belongings safe with our 24/7 monitored storage units.
-                        </p>
-                        <button class="px-4 py-2 bg-blue-600 text-white font-semibold rounded">
-                            LEARN MORE
-                        </button>
-                    </div>
-                    <div class="bg-white shadow-lg rounded-lg p-6 text-center">
-                        <i class="fas fa-calendar-check text-4xl text-blue-600 mb-4"></i>
-                        <h3 class="text-xl font-semibold mb-2">Flexible Leasing</h3>
-                        <p class="text-gray-600 mb-4">
-                            Short-term and long-term rental options to suit your schedule.
-                        </p>
-                        <button class="px-4 py-2 bg-blue-600 text-white font-semibold rounded">
-                            CHECK AVAILABILITY
-                        </button>
-                    </div>
-                    <div class="bg-white shadow-lg rounded-lg p-6 text-center">
-                        <i class="fas fa-truck-loading text-4xl text-blue-600 mb-4"></i>
-                        <h3 class="text-xl font-semibold mb-2">Easy Access</h3>
-                        <p class="text-gray-600 mb-4">
-                            Convenient access to your units with free parking and loading docks.
-                        </p>
-                        <button class="px-4 py-2 bg-blue-600 text-white font-semibold rounded">
-                            GET DIRECTIONS
-                        </button>
+        <section>
+            <div class="relative bg-cover bg-center h-[40vh] "
+                style="background-image: url('./images/Storage-Unit-iStock-1280808958.jpg')">
+                <div class="absolute inset-0 bg-black opacity-50"></div>
+                <div class="relative z-10 flex flex-col items-center justify-center h-full text-center text-white">
+                    <h1 class="text-4xl font-bold">
+                        Your Trusted Partner for Secure Storage Solutions.
+                    </h1>
+                    <p class="mt-4 text-lg">
+                        Safe, affordable, and convenient storage units for all your personal and business needs.
+                    </p>
+                    <button class="mt-8 px-6 py-3 bg-blue-600 text-white font-semibold rounded">
+                        VIEW AVAILABLE UNITS
+                    </button>
+                </div>
+            </div>
+            <!-- Services Section -->
+            <div class="pt-8 pb-4 bg-white shadow-lg">
+                <div class="container mx-auto px-4">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div class="bg-white border-2 shadow-sm rounded-lg p-6 text-center">
+                            <i class="fas fa-box text-4xl text-blue-600 mb-4"></i>
+                            <h3 class="text-xl font-semibold mb-2">Secure Storage</h3>
+                            <p class="text-gray-600 mb-4">
+                                Keep your belongings safe with our 24/7 monitored storage units.
+                            </p>
+                            <button class="px-4 py-2 bg-blue-600 text-white font-semibold rounded">
+                                LEARN MORE
+                            </button>
+                        </div>
+                        <div class="bg-white border-2 shadow-sm rounded-lg p-6 text-center">
+                            <i class="fas fa-calendar-check text-4xl text-blue-600 mb-4"></i>
+                            <h3 class="text-xl font-semibold mb-2">Flexible Leasing</h3>
+                            <p class="text-gray-600 mb-4">
+                                Short-term and long-term rental options to suit your schedule.
+                            </p>
+                            <button class="px-4 py-2 bg-blue-600 text-white font-semibold rounded">
+                                CHECK AVAILABILITY
+                            </button>
+                        </div>
+                        <div class="bg-white border-2 shadow-sm rounded-lg p-6 text-center">
+                            <i class="fas fa-truck-loading text-4xl text-blue-600 mb-4"></i>
+                            <h3 class="text-xl font-semibold mb-2">Easy Access</h3>
+                            <p class="text-gray-600 mb-4">
+                                Convenient access to your units with free parking and loading docks.
+                            </p>
+                            <button class="px-4 py-2 bg-blue-600 text-white font-semibold rounded">
+                                GET DIRECTIONS
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="container mx-auto px-4 py-8">
+        <!-- Storages section -->
+        <section class="px-4 py-8">
             <div class="flex justify-center mb-4 gap-4">
                 <button class="text-black font-semibold">
                     Small
@@ -83,8 +89,8 @@
                     Large
                 </button>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div class="border p-2">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ">
+                <div class="border p-2 bg-neutral-100 shadow-md">
                     <img alt="Woman wearing a casual letter print top" class="w-full h-64 object-cover" height="400"
                         src="./images/bg-storage-removebg-preview.png" width="400" />
                     <p class="text-sm mt-2">
@@ -94,7 +100,7 @@
                         ₱281
                     </p>
                 </div>
-                <div class="border p-2">
+                <div class="border p-2 bg-neutral-100 shadow-md">
                     <img alt="Woman wearing a metal V neck blouse" class="w-full h-64 object-cover" height="400"
                         src="./images/bg-storage-removebg-preview.png" width="400" />
                     <p class="text-sm mt-2">
@@ -107,7 +113,7 @@
                         </span>
                     </p>
                 </div>
-                <div class="border p-2">
+                <div class="border p-2 bg-neutral-100 shadow-md">
                     <img alt="Woman wearing a textured pocket decor round neck top" class="w-full h-64 object-cover"
                         height="400" src="./images/bg-storage-removebg-preview.png" width="400" />
                     <p class="text-sm mt-2">
@@ -120,7 +126,7 @@
                         </span>
                     </p>
                 </div>
-                <div class="border p-2">
+                <div class="border p-2 bg-neutral-100 shadow-md">
                     <img alt="Vintage racing pattern tee" class="w-full h-64 object-cover" height="400"
                         src="./images/bg-storage-removebg-preview.png" width="400" />
                     <p class="text-sm mt-2">
@@ -133,7 +139,7 @@
                         </span>
                     </p>
                 </div>
-                <div class="border p-2">
+                <div class="border p-2 bg-neutral-100 shadow-md">
                     <img alt="Women's vacation blouse with blue floral print" class="w-full h-64 object-cover"
                         height="400" src="./images/bg-storage-removebg-preview.png" width="400" />
                     <p class="text-sm mt-2">
@@ -195,15 +201,19 @@
                     </div>
                 </div>
         </section>
+
         <!-- Contact Section -->
-        <section class="py-16 bg-gray-900 text-white text-center mb-4">
-            <div class="container mx-auto px-4">
-                <h2 class="text-2xl font-bold mb-4">Ready to rent a storage unit?</h2>
+        <section class="py-16 text-white text-center mb-4 bg-cover bg-no-repeat bg-center"
+            style="background-image: url('./images/Storage-Unit-iStock-1280808958.jpg');">
+            <div class="container mx-auto p-4 backdrop-blur-md bg-transparent max-w-screen-sm rounded-lg">
+                <h2 class="text-3xl font-semibold mb-4">Ready to rent a storage unit?</h2>
                 <button class="px-6 py-3 bg-blue-600 text-white font-semibold rounded">
                     CONTACT US TODAY
                 </button>
             </div>
         </section>
+
+
     </main>
     <?php
     require_once './components/footer.php'
