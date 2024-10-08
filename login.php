@@ -1,4 +1,4 @@
-<div class="login-container z-50 flex-col shadow-lg min-w-96 fixed bg-cyan-700 p-4 rounded-xl left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 hidden "
+<div class="z-50 flex-col shadow-lg min-w-96 fixed bg-cyan-700 p-4 rounded-xl left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 hidden "
     id="loginModal">
     <button class="absolute top-3 right-4" id="closeLogin">
         <i class="fa fa-times fa-lg"></i>
@@ -32,7 +32,7 @@
                 class="w-full bg-neutral-100 text-gray-900 py-2 rounded hover:bg-neutral-400 duration-100 hover:text-neutral-100">REGISTER</button>
         </div>
     </form>
-    <div class="text-center mb-4">
+    <div class="text-center">
         <a href="#" class="text-sm text-neutral-100">Forgot Password? <span
                 class="underline hover:text-blue-500 duration-100">Click Here</span></a>
     </div>

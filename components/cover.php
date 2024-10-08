@@ -1,7 +1,7 @@
 <section class="flex flex-col mb-4">
     <div class="grid grid-cols-1 lg:grid-cols-2 p-4 pb-0 gap-2">
         <div class="flex flex-col justify-center lg:h-[500px] order-2 lg:order-1">
-            <h1 class="text-5xl font-bold text-blue-400 mb-4">
+            <h1 class="text-3xl lg:text-5xl font-bold text-blue-400 mb-4">
                 Secure and Convenient Storage Solutions
             </h1>
             <p class="text-lg mb-8">

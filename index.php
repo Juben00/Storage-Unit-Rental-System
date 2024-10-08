@@ -26,7 +26,7 @@ $isLoginPop = false;
     include_once './components/header.php';
     ?>
 
-    <main class="flex-grow flex flex-col container mx-auto">
+    <main class="flex-grow flex flex-col container mx-auto pt-24">
         <?php
         include_once './components/cover.php';
         ?>
@@ -232,22 +232,56 @@ $isLoginPop = false;
         ?>
 
     <script>
-        document.getElementById('login-button').addEventListener('click', () => {
-            document.getElementById('loginModal').classList.remove('hidden');
-            document.getElementById('loginModal').classList.add('flex');
-            console.log("click login");
-        });
-        document.getElementById('login-button-mobile').addEventListener('click', () => {
-            document.getElementById('loginModal').classList.remove('hidden');
-            document.getElementById('loginModal').classList.add('flex');
+        // Login Modal Elements
+        const loginModal = document.getElementById('loginModal');
+        const loginButton = document.getElementById('login-button');
+        const loginButtonMobile = document.getElementById('login-button-mobile');
+        const closeLoginButton = document.getElementById('closeLogin');
+
+        // Signup Modal Elements
+        const signupModal = document.getElementById('signupModal');
+        const signupButton = document.getElementById('signup-button');
+        const signupButtonMobile = document.getElementById('signup-button-mobile');
+        const closeSignupButton = document.getElementById('closeSignup');
+
+        // Login Button Event Listeners
+        loginButton.addEventListener('click', () => {
+            loginModal.classList.remove('hidden');
+            loginModal.classList.add('flex');
             console.log("click login");
         });
 
-        document.getElementById('closeLogin').addEventListener('click', () => {
-            document.getElementById('loginModal').classList.add('hidden');
-            document.getElementById('loginModal').classList.remove('flex');
+        loginButtonMobile.addEventListener('click', () => {
+            loginModal.classList.remove('hidden');
+            loginModal.classList.add('flex');
+            console.log("click login");
+        });
+
+        closeLoginButton.addEventListener('click', () => {
+            loginModal.classList.add('hidden');
+            loginModal.classList.remove('flex');
+        });
+
+        // Signup Button Event Listeners
+        signupButton.addEventListener('click', () => {
+            signupModal.classList.remove('hidden');
+            signupModal.classList.add('flex');
+            console.log("click signup");
+        });
+
+        signupButtonMobile.addEventListener('click', () => {
+            signupModal.classList.remove('hidden');
+            signupModal.classList.add('flex');
+            console.log("click signup");
+        });
+
+        closeSignupButton.addEventListener('click', () => {
+            signupModal.classList.add('hidden');
+            signupModal.classList.remove('flex');
         });
     </script>
+
+
 </body>
 
 </html>

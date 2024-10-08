@@ -1,4 +1,4 @@
-<div class="login-container z-50 flex-col shadow-lg min-w-96 fixed bg-cyan-700 p-4 rounded-xl left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 flex"
+<div class="z-50 flex-col shadow-lg min-w-96 fixed bg-cyan-700 p-4 rounded-xl left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 hidden"
     id="signupModal">
     <button class="absolute top-3 right-4" id="closeSignup">
         <i class="fa fa-times fa-lg"></i>
@@ -83,16 +83,16 @@
             </div>
         </div>
 
-        <div class="mb-4">
+        <div class="mb-1">
             <button type="submit"
                 class="w-full bg-blue-500 text-gray-800 py-2 rounded hover:bg-blue-400 duration-100 hover:text-neutral-100">SIGN
                 UP</button>
         </div>
+        <div class="text-center">
+            <a href="#" class="text-sm text-neutral-100">Already Have An Account? <span
+                    class="underline hover:text-blue-500 duration-100">Click Here</span></a>
+        </div>
 </div>
 
-<!-- <div class="mb-4">
-            <button type="button"
-                class="w-full bg-neutral-100 text-gray-900 py-2 rounded hover:bg-neutral-400 duration-100 hover:text-neutral-100">LOGIN</button>
-        </div> -->
 </form>
 </div>

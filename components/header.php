@@ -35,12 +35,12 @@
     <!-- Buttons (Hidden on mobile) -->
     <div id="nav-buttons" class="hidden lg:flex space-x-4">
         <button
-            class="bg-transparent duration-150 border border-neutral-600  py-2 px-4 rounded hover:bg-blue-400 hover:text-black">
+            class="bg-transparent duration-150 border border-neutral-600  py-2 px-4 rounded hover:bg-blue-400 hover:text-black"
+            id="signup-button">
             <!-- CONTACT US -->
             SIGN UP
         </button>
-        <button class="bg-blue-500 duration-150 text-white py-2 px-4 rounded hover:bg-blue-600"
-            id="login-button-mobile">
+        <button class="bg-blue-500 duration-150 text-white py-2 px-4 rounded hover:bg-blue-600" id="login-button">
             <!-- GET STARTED -->
             LOGIN
         </button>
@@ -48,18 +48,19 @@
 
     <!-- Mobile Menu (Hidden by default) -->
 </header>
-<div id="mobile-menu" class="lg:hidden flex flex-col items-center gap-4 bg-slate-200 p-6">
+<div id="mobile-menu" class="lg:hidden flex flex-col items-center gap-4 bg-slate-200 p-6 pt-24">
     <a class=" w-full text-center hover:text-gray-400 duration-150" href="#">Storages</a>
     <a class=" w-full text-center hover:text-gray-400 duration-150" href="#">Pricing</a>
     <a class=" w-full text-center hover:text-gray-400 duration-150" href="#">About Us</a>
 
     <button
-        class="w-[100px] bg-transparent text-center  duration-150 border border-neutral-600 py-2 px-4 rounded hover:bg-white hover:text-black">
+        class="w-[100px] bg-transparent text-center  duration-150 border border-neutral-600 py-2 px-4 rounded hover:bg-white hover:text-black"
+        id="signup-button-mobile">
         <!-- CONTACT US -->
         SIGN UP
     </button>
 
-    <button id="login-button"
+    <button id="login-button-mobile"
         class="w-[100px] bg-blue-500 text-center duration-150 text-white py-2 px-4 rounded hover:bg-blue-600">
         <!-- GET STARTED -->
         LOGIN
