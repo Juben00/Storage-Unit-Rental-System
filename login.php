@@ -1,6 +1,6 @@
-<div class="z-50 flex-col shadow-lg min-w-96 fixed bg-cyan-700 p-4 rounded-xl left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 hidden "
+<div class="z-50 flex-col shadow-2xl min-w-96 fixed bg-cyan-700 p-4 rounded-xl left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 hidden "
     id="loginModal">
-    <button class="absolute top-3 right-4" id="closeLogin">
+    <button class="absolute top-3 right-4 hover:text-gray-400 duration-100" id="closeLogin">
         <i class="fa fa-times fa-lg"></i>
     </button>
 
@@ -28,7 +28,7 @@
                 class="w-full bg-blue-500 text-gray-800 py-2 rounded hover:bg-blue-400 duration-100 hover:text-neutral-100">LOGIN</button>
         </div>
         <div class="mb-4">
-            <button type="button"
+            <button type="button" id="Login-Signup-Redirect"
                 class="w-full bg-neutral-100 text-gray-900 py-2 rounded hover:bg-neutral-400 duration-100 hover:text-neutral-100">REGISTER</button>
         </div>
     </form>

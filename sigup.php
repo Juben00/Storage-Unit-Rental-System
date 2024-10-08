@@ -1,6 +1,6 @@
-<div class="z-50 flex-col shadow-lg min-w-96 fixed bg-cyan-700 p-4 rounded-xl left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 hidden"
+<div class="z-50 flex-col shadow-2xl min-w-96 fixed bg-cyan-700 p-4 rounded-xl left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 hidden"
     id="signupModal">
-    <button class="absolute top-3 right-4" id="closeSignup">
+    <button class="absolute top-3 right-4 hover:text-gray-400 duration-100" id="closeSignup">
         <i class="fa fa-times fa-lg"></i>
     </button>
 
@@ -47,23 +47,26 @@
             </div>
         </div>
 
-        <div class="mb-1">
-            <label for="phone" class="text-neutral-100">Phone</label>
-            <div class="flex items-center bg-neutral-100 p-2 rounded">
-                <input type="text" id="phone" name="phone" placeholder="Enter your Phone Number"
-                    class="w-full bg-transparent border-none focus:outline-none">
-                <i class="fas fa-phone text-neutral-900 mr-2"></i>
+        <div class="lg:mb-1 lg:flex lg:items-center lg:gap-2 block">
+            <div class="mb-1">
+                <label for="phone" class="text-neutral-100">Phone</label>
+                <div class="flex items-center bg-neutral-100 p-2 rounded">
+                    <input type="text" id="phone" name="phone" placeholder="Enter Phone Number"
+                        class="w-full bg-transparent border-none focus:outline-none">
+                    <i class="fas fa-phone text-neutral-900 mr-2"></i>
+                </div>
+            </div>
+
+            <div class="mb-1">
+                <label for="address" class="text-neutral-100">Address</label>
+                <div class="flex items-center bg-neutral-100 p-2 rounded">
+                    <input type="text" id="address" name="address" placeholder="Enter your Address"
+                        class="w-full bg-transparent border-none focus:outline-none">
+                    <i class="fas fa-home text-neutral-900 mr-2"></i>
+                </div>
             </div>
         </div>
 
-        <div class="mb-1">
-            <label for="address" class="text-neutral-100">Address</label>
-            <div class="flex items-center bg-neutral-100 p-2 rounded">
-                <input type="text" id="address" name="address" placeholder="Enter your Address"
-                    class="w-full bg-transparent border-none focus:outline-none">
-                <i class="fas fa-home text-neutral-900 mr-2"></i>
-            </div>
-        </div>
 
         <div class="mb-1">
             <label for="email" class="text-neutral-100">Email</label>
@@ -74,7 +77,7 @@
             </div>
         </div>
 
-        <div class="mb-4">
+        <div class="mb-1">
             <label for="Password" class="text-neutral-100">Password</label>
             <div class="flex items-center bg-neutral-100 p-2 rounded">
                 <input type="password" id="Password" name="Password" placeholder="Password"
@@ -82,15 +85,25 @@
                 <i class="fas fa-lock text-neutral-900 mr-2"></i>
             </div>
         </div>
+        <div class="mb-4">
+            <label for="cPassword" class="text-neutral-100">Confirm Password</label>
+            <div class="flex items-center bg-neutral-100 p-2 rounded">
+                <input type="password" id="cPassword" name="cPassword" placeholder="Confrim Password"
+                    class="w-full bg-transparent border-none focus:outline-none">
+                <i class="fas fa-lock text-neutral-900 mr-2"></i>
+            </div>
+        </div>
 
-        <div class="mb-1">
+        <div class="mb-4">
             <button type="submit"
                 class="w-full bg-blue-500 text-gray-800 py-2 rounded hover:bg-blue-400 duration-100 hover:text-neutral-100">SIGN
                 UP</button>
         </div>
         <div class="text-center">
-            <a href="#" class="text-sm text-neutral-100">Already Have An Account? <span
-                    class="underline hover:text-blue-500 duration-100">Click Here</span></a>
+            <p class="text-sm text-neutral-100">Already Have An Account? <button
+                    class="underline hover:text-blue-500 duration-100" id="Signup-Login-Redirect">Click
+                    Here</button>
+            </p>
         </div>
 </div>
 

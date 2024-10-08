@@ -244,6 +244,10 @@ $isLoginPop = false;
         const signupButtonMobile = document.getElementById('signup-button-mobile');
         const closeSignupButton = document.getElementById('closeSignup');
 
+        //Redirect Button
+        const loginSignupRedirect = document.getElementById('Login-Signup-Redirect');
+        const signupLoginRedirect = document.getElementById('Signup-Login-Redirect');
+
         // Login Button Event Listeners
         loginButton.addEventListener('click', () => {
             loginModal.classList.remove('hidden');
@@ -278,6 +282,21 @@ $isLoginPop = false;
         closeSignupButton.addEventListener('click', () => {
             signupModal.classList.add('hidden');
             signupModal.classList.remove('flex');
+        });
+
+        // Redirect Button Event Listeners
+        loginSignupRedirect.addEventListener('click', () => {
+            loginModal.classList.add('hidden');
+            loginModal.classList.remove('flex');
+            signupModal.classList.remove('hidden');
+            signupModal.classList.add('flex');
+        });
+
+        signupLoginRedirect.addEventListener('click', () => {
+            signupModal.classList.add('hidden');
+            signupModal.classList.remove('flex');
+            loginModal.classList.remove('hidden');
+            loginModal.classList.add('flex');
         });
     </script>
 
