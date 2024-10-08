@@ -2,7 +2,7 @@
     <div class="container mx-auto px-4">
         <div class="flex flex-col md:flex-row justify-between items-center">
             <div class="w-">
-                <img src="./images/logo white transparent.png" alt="" style="width: 200px;">
+                <img src="./images/logo white.png" alt="" style="width: 200px;">
             </div>
             <div class="mb-4 md:mb-0">
                 <h3 class="text-xl font-bold">StorageUnit Rentals</h3>
@@ -19,8 +19,6 @@
                     <h4 class="font-semibold mb-2">Services</h4>
                     <ul>
                         <li><a class="text-gray-400 hover:text-white" href="#">Storage Units</a></li>
-                        <li><a class="text-gray-400 hover:text-white" href="#">Climate Controlled</a></li>
-                        <li><a class="text-gray-400 hover:text-white" href="#">Vehicle Storage</a></li>
                     </ul>
                 </div>
                 <div>
@@ -28,7 +26,6 @@
                     <ul>
                         <li><a class="text-gray-400 hover:text-white" href="#">About Us</a></li>
                         <li><a class="text-gray-400 hover:text-white" href="#">Contact</a></li>
-                        <li><a class="text-gray-400 hover:text-white" href="#">Careers</a></li>
                     </ul>
                 </div>
             </div>
