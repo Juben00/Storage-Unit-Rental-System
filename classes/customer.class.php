@@ -1,5 +1,6 @@
 <?php
-require_once 'db.php';
+require_once __DIR__ . '/../db.php';
+
 
 class Customer
 {
@@ -12,30 +13,37 @@ class Customer
     public $address;
     public $email;
     public $password;
-    public $cpasssword;
+    public $cpassword; // Corrected the typo from cpasssword to cpassword
 
-    private $db;
+    protected $db;
 
     function __construct()
     {
         $this->db = new Database();
     }
 
-    function signup()
+
+    public function signup()
     {
-        $sql = "SELECT * FROM customers WHERE email = :email;";
-        $stmt = $this->db->connect()->prepare($sql);
-        $stmt->bindParam(':email', $this->email);
+        try {
+            // Check if passwords match
+            if ($this->password !== $this->cpassword) {
+                return ['status' => 'error', 'message' => 'Passwords do not match'];
+            }
 
-        if ($stmt->execute()) {
-            if ($stmt->rowCount() > 0) {
-                return false;
-            } else {
+            // Check if email already exists
+            $sql = "SELECT * FROM customer WHERE email = :email;";
+            $stmt = $this->db->connect()->prepare($sql);
+            $stmt->bindParam(':email', $this->email);
 
-                if ($this->password != $this->cpasssword) {
-                    return false;
+            if ($stmt->execute()) {
+                if ($stmt->rowCount() > 0) {
+                    return ['status' => 'error', 'message' => 'Email already exists'];
                 }
-                $sql = "INSERT INTO customers (firstname, lastname, birthdate, sex, phone, address, email, password) VALUES (:firstname, :lastname, :birthdate, :sex, :phone, :address, :email, :password);";
+
+                // Prepare to insert new customer
+                $sql = "INSERT INTO customer (firstname, lastname, birthdate, sex, phone, address, email, password) 
+                    VALUES (:firstname, :lastname, :birthdate, :sex, :phone, :address, :email, :password);";
 
                 $stmt = $this->db->connect()->prepare($sql);
                 $stmt->bindParam(':firstname', $this->firstname);
@@ -46,27 +54,47 @@ class Customer
                 $stmt->bindParam(':address', $this->address);
                 $stmt->bindParam(':email', $this->email);
 
+                // Hash the password before storing it
                 $hash = password_hash($this->password, PASSWORD_DEFAULT);
                 $stmt->bindParam(':password', $hash);
 
-                return $stmt->execute();
+                // Try executing the insert statement
+                if ($stmt->execute()) {
+                    return ['status' => 'success', 'message' => 'Signup successful'];
+                } else {
+                    // Log the error for debugging
+                    error_log("Insert error: " . implode(", ", $stmt->errorInfo()));
+                    return ['status' => 'error', 'message' => 'Signup failed due to an internal error'];
+                }
             }
+        } catch (PDOException $e) {
+            // Log the error and return a failure message
+            error_log("PDOException: " . $e->getMessage());
+            return ['status' => 'error', 'message' => 'Database error: ' . $e->getMessage()];
         }
     }
 
-    function login()
+    public function login()
     {
-        $sql = "SELECT * FROM customers WHERE email = :email;";
-        $stmt = $this->db->connect()->prepare($sql);
-        $stmt->bindParam(':email', $this->email);
+        try {
+            $sql = "SELECT * FROM customers WHERE email = :email;";
+            $stmt = $this->db->connect()->prepare($sql);
+            $stmt->bindParam(':email', $this->email);
 
-        if ($stmt->execute()) {
-            if ($stmt->rowCount() > 0) {
-                $row = $stmt->fetch(PDO::FETCH_ASSOC);
-                if (password_verify($this->password, $row['password'])) {
-                    $_SESSION['customer'] = $row;
+            if ($stmt->execute()) {
+                if ($stmt->rowCount() > 0) {
+                    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                    // Verify the password
+                    if (password_verify($this->password, $row['password'])) {
+                        $_SESSION['customer'] = $row; // Store user info in session
+                        return ['status' => 'success', 'message' => 'Logged In successfully!'];
+                    }
                 }
             }
+            return ['status' => 'error', 'message' => 'Account Don\'t Exist'];
+        } catch (PDOException $e) {
+            error_log("PDOException: " . $e->getMessage());
+            return ['status' => 'error', 'message' => 'Database error: ' . $e->getMessage()];
         }
     }
 }

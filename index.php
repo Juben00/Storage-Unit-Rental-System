@@ -1,6 +1,11 @@
 <?php
 
+require_once './classes/customer.class.php';
+require_once './sanitize.php';
+
+
 $isLoginPop = false;
+$feedbackMessage = "";
 
 ?>
 
@@ -17,20 +22,16 @@ $isLoginPop = false;
 
 <body class="min-h-screen flex flex-col bg-slate-100 relative">
     <?php
+    include_once './components/header.php';
     require_once './login.php';
     require_once './sigup.php';
-    ?>
 
-
-    <?php
-    include_once './components/header.php';
     ?>
 
     <main class="flex-grow flex flex-col container mx-auto pt-24">
         <?php
         include_once './components/cover.php';
         ?>
-
 
         <!-- Services Section -->
         <section>
@@ -225,6 +226,22 @@ $isLoginPop = false;
             </div>
         </section>
 
+        <div class="fixed inset-0 flex items-center justify-center z-50 left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2"
+            id="modal" style="display:none;"> <!-- Modal is hidden initially -->
+            <div class="bg-white rounded-lg overflow-hidden shadow-2xl border-red-500 border-2 z-10 max-w-sm mx-auto">
+                <div class="p-5">
+                    <h2 class="text-lg font-semibold">Feedback</h2>
+                    <p id="feedbackMessage" class="mt-2"></p> <!-- Display feedback message here -->
+                    <div class="mt-4">
+                        <button onclick="document.getElementById('modal').style.display='none'; stl();"
+                            class="bg-blue-500 text-white font-semibold py-2 px-4 rounded">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
     </main>
     <?php
@@ -247,6 +264,7 @@ $isLoginPop = false;
         //Redirect Button
         const loginSignupRedirect = document.getElementById('Login-Signup-Redirect');
         const signupLoginRedirect = document.getElementById('Signup-Login-Redirect');
+
 
         // Login Button Event Listeners
         loginButton.addEventListener('click', () => {
@@ -284,7 +302,6 @@ $isLoginPop = false;
             signupModal.classList.remove('flex');
         });
 
-        // Redirect Button Event Listeners
         loginSignupRedirect.addEventListener('click', () => {
             loginModal.classList.add('hidden');
             loginModal.classList.remove('flex');
@@ -298,6 +315,45 @@ $isLoginPop = false;
             loginModal.classList.remove('hidden');
             loginModal.classList.add('flex');
         });
+
+        function stl() {
+            signupModal.classList.add('hidden');
+            signupModal.classList.remove('flex');
+            loginModal.classList.remove('hidden');
+            loginModal.classList.add('flex');
+        }
+
+        document.getElementById('signup-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+
+            try {
+                const response = await fetch('./api/Register.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                let feedbackMessage = '';
+
+                if (data.status === 'success') {
+                    feedbackMessage = data.message;
+                } else {
+                    feedbackMessage = data.message;
+                }
+
+                document.getElementById('feedbackMessage').innerText = feedbackMessage;
+                document.getElementById('modal').style.display = 'flex';
+
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('feedbackMessage').innerText = 'An error occurred while processing your request.';
+                document.getElementById('modal').style.display = 'flex';
+            }
+            document.getElementById('signup-form').reset();
+        });
+
+
     </script>
 
 

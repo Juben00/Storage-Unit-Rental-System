@@ -10,7 +10,7 @@
         <div class="mb-1">
             <label for="Email" class="text-neutral-100">Email</label>
             <div class="flex items-center bg-neutral-100 p-2 rounded">
-                <input type="text" id="Email" name="Email" placeholder="Enter your Email"
+                <input type="text" id="email" name="email" placeholder="Enter your Email"
                     class="w-full bg-transparent border-none focus:outline-none">
                 <i class="fas fa-user text-neutral-900 mr-2"></i>
             </div>
@@ -18,7 +18,7 @@
         <div class="mb-4">
             <label for="Password" class="text-neutral-100">Password</label>
             <div class="flex items-center bg-neutral-100 p-2 rounded">
-                <input type="password" id="Password" name="Password" placeholder="Password"
+                <input type="password" id="password" name="password" placeholder="Password"
                     class="w-full bg-transparent border-none focus:outline-none">
                 <i class="fas fa-lock text-neutral-900 mr-2"></i>
             </div>
