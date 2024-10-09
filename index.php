@@ -3,6 +3,7 @@
 require_once './classes/customer.class.php';
 require_once './sanitize.php';
 
+session_start();
 
 $isLoginPop = false;
 $feedbackMessage = "";
@@ -351,6 +352,36 @@ $feedbackMessage = "";
                 document.getElementById('modal').style.display = 'flex';
             }
             document.getElementById('signup-form').reset();
+        });
+
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+
+            try {
+                const response = await fetch('./api/Login.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                let feedbackMessage = '';
+
+                if (data.status === 'success') {
+                    feedbackMessage = data.message;
+                } else {
+                    feedbackMessage = data.message;
+                }
+
+                document.getElementById('feedbackMessage').innerText = feedbackMessage;
+                document.getElementById('modal').style.display = 'flex';
+
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('feedbackMessage').innerText = 'An error occurred while processing your request.';
+                document.getElementById('modal').style.display = 'flex';
+            }
+            document.getElementById('login-form').reset();
         });
 
 

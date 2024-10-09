@@ -77,7 +77,7 @@ class Customer
     public function login()
     {
         try {
-            $sql = "SELECT * FROM customers WHERE email = :email;";
+            $sql = "SELECT * FROM customer WHERE email = :email;";
             $stmt = $this->db->connect()->prepare($sql);
             $stmt->bindParam(':email', $this->email);
 
@@ -88,6 +88,8 @@ class Customer
                     if (password_verify($this->password, $row['password'])) {
                         $_SESSION['customer'] = $row; // Store user info in session
                         return ['status' => 'success', 'message' => 'Logged In successfully!'];
+                    } else {
+                        return ['status' => 'error', 'message' => 'Invalid Password'];
                     }
                 }
             }
@@ -96,5 +98,11 @@ class Customer
             error_log("PDOException: " . $e->getMessage());
             return ['status' => 'error', 'message' => 'Database error: ' . $e->getMessage()];
         }
+    }
+
+    public function logout()
+    {
+        session_destroy();
+        return ['status' => 'success', 'message' => 'Logged Out successfully!'];
     }
 }

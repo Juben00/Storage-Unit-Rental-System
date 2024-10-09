@@ -6,7 +6,7 @@
 
 
     <h2 class="text-center text-2xl text-white mb-4 font-semibold">USER LOGIN</h2>
-    <form>
+    <form id="login-form">
         <div class="mb-1">
             <label for="Email" class="text-neutral-100">Email</label>
             <div class="flex items-center bg-neutral-100 p-2 rounded">
@@ -28,8 +28,9 @@
                 class="w-full bg-blue-500 text-gray-800 py-2 rounded hover:bg-blue-400 duration-100 hover:text-neutral-100">LOGIN</button>
         </div>
         <div class="mb-4">
-            <button type="button" id="Login-Signup-Redirect"
-                class="w-full bg-neutral-100 text-gray-900 py-2 rounded hover:bg-neutral-400 duration-100 hover:text-neutral-100">REGISTER</button>
+            <input type="button" id="Login-Signup-Redirect"
+                class="w-full bg-neutral-100 text-gray-900 py-2 rounded hover:bg-neutral-400 duration-100 hover:text-neutral-100"
+                value="REGISTER" />
         </div>
     </form>
     <div class="text-center">
