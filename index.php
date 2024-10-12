@@ -346,7 +346,6 @@ if (isset($_SESSION['customer']['role'])) {
             loginModal.classList.add('flex');
         });
 
-
         document.getElementById('signup-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const formData = new FormData(e.target);

@@ -271,39 +271,33 @@ if (isset($_SESSION['customer']['role'])) {
                             <tbody>
                                 <?php if (!empty($Storage)): ?>
                                     <?php foreach ($Storage as $item): ?>
-                                        <tr class="border-b">
-                                            <td class="py-2">
-                                                <?php echo htmlspecialchars($item['id']); ?>
-                                            </td>
+                                        <tr id="storage-row-<?php echo htmlspecialchars($item['id']); ?>" class="border-b">
+                                            <td class="py-2"><?php echo htmlspecialchars($item['id']); ?></td>
                                             <td class="py-2 flex items-center">
                                                 <img alt="Product Image" class="w-8 h-8 mr-2" height="30"
                                                     src="<?php echo htmlspecialchars($item['image']); ?>" width="30" />
-                                                <span class="truncate">
-                                                    <?php echo htmlspecialchars($item['name']); ?>
-                                                </span>
+                                                <span class="truncate"><?php echo htmlspecialchars($item['name']); ?></span>
                                             </td>
                                             <td class="py-2 max-w-xs truncate overflow-hidden whitespace-nowrap">
                                                 <?php echo htmlspecialchars($item['description']); ?>
                                             </td>
-                                            <td class="py-2">
-                                                <?php echo htmlspecialchars($item['category']); ?>
+                                            <td class="py-2"><?php echo htmlspecialchars($item['category']); ?></td>
+                                            <td class="py-2"><?php echo htmlspecialchars($item['stock']); ?></td>
+                                            <td class="py-2">$<?php echo htmlspecialchars(number_format($item['price'], 2)); ?>
                                             </td>
-                                            <td class="py-2">
-                                                <?php echo htmlspecialchars($item['stock']); ?>
-                                            </td>
-                                            <td class="py-2">
-                                                $<?php echo htmlspecialchars(number_format($item['price'], 2)); ?>
-                                            </td>
-                                            <td class="py-2">
-                                                <?php echo htmlspecialchars($item['status']); ?>
-                                            </td>
+                                            <td class="py-2"><?php echo htmlspecialchars($item['status']); ?></td>
                                             <td class="py-2">
                                                 <button
-                                                    class="p-2 border-2 border-red-500 w-[70px] rounded-md font-semibold shadow-md">Disable</button>
+                                                    class="p-2 border-2 border-red-500 w-[70px] rounded-md font-semibold shadow-md"
+                                                    onclick="disableStorage(<?php echo htmlspecialchars($item['id']); ?>)">Disable
+                                                </button>
                                                 <button
-                                                    class="p-2 border-2 border-orange-500 w-[70px] rounded-md font-semibold shadow-md">Edit</button>
+                                                    class="p-2 border-2 border-orange-500 w-[70px] rounded-md font-semibold shadow-md">Edit
+                                                </button>
                                                 <button
-                                                    class="p-2 border-2 border-neutral-800 w-[70px]  rounded-md font-semibold shadow-md">Delete</button>
+                                                    class="p-2 border-2 border-neutral-800 w-[70px] rounded-md font-semibold shadow-md"
+                                                    onclick="deleteStorage(<?php echo htmlspecialchars($item['id']); ?>)">Delete
+                                                </button>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
@@ -314,6 +308,7 @@ if (isset($_SESSION['customer']['role'])) {
                                 <?php endif; ?>
                             </tbody>
                         </table>
+
                     </div>
 
 
@@ -358,6 +353,36 @@ if (isset($_SESSION['customer']['role'])) {
     </script>
 
     <script>
+
+        async function deleteStorage(id) {
+            if (confirm('Are you sure you want to delete this storage item?')) {
+                try {
+                    let response = await fetch(`./api/DeleteStorage.php?id=${id}`, {
+                        method: 'GET',
+                    });
+                    let data = await response.json();
+                    let feedbackMessage = '';
+
+                    if (data.status === 'success') {
+                        feedbackMessage = data.message;
+                        // Remove the deleted row from the table
+                        document.querySelector(`#storage-row-${id}`).remove();
+                    } else {
+                        feedbackMessage = data.message;
+                    }
+
+                    document.getElementById('feedbackMessage').innerText = feedbackMessage;
+                    document.getElementById('modal').style.display = 'flex';
+
+                } catch (error) {
+                    document.getElementById('feedbackMessage').innerText = 'An error occurred while deleting the storage item.';
+                    document.getElementById('modal').style.display = 'flex';
+                }
+            }
+        }
+
+
+
         const popbutton = document.getElementById('popupbutt');
 
         popbutton.addEventListener("click", () => {

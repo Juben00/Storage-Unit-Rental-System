@@ -66,6 +66,24 @@ class Admin
         return $result;
     }
 
+    public function deleteStorage($id)
+    {
+        $sql = "DELETE FROM storage WHERE id = :id;";
+        $stmt = $this->db->connect()->prepare($sql);
+        $stmt->bindParam(':id', $id);
+        if ($stmt->execute()) {
+            return ['status' => 'success', 'message' => 'Storage deleted successfully'];
+        } else {
+            return ['status' => 'error', 'message' => 'Failed to delete storage'];
+        }
+    }
+
+    public function logout()
+    {
+        session_destroy();
+        return ['status' => 'success', 'message' => 'Logged Out successfully!'];
+    }
+
 
 
 
@@ -73,4 +91,4 @@ class Admin
 }
 $adminObj = new Admin();
 
-// var_dump($adminObj->getAllStorage());
+// var_dump($adminObj->deleteStorage(3));
