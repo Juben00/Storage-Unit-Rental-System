@@ -14,6 +14,7 @@ $Admin = [];
 
 $Admin = $adminObj->getAdmin();
 $Customer = $adminObj->getAllCustomers();
+$totalCustomers = count($Customer);
 
 
 if (isset($_SESSION['customer']['role'])) {
@@ -43,215 +44,226 @@ if (isset($_SESSION['customer']['role'])) {
 <body class="min-h-screen flex flex-col bg-slate-100 ">
     <div class="flex h-screen">
         <!-- Sidebar -->
-        <div class="w-64 bg-slate-50 shadow-md">
-            <div class="flex items-center justify-center">
-                <img alt="Company Logo" src="./images/logo black transparent with name.png" />
-            </div>
-            <nav class="">
-                <a class="flex items-center px-6 py-2 text-gray-700 bg-gray-100 border-l-4 border-blue-500" href="#">
-                    <i class="fas fa-home mr-3">
-                    </i>
-                    Dashboard
-                </a>
-
-                <a class="flex items-center px-6 py-2 text-gray-700 hover:bg-gray-100" href="#">
-                    <i class="fas fa-chart-line mr-3">
-                    </i>
-                    Sales
-                </a>
-                <a class="flex items-center px-6 py-2 text-gray-700 hover:bg-gray-100" href="#">
-                    <i class="fas fa-boxes mr-3">
-                    </i>
-                    Accounts
-                </a>
-
-                <a class="flex items-center px-6 py-2 text-gray-700 hover:bg-gray-100" href="#">
-                    <i class="fas fa-cog mr-3">
-                    </i>
-                    Settings
-                </a>
-                <a class="flex items-center px-6 py-2 text-gray-700 hover:bg-gray-100" href="#">
-                    <svg viewBox="0 0 24 24" height="20" class="mr-2" width="20" fill="none"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                        <g id="SVGRepo_iconCarrier">
-                            <path d="M21 12L13 12" stroke="#323232" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round"></path>
-                            <path d="M18 15L20.913 12.087V12.087C20.961 12.039 20.961 11.961 20.913 11.913V11.913L18 9"
-                                stroke="#323232" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                            <path
-                                d="M16 5V4.5V4.5C16 3.67157 15.3284 3 14.5 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H14.5C15.3284 21 16 20.3284 16 19.5V19.5V19"
-                                stroke="#323232" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                        </g>
-                    </svg>
-                    Logout </a>
-            </nav>
-        </div>
-
+        <?php require_once './components/AdminSidebar.php' ?>
 
         <!-- Main Content -->
         <div class="flex-1 p-6">
-            <div class="flex justify-between items-center mb-6">
-                <h1 class="text-2xl font-semibold">
-                    Dashboard
-                </h1>
-                <div class="flex items-center">
+            <div id="dashboard" class="content-section">
+                <div class="flex justify-between items-center mb-6">
+                    <h1 class="text-2xl font-semibold">
+                        Dashboard
+                    </h1>
                     <div class="flex items-center">
-                        <img alt="User Avatar" class="rounded-full mr-2" height="40" src="./images/OIP.jpg"
-                            width="40" />
+                        <div class="flex items-center">
+                            <img alt="User Avatar" class="rounded-full mr-2" height="40" src="./images/OIP.jpg"
+                                width="40" />
+                            <div>
+                                <p class="text-gray-700 font-medium">
+                                    <?php
+                                    if (isset($Admin['firstname']) && isset($Admin['lastname'])) {
+                                        echo $Admin['firstname'] . ' ' . $Admin['lastname'];
+                                    } else {
+                                        echo 'Admin Name';
+                                    }
+                                    ?>
+                                </p>
+                                <p class="text-gray-500 text-sm">
+                                    <?php
+                                    if (isset($Admin['email'])) {
+                                        echo $Admin['email'];
+                                    } else {
+                                        echo 'admin@example.com';
+                                    }
+                                    ?>
+                                </p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="grid grid-cols-3 gap-6">
+
+                    <!-- Card 1 -->
+                    <div class="bg-white p-4 rounded-lg shadow-md border-t-4 border-blue-500">
+                        <div class="flex justify-between items-center ">
+                            <div class="flex items-center gap-2">
+                                <svg width="50px" height="50px" viewBox="0 0 24.00 24.00" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke="#CCCCCC" stroke-width="0.048"></g>
+                                    <g id="SVGRepo_iconCarrier">
+                                        <circle cx="12" cy="9" r="3" stroke="#1C274C" stroke-width="1.5"></circle>
+                                        <path
+                                            d="M17.9691 20C17.81 17.1085 16.9247 15 11.9999 15C7.07521 15 6.18991 17.1085 6.03076 20"
+                                            stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"></path>
+                                        <path
+                                            d="M7 3.33782C8.47087 2.48697 10.1786 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 10.1786 2.48697 8.47087 3.33782 7"
+                                            stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"></path>
+                                    </g>
+                                </svg>
+
+                                <div>
+                                    <p class="text-gray-500">
+                                        Total Number of Customers
+                                    </p>
+                                    <p class="text-2xl font-semibold">
+                                        <?php echo $totalCustomers ?>
+                                    </p>
+                                </div>
+                            </div>
+                            <i class="fas fa-ellipsis-v text-gray-500">
+                            </i>
+                        </div>
+                    </div>
+                    <!-- Card 2 -->
+                    <div class="bg-white p-4 rounded-lg shadow-md border-t-4 border-green-500">
+                        <div class="flex justify-between items-center mb-4">
+                            <div class="flex items-center">
+                                <i class="fas fa-wallet text-gray-500 text-2xl mr-2">
+                                </i>
+                                <div>
+                                    <p class="text-gray-500">
+                                        Total Number of Storages
+                                    </p>
+                                    <p class="text-2xl font-semibold">
+                                        $105 500.00
+                                    </p>
+                                </div>
+                            </div>
+                            <i class="fas fa-ellipsis-v text-gray-500">
+                            </i>
+                        </div>
+
+                    </div>
+                    <!-- Card 3 -->
+                    <div class="bg-white p-4 rounded-lg shadow-md border-t-4 border-red-500">
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center">
+                                <i class="fas fa-money-bill-wave text-gray-500 text-2xl mr-2">
+                                </i>
+                                <div>
+                                    <p class="text-gray-500">
+                                        Gastos Diarios
+                                    </p>
+                                    <p class="text-2xl font-semibold">
+                                        $3 480.00
+                                    </p>
+                                </div>
+                            </div>
+                            <i class="fas fa-ellipsis-v text-gray-500">
+                            </i>
+                        </div>
+
+                    </div>
+                    <!-- Card 4 -->
+                    <div class="col-span-2 bg-white p-4 rounded-lg shadow-md">
+                        <div class="flex justify-between items-center ">
+                            <div class="flex items-center">
+                                <i class="fas fa-chart-line text-gray-500 text-2xl mr-2">
+                                </i>
+                                <div>
+                                    <p class="text-gray-500">
+                                        Evolución de Ventas
+                                    </p>
+                                </div>
+                            </div>
+                            <i class="fas fa-ellipsis-v text-gray-500">
+                            </i>
+                        </div>
                         <div>
-                            <p class="text-gray-700 font-medium">
-                                <?php
-                                if (isset($Admin['firstname']) && isset($Admin['lastname'])) {
-                                    echo $Admin['firstname'] . ' ' . $Admin['lastname'];
-                                } else {
-                                    echo 'Admin Name';
-                                }
-                                ?>
-                            </p>
-                            <p class="text-gray-500 text-sm">
-                                <?php
-                                if (isset($Admin['email'])) {
-                                    echo $Admin['email'];
-                                } else {
-                                    echo 'admin@example.com';
-                                }
-                                ?>
-                            </p>
+                            <canvas id="salesChart">
+                            </canvas>
                         </div>
-
+                    </div>
+                    <!-- Card 5 -->
+                    <div class="bg-white p-4 rounded-lg shadow-md">
+                        <div class="flex justify-between items-center mb-4">
+                            <div class="flex items-center">
+                                <i class="fas fa-boxes text-gray-500 text-2xl mr-2">
+                                </i>
+                                <div>
+                                    <p class="text-gray-500">
+                                        Inventario
+                                    </p>
+                                </div>
+                            </div>
+                            <i class="fas fa-ellipsis-v text-gray-500">
+                            </i>
+                        </div>
+                        <div>
+                            <canvas id="inventoryChart">
+                            </canvas>
+                        </div>
                     </div>
                 </div>
             </div>
 
-
-            <div class="grid grid-cols-3 gap-6">
-                <!-- Card 1 -->
-                <div class="bg-white p-4 rounded-lg shadow-md border-t-4 border-blue-500">
-                    <div class="flex justify-between items-center mb-4">
-                        <div class="flex items-center">
-                            <i class="fas fa-dollar-sign text-gray-500 text-2xl mr-2">
-                            </i>
-                            <div>
-                                <p class="text-gray-500">
-                                    Ventas Diarias
-                                </p>
-                                <p class="text-2xl font-semibold">
-                                    $40 572.00
-                                </p>
-                            </div>
-                        </div>
-                        <i class="fas fa-ellipsis-v text-gray-500">
-                        </i>
-                    </div>
-                    <div class="flex items-center text-green-500">
-                        <i class="fas fa-arrow-up mr-1">
-                        </i>
-                        <p>
-                            8% con el día anterior
-                        </p>
-                    </div>
-                </div>
-                <!-- Card 2 -->
-                <div class="bg-white p-4 rounded-lg shadow-md border-t-4 border-green-500">
-                    <div class="flex justify-between items-center mb-4">
-                        <div class="flex items-center">
-                            <i class="fas fa-wallet text-gray-500 text-2xl mr-2">
-                            </i>
-                            <div>
-                                <p class="text-gray-500">
-                                    Saldo Disponible
-                                </p>
-                                <p class="text-2xl font-semibold">
-                                    $105 500.00
-                                </p>
-                            </div>
-                        </div>
-                        <i class="fas fa-ellipsis-v text-gray-500">
-                        </i>
-                    </div>
-                    <div class="flex items-center text-green-500">
-                        <i class="fas fa-arrow-up mr-1">
-                        </i>
-                        <p>
-                            3% con el día anterior
-                        </p>
-                    </div>
-                </div>
-                <!-- Card 3 -->
-                <div class="bg-white p-4 rounded-lg shadow-md border-t-4 border-red-500">
-                    <div class="flex justify-between items-center mb-4">
-                        <div class="flex items-center">
-                            <i class="fas fa-money-bill-wave text-gray-500 text-2xl mr-2">
-                            </i>
-                            <div>
-                                <p class="text-gray-500">
-                                    Gastos Diarios
-                                </p>
-                                <p class="text-2xl font-semibold">
-                                    $3 480.00
-                                </p>
-                            </div>
-                        </div>
-                        <i class="fas fa-ellipsis-v text-gray-500">
-                        </i>
-                    </div>
-                    <div class="flex items-center text-red-500">
-                        <i class="fas fa-arrow-down mr-1">
-                        </i>
-                        <p>
-                            3% con el día anterior
-                        </p>
-                    </div>
-                </div>
-                <!-- Card 4 -->
-                <div class="col-span-2 bg-white p-4 rounded-lg shadow-md">
-                    <div class="flex justify-between items-center mb-4">
-                        <div class="flex items-center">
-                            <i class="fas fa-chart-line text-gray-500 text-2xl mr-2">
-                            </i>
-                            <div>
-                                <p class="text-gray-500">
-                                    Evolución de Ventas
-                                </p>
-                            </div>
-                        </div>
-                        <i class="fas fa-ellipsis-v text-gray-500">
-                        </i>
-                    </div>
-                    <div>
-                        <canvas id="salesChart">
-                        </canvas>
-                    </div>
-                </div>
-                <!-- Card 5 -->
-                <div class="bg-white p-4 rounded-lg shadow-md">
-                    <div class="flex justify-between items-center mb-4">
-                        <div class="flex items-center">
-                            <i class="fas fa-boxes text-gray-500 text-2xl mr-2">
-                            </i>
-                            <div>
-                                <p class="text-gray-500">
-                                    Inventario
-                                </p>
-                            </div>
-                        </div>
-                        <i class="fas fa-ellipsis-v text-gray-500">
-                        </i>
-                    </div>
-                    <div>
-                        <canvas id="inventoryChart">
-                        </canvas>
-                    </div>
-                </div>
+            <div id="sales" class="content-section hidden">
+                <h1 class="text-2xl font-semibold">
+                    Sales
+                </h1>
             </div>
+
+            <div id="customers" class="content-section hidden">
+                <h1 class="text-2xl font-semibold">
+                    Customers
+                </h1>
+            </div>
+
+            <div id="storages" class="content-section hidden">
+                <h1 class="text-2xl font-semibold">
+                    Storages
+                </h1>
+            </div>
+
+            <div id="settings" class="content-section hidden">
+                <h1 class="text-2xl font-semibold">
+                    Settings
+                </h1>
+            </div>
+
+
+
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js">
     </script>
+
     <script>
+        // JavaScript to switch content based on sidebar click
+        const links = document.querySelectorAll('nav a');
+        const contentSections = document.querySelectorAll('.content-section');
+
+        links.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault(); // Prevent default anchor behavior
+
+                // Remove active class from all links
+                links.forEach(l => l.classList.remove('border-l-4', 'border-blue-500'));
+
+                const targetId = link.getAttribute('data-target');
+
+                // Hide all sections
+                contentSections.forEach(section => {
+                    section.classList.add('hidden');
+                });
+
+                // Show the selected section
+                const targetSection = document.getElementById(targetId);
+                targetSection.classList.remove('hidden');
+
+                // Add active class to the clicked link
+                link.classList.add('border-l-4', 'border-blue-500');
+            });
+        });
+
+
+
+
         const salesCtx = document.getElementById('salesChart').getContext('2d');
         const salesChart = new Chart(salesCtx, {
             type: 'line',

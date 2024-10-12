@@ -36,7 +36,7 @@ class Admin
 
     public function getAllCustomers()
     {
-        $sql = "SELECT * FROM customer WHERE role = 'Customer';";
+        $sql = "SELECT *  FROM customer WHERE role = 'Customer';";
         $stmt = $this->db->connect()->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -46,7 +46,8 @@ class Admin
 
 
 
+
 }
 $adminObj = new Admin();
 
-// var_dump($adminObj->getAdmin());
+// var_dump($adminObj->getAllCustomers());
