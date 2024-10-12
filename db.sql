@@ -14,3 +14,14 @@ CREATE TABLE customer(
     email VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(100) NOT NULL
 );
+
+CREATE TABLE storage (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    description VARCHAR(100) NOT NULL,
+    stock INT NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    status ENUM('In-stock', 'Out-of-Stock') NOT NULL,
+    quantity INT NOT NULL,
+    image VARCHAR(100) NOT NULL
+)

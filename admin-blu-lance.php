@@ -41,7 +41,7 @@ if (isset($_SESSION['customer']['role'])) {
 
 </head>
 
-<body class="min-h-screen flex flex-col bg-slate-100 ">
+<body class="max-h-screen flex flex-col bg-slate-100 overflow-hidden">
     <div class="flex h-screen">
         <!-- Sidebar -->
         <?php require_once './components/AdminSidebar.php' ?>
@@ -213,11 +213,447 @@ if (isset($_SESSION['customer']['role'])) {
                 </h1>
             </div>
 
-            <div id="storages" class="content-section hidden">
-                <h1 class="text-2xl font-semibold">
-                    Storages
-                </h1>
+            <div id="storages" class="content-section hidden h-screen overflow-y-scroll">
+
+                <div class="flex-1">
+                    <div class="flex justify-between items-center mb-6">
+                        <h1 class="text-2xl font-semibold">
+                            Storages
+                        </h1>
+                        <a href="#addStorage" class="bg-blue-600 text-white px-4 py-2 rounded">
+                            + Add Storage
+                        </a>
+                    </div>
+                    <div class="bg-white p-4 py-6  rounded shadow-md">
+                        <div class="flex items-center">
+                            <div class="flex items-center mb-4 gap-1">
+                                <label for="status">Status: </label>
+                                <select id="status" class="bg-gray-100 px-2 py-1 rounded mr-4">
+                                    <option>
+                                        Select
+                                    </option>
+                                    <option>
+                                        In-Stock
+                                    </option>
+                                    <option>
+                                        Out-of-Stock
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="flex items-center mb-4 gap-1">
+                                <label for="category">Category : </label>
+                                <select id="category" class="bg-gray-100 px-2 py-1 rounded mr-4">
+                                    <option>
+                                        Select
+                                    </option>
+                                    <option>
+                                        Small
+                                    </option>
+                                    <option>
+                                        Medium
+                                    </option>
+                                    <option>
+                                        Large
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <table class="w-full text-left border-collapse overflow-scroll">
+                            <thead>
+                                <tr class="text-gray-600">
+                                    <th class="py-2">
+                                        Storage ID
+                                    </th>
+                                    <th class="py-2">
+                                        Name
+                                    </th>
+                                    <th class="py-2">
+                                        Description
+                                    </th>
+                                    <th class="py-2">
+                                        Category
+                                    </th>
+                                    <th class="py-2">
+                                        Stock
+                                    </th>
+                                    <th class="py-2">
+                                        Price
+                                    </th>
+                                    <th class="py-2">
+                                        Status
+                                    </th>
+                                    <th class="py-2">
+                                        Action
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b">
+                                    <td class="py-2">
+                                        01
+                                    </td>
+                                    <td class="py-2 flex items-center">
+                                        <img alt="Product Image" class="w-8 h-8 mr-2" height="30"
+                                            src="https://storage.googleapis.com/a1aa/image/qLIcgYqeWKUSQKheqKPRd3pywgnQe0jX9OgpTLJhvBEki0LnA.jpg"
+                                            width="30" />
+                                        <span class="truncate">
+                                            Lorem ipsum
+                                        </span>
+                                    </td>
+                                    <td class="py-2 max-w-xs truncate overflow-hidden whitespace-nowrap">
+                                        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Soluta dicta ullam
+                                        laborum aperiam cumque autem aliquid adipisci possimus, veniam necessitatibus.
+                                    </td>
+                                    <td class="py-2">
+                                        Small
+                                    </td>
+                                    <td class="py-2">
+                                        5
+                                    </td>
+                                    <td class="py-2">
+                                        $254
+                                    </td>
+                                    <td class="py-2">
+                                        In-Stock
+                                    </td>
+                                    <td class="py-2">
+                                        <button class="p-2 border bg-red-500 w-[80px] rounded-sm">Disable</button>
+                                        <button class="p-2 border bg-orange-400 w-[80px] rounded-sm">Edit</button>
+                                        <button
+                                            class="p-2 border bg-neutral-800 w-[80px] rounded-sm text-slate-50">Delete</button>
+                                    </td>
+                                </tr>
+                                <tr class="border-b">
+                                    <td class="py-2">
+                                        01
+                                    </td>
+                                    <td class="py-2 flex items-center">
+                                        <img alt="Product Image" class="w-8 h-8 mr-2" height="30"
+                                            src="https://storage.googleapis.com/a1aa/image/qLIcgYqeWKUSQKheqKPRd3pywgnQe0jX9OgpTLJhvBEki0LnA.jpg"
+                                            width="30" />
+                                        <span class="truncate">
+                                            Lorem ipsum
+                                        </span>
+                                    </td>
+                                    <td class="py-2 max-w-xs truncate overflow-hidden whitespace-nowrap">
+                                        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Soluta dicta ullam
+                                        laborum aperiam cumque autem aliquid adipisci possimus, veniam necessitatibus.
+                                    </td>
+                                    <td class="py-2">
+                                        Small
+                                    </td>
+                                    <td class="py-2">
+                                        5
+                                    </td>
+                                    <td class="py-2">
+                                        $254
+                                    </td>
+                                    <td class="py-2">
+                                        In-Stock
+                                    </td>
+                                    <td class="py-2">
+                                        <button class="p-2 border bg-red-500 w-[80px] rounded-sm">Disable</button>
+                                        <button class="p-2 border bg-orange-400 w-[80px] rounded-sm">Edit</button>
+                                        <button
+                                            class="p-2 border bg-neutral-800 w-[80px] rounded-sm text-slate-50">Delete</button>
+                                    </td>
+                                </tr>
+                                <tr class="border-b">
+                                    <td class="py-2">
+                                        01
+                                    </td>
+                                    <td class="py-2 flex items-center">
+                                        <img alt="Product Image" class="w-8 h-8 mr-2" height="30"
+                                            src="https://storage.googleapis.com/a1aa/image/qLIcgYqeWKUSQKheqKPRd3pywgnQe0jX9OgpTLJhvBEki0LnA.jpg"
+                                            width="30" />
+                                        <span class="truncate">
+                                            Lorem ipsum
+                                        </span>
+                                    </td>
+                                    <td class="py-2 max-w-xs truncate overflow-hidden whitespace-nowrap">
+                                        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Soluta dicta ullam
+                                        laborum aperiam cumque autem aliquid adipisci possimus, veniam necessitatibus.
+                                    </td>
+                                    <td class="py-2">
+                                        Small
+                                    </td>
+                                    <td class="py-2">
+                                        5
+                                    </td>
+                                    <td class="py-2">
+                                        $254
+                                    </td>
+                                    <td class="py-2">
+                                        In-Stock
+                                    </td>
+                                    <td class="py-2">
+                                        <button class="p-2 border bg-red-500 w-[80px] rounded-sm">Disable</button>
+                                        <button class="p-2 border bg-orange-400 w-[80px] rounded-sm">Edit</button>
+                                        <button
+                                            class="p-2 border bg-neutral-800 w-[80px] rounded-sm text-slate-50">Delete</button>
+                                    </td>
+                                </tr>
+                                <tr class="border-b">
+                                    <td class="py-2">
+                                        01
+                                    </td>
+                                    <td class="py-2 flex items-center">
+                                        <img alt="Product Image" class="w-8 h-8 mr-2" height="30"
+                                            src="https://storage.googleapis.com/a1aa/image/qLIcgYqeWKUSQKheqKPRd3pywgnQe0jX9OgpTLJhvBEki0LnA.jpg"
+                                            width="30" />
+                                        <span class="truncate">
+                                            Lorem ipsum
+                                        </span>
+                                    </td>
+                                    <td class="py-2 max-w-xs truncate overflow-hidden whitespace-nowrap">
+                                        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Soluta dicta ullam
+                                        laborum aperiam cumque autem aliquid adipisci possimus, veniam necessitatibus.
+                                    </td>
+                                    <td class="py-2">
+                                        Small
+                                    </td>
+                                    <td class="py-2">
+                                        5
+                                    </td>
+                                    <td class="py-2">
+                                        $254
+                                    </td>
+                                    <td class="py-2">
+                                        In-Stock
+                                    </td>
+                                    <td class="py-2">
+                                        <button class="p-2 border bg-red-500 w-[80px] rounded-sm">Disable</button>
+                                        <button class="p-2 border bg-orange-400 w-[80px] rounded-sm">Edit</button>
+                                        <button
+                                            class="p-2 border bg-neutral-800 w-[80px] rounded-sm text-slate-50">Delete</button>
+                                    </td>
+                                </tr>
+                                <tr class="border-b">
+                                    <td class="py-2">
+                                        01
+                                    </td>
+                                    <td class="py-2 flex items-center">
+                                        <img alt="Product Image" class="w-8 h-8 mr-2" height="30"
+                                            src="https://storage.googleapis.com/a1aa/image/qLIcgYqeWKUSQKheqKPRd3pywgnQe0jX9OgpTLJhvBEki0LnA.jpg"
+                                            width="30" />
+                                        <span class="truncate">
+                                            Lorem ipsum
+                                        </span>
+                                    </td>
+                                    <td class="py-2 max-w-xs truncate overflow-hidden whitespace-nowrap">
+                                        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Soluta dicta ullam
+                                        laborum aperiam cumque autem aliquid adipisci possimus, veniam necessitatibus.
+                                    </td>
+                                    <td class="py-2">
+                                        Small
+                                    </td>
+                                    <td class="py-2">
+                                        5
+                                    </td>
+                                    <td class="py-2">
+                                        $254
+                                    </td>
+                                    <td class="py-2">
+                                        In-Stock
+                                    </td>
+                                    <td class="py-2">
+                                        <button class="p-2 border bg-red-500 w-[80px] rounded-sm">Disable</button>
+                                        <button class="p-2 border bg-orange-400 w-[80px] rounded-sm">Edit</button>
+                                        <button
+                                            class="p-2 border bg-neutral-800 w-[80px] rounded-sm text-slate-50">Delete</button>
+                                    </td>
+                                </tr>
+                                <tr class="border-b">
+                                    <td class="py-2">
+                                        01
+                                    </td>
+                                    <td class="py-2 flex items-center">
+                                        <img alt="Product Image" class="w-8 h-8 mr-2" height="30"
+                                            src="https://storage.googleapis.com/a1aa/image/qLIcgYqeWKUSQKheqKPRd3pywgnQe0jX9OgpTLJhvBEki0LnA.jpg"
+                                            width="30" />
+                                        <span class="truncate">
+                                            Lorem ipsum
+                                        </span>
+                                    </td>
+                                    <td class="py-2 max-w-xs truncate overflow-hidden whitespace-nowrap">
+                                        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Soluta dicta ullam
+                                        laborum aperiam cumque autem aliquid adipisci possimus, veniam necessitatibus.
+                                    </td>
+                                    <td class="py-2">
+                                        Small
+                                    </td>
+                                    <td class="py-2">
+                                        5
+                                    </td>
+                                    <td class="py-2">
+                                        $254
+                                    </td>
+                                    <td class="py-2">
+                                        In-Stock
+                                    </td>
+                                    <td class="py-2">
+                                        <button class="p-2 border bg-red-500 w-[80px] rounded-sm">Disable</button>
+                                        <button class="p-2 border bg-orange-400 w-[80px] rounded-sm">Edit</button>
+                                        <button
+                                            class="p-2 border bg-neutral-800 w-[80px] rounded-sm text-slate-50">Delete</button>
+                                    </td>
+                                </tr>
+                                <tr class="border-b">
+                                    <td class="py-2">
+                                        01
+                                    </td>
+                                    <td class="py-2 flex items-center">
+                                        <img alt="Product Image" class="w-8 h-8 mr-2" height="30"
+                                            src="https://storage.googleapis.com/a1aa/image/qLIcgYqeWKUSQKheqKPRd3pywgnQe0jX9OgpTLJhvBEki0LnA.jpg"
+                                            width="30" />
+                                        <span class="truncate">
+                                            Lorem ipsum
+                                        </span>
+                                    </td>
+                                    <td class="py-2 max-w-xs truncate overflow-hidden whitespace-nowrap">
+                                        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Soluta dicta ullam
+                                        laborum aperiam cumque autem aliquid adipisci possimus, veniam necessitatibus.
+                                    </td>
+                                    <td class="py-2">
+                                        Small
+                                    </td>
+                                    <td class="py-2">
+                                        5
+                                    </td>
+                                    <td class="py-2">
+                                        $254
+                                    </td>
+                                    <td class="py-2">
+                                        In-Stock
+                                    </td>
+                                    <td class="py-2">
+                                        <button class="p-2 border bg-red-500 w-[80px] rounded-sm">Disable</button>
+                                        <button class="p-2 border bg-orange-400 w-[80px] rounded-sm">Edit</button>
+                                        <button
+                                            class="p-2 border bg-neutral-800 w-[80px] rounded-sm text-slate-50">Delete</button>
+                                    </td>
+                                </tr>
+                                <tr class="border-b">
+                                    <td class="py-2">
+                                        01
+                                    </td>
+                                    <td class="py-2 flex items-center">
+                                        <img alt="Product Image" class="w-8 h-8 mr-2" height="30"
+                                            src="https://storage.googleapis.com/a1aa/image/qLIcgYqeWKUSQKheqKPRd3pywgnQe0jX9OgpTLJhvBEki0LnA.jpg"
+                                            width="30" />
+                                        <span class="truncate">
+                                            Lorem ipsum
+                                        </span>
+                                    </td>
+                                    <td class="py-2 max-w-xs truncate overflow-hidden whitespace-nowrap">
+                                        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Soluta dicta ullam
+                                        laborum aperiam cumque autem aliquid adipisci possimus, veniam necessitatibus.
+                                    </td>
+                                    <td class="py-2">
+                                        Small
+                                    </td>
+                                    <td class="py-2">
+                                        5
+                                    </td>
+                                    <td class="py-2">
+                                        $254
+                                    </td>
+                                    <td class="py-2">
+                                        In-Stock
+                                    </td>
+                                    <td class="py-2">
+                                        <button class="p-2 border bg-red-500 w-[80px] rounded-sm">Disable</button>
+                                        <button class="p-2 border bg-orange-400 w-[80px] rounded-sm">Edit</button>
+                                        <button
+                                            class="p-2 border bg-neutral-800 w-[80px] rounded-sm text-slate-50">Delete</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+
+
+                    </div>
+
+
+
+
+
+                </div>
+
+                <div class="">
+                    <div class="flex justify-between items-center mt-6">
+                        <h1 class="text-2xl font-semibold" id="addStorage">
+                            Add Storage
+                        </h1>
+                    </div>
+                    <div class="flex">
+                        <!-- Right Section -->
+                        <div class="w-1/2 ">
+                            <form class="bg-white  my-2 p-6 rounded-lg shadow-lg">
+                                <div class="mb-4">
+                                    <label class="block text-gray-700 font-semibold mb-2" for="image">
+                                        Product Image
+                                    </label>
+                                    <input type="file" id="image"
+                                        class="border-2 w-full border-dashed border-gray-300 rounded-lg p-6 text-center">
+
+                                    </input>
+                                    <label class="block text-gray-700 font-semibold mb-2" for="productName">
+                                        Product Name
+                                    </label>
+                                    <input
+                                        class="w-full border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                                        id="productName" placeholder="Name" type="text" />
+                                </div>
+                                <div class="mb-4">
+                                    <label class="block text-gray-700 font-semibold mb-2" for="description">
+                                        Description
+                                    </label>
+                                    <textarea
+                                        class="w-full border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                                        id="description" placeholder="Storage Description"></textarea>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="block text-gray-700 font-semibold mb-2" for="category">
+                                        Category
+                                    </label>
+                                    <select name="category" id="category"
+                                        class="w-full border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-600">
+                                        <option value="">Select an Option</option>
+                                        <option value="Small">Small</option>
+                                        <option value="Medium">Medium</option>
+                                        <option value="Large">Large</option>
+                                    </select>
+                                </div>
+                                <div class="mb-4">
+                                    <div class="flex items-center gap-2">
+                                        <label class="block text-gray-700 font-semibold " for="stock">
+                                            Stock
+                                        </label>
+                                        <input
+                                            class="w-full border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                                            id="stock" placeholder="Storage Quantity" type="text" />
+
+                                        <label class="block text-gray-700 font-semibold " for="price">
+                                            Price
+                                        </label>
+                                        <input
+                                            class="w-full border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                                            id="price" placeholder="Storage Price" type="text" />
+                                    </div>
+                                </div>
+
+                                <button class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">
+                                    Add Product
+                                </button>
+                                </f>
+                        </div>
+                    </div>
+                </div>
             </div>
+
+
 
             <div id="settings" class="content-section hidden">
                 <h1 class="text-2xl font-semibold">
@@ -225,91 +661,86 @@ if (isset($_SESSION['customer']['role'])) {
                 </h1>
             </div>
 
+            <script src="https://cdn.jsdelivr.net/npm/chart.js">
+            </script>
 
+            <script>
+                // JavaScript to switch content based on sidebar click
+                const links = document.querySelectorAll('nav a');
+                const contentSections = document.querySelectorAll('.content-section');
 
-        </div>
-    </div>
+                links.forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault(); // Prevent default anchor behavior
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js">
-    </script>
+                        // Remove active class from all links
+                        links.forEach(l => l.classList.remove('border-l-4', 'border-blue-500', 'bg-slate-200'));
 
-    <script>
-        // JavaScript to switch content based on sidebar click
-        const links = document.querySelectorAll('nav a');
-        const contentSections = document.querySelectorAll('.content-section');
+                        const targetId = link.getAttribute('data-target');
 
-        links.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault(); // Prevent default anchor behavior
+                        // Hide all sections
+                        contentSections.forEach(section => {
+                            section.classList.add('hidden');
+                        });
 
-                // Remove active class from all links
-                links.forEach(l => l.classList.remove('border-l-4', 'border-blue-500'));
+                        // Show the selected section
+                        const targetSection = document.getElementById(targetId);
+                        targetSection.classList.remove('hidden');
 
-                const targetId = link.getAttribute('data-target');
-
-                // Hide all sections
-                contentSections.forEach(section => {
-                    section.classList.add('hidden');
+                        // Add active class to the clicked link
+                        link.classList.add('border-l-4', 'border-blue-500', 'bg-slate-200');
+                    });
                 });
 
-                // Show the selected section
-                const targetSection = document.getElementById(targetId);
-                targetSection.classList.remove('hidden');
-
-                // Add active class to the clicked link
-                link.classList.add('border-l-4', 'border-blue-500');
-            });
-        });
 
 
 
-
-        const salesCtx = document.getElementById('salesChart').getContext('2d');
-        const salesChart = new Chart(salesCtx, {
-            type: 'line',
-            data: {
-                labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
-                datasets: [{
-                    label: 'Progreso actual',
-                    data: [20, 40, 60, 50, 70, 80],
-                    borderColor: 'blue',
-                    fill: false
-                }, {
-                    label: 'Progreso Ideal',
-                    data: [30, 50, 70, 60, 80, 90],
-                    borderColor: 'lightblue',
-                    borderDash: [5, 5],
-                    fill: false
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 100
+                const salesCtx = document.getElementById('salesChart').getContext('2d');
+                const salesChart = new Chart(salesCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
+                        datasets: [{
+                            label: 'Progreso actual',
+                            data: [20, 40, 60, 50, 70, 80],
+                            borderColor: 'blue',
+                            fill: false
+                        }, {
+                            label: 'Progreso Ideal',
+                            data: [30, 50, 70, 60, 80, 90],
+                            borderColor: 'lightblue',
+                            borderDash: [5, 5],
+                            fill: false
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 100
+                            }
+                        }
                     }
-                }
-            }
-        });
+                });
 
-        const inventoryCtx = document.getElementById('inventoryChart').getContext('2d');
-        const inventoryChart = new Chart(inventoryCtx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Stock', 'Defectuosos', 'Agotados', 'Obsoletos'],
-                datasets: [{
-                    data: [65, 10, 20, 5],
-                    backgroundColor: ['blue', 'red', 'orange', 'gray']
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false
-            }
-        });
-    </script>
+                const inventoryCtx = document.getElementById('inventoryChart').getContext('2d');
+                const inventoryChart = new Chart(inventoryCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Stock', 'Defectuosos', 'Agotados', 'Obsoletos'],
+                        datasets: [{
+                            data: [65, 10, 20, 5],
+                            backgroundColor: ['blue', 'red', 'orange', 'gray']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false
+                    }
+                });
+            </script>
 
 
 
