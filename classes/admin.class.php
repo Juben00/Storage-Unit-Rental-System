@@ -57,6 +57,15 @@ class Admin
         }
     }
 
+    public function getAllStorage()
+    {
+        $sql = "SELECT * FROM storage;";
+        $stmt = $this->db->connect()->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
+
 
 
 
@@ -64,4 +73,4 @@ class Admin
 }
 $adminObj = new Admin();
 
-// var_dump($adminObj->getAllCustomers());
+// var_dump($adminObj->getAllStorage());
