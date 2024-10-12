@@ -1,17 +1,11 @@
-<?php
-
-require_once './classes/admin.class.php';
+<?php require_once './classes/admin.class.php';
 require_once './sanitize.php';
-
 $adminObj = new Admin();
-
 session_start();
-
 $isLoginPop = false;
 $feedbackMessage = "";
 $Customer = [];
 $Admin = [];
-
 $Admin = $adminObj->getAdmin();
 $Customer = $adminObj->getAllCustomers();
 $totalCustomers = count($Customer);
@@ -84,7 +78,6 @@ if (isset($_SESSION['customer']['role'])) {
 
 
                 <div class="grid grid-cols-3 gap-6">
-
                     <!-- Card 1 -->
                     <div class="bg-white p-4 rounded-lg shadow-md border-t-4 border-blue-500">
                         <div class="flex justify-between items-center ">
@@ -220,7 +213,7 @@ if (isset($_SESSION['customer']['role'])) {
                         <h1 class="text-2xl font-semibold">
                             Storages
                         </h1>
-                        <a href="#addStorage" class="bg-blue-600 text-white px-4 py-2 rounded">
+                        <a class="bg-blue-600 text-white px-4 py-2 rounded " id="addStore">
                             + Add Storage
                         </a>
                     </div>
@@ -302,7 +295,8 @@ if (isset($_SESSION['customer']['role'])) {
                                     </td>
                                     <td class="py-2 max-w-xs truncate overflow-hidden whitespace-nowrap">
                                         Lorem ipsum dolor sit, amet consectetur adipisicing elit. Soluta dicta ullam
-                                        laborum aperiam cumque autem aliquid adipisci possimus, veniam necessitatibus.
+                                        laborum aperiam cumque autem aliquid adipisci possimus, veniam
+                                        necessitatibus.
                                     </td>
                                     <td class="py-2">
                                         Small
@@ -337,7 +331,8 @@ if (isset($_SESSION['customer']['role'])) {
                                     </td>
                                     <td class="py-2 max-w-xs truncate overflow-hidden whitespace-nowrap">
                                         Lorem ipsum dolor sit, amet consectetur adipisicing elit. Soluta dicta ullam
-                                        laborum aperiam cumque autem aliquid adipisci possimus, veniam necessitatibus.
+                                        laborum aperiam cumque autem aliquid adipisci possimus, veniam
+                                        necessitatibus.
                                     </td>
                                     <td class="py-2">
                                         Small
@@ -372,7 +367,8 @@ if (isset($_SESSION['customer']['role'])) {
                                     </td>
                                     <td class="py-2 max-w-xs truncate overflow-hidden whitespace-nowrap">
                                         Lorem ipsum dolor sit, amet consectetur adipisicing elit. Soluta dicta ullam
-                                        laborum aperiam cumque autem aliquid adipisci possimus, veniam necessitatibus.
+                                        laborum aperiam cumque autem aliquid adipisci possimus, veniam
+                                        necessitatibus.
                                     </td>
                                     <td class="py-2">
                                         Small
@@ -407,7 +403,8 @@ if (isset($_SESSION['customer']['role'])) {
                                     </td>
                                     <td class="py-2 max-w-xs truncate overflow-hidden whitespace-nowrap">
                                         Lorem ipsum dolor sit, amet consectetur adipisicing elit. Soluta dicta ullam
-                                        laborum aperiam cumque autem aliquid adipisci possimus, veniam necessitatibus.
+                                        laborum aperiam cumque autem aliquid adipisci possimus, veniam
+                                        necessitatibus.
                                     </td>
                                     <td class="py-2">
                                         Small
@@ -442,7 +439,8 @@ if (isset($_SESSION['customer']['role'])) {
                                     </td>
                                     <td class="py-2 max-w-xs truncate overflow-hidden whitespace-nowrap">
                                         Lorem ipsum dolor sit, amet consectetur adipisicing elit. Soluta dicta ullam
-                                        laborum aperiam cumque autem aliquid adipisci possimus, veniam necessitatibus.
+                                        laborum aperiam cumque autem aliquid adipisci possimus, veniam
+                                        necessitatibus.
                                     </td>
                                     <td class="py-2">
                                         Small
@@ -477,7 +475,8 @@ if (isset($_SESSION['customer']['role'])) {
                                     </td>
                                     <td class="py-2 max-w-xs truncate overflow-hidden whitespace-nowrap">
                                         Lorem ipsum dolor sit, amet consectetur adipisicing elit. Soluta dicta ullam
-                                        laborum aperiam cumque autem aliquid adipisci possimus, veniam necessitatibus.
+                                        laborum aperiam cumque autem aliquid adipisci possimus, veniam
+                                        necessitatibus.
                                     </td>
                                     <td class="py-2">
                                         Small
@@ -512,7 +511,8 @@ if (isset($_SESSION['customer']['role'])) {
                                     </td>
                                     <td class="py-2 max-w-xs truncate overflow-hidden whitespace-nowrap">
                                         Lorem ipsum dolor sit, amet consectetur adipisicing elit. Soluta dicta ullam
-                                        laborum aperiam cumque autem aliquid adipisci possimus, veniam necessitatibus.
+                                        laborum aperiam cumque autem aliquid adipisci possimus, veniam
+                                        necessitatibus.
                                     </td>
                                     <td class="py-2">
                                         Small
@@ -547,7 +547,8 @@ if (isset($_SESSION['customer']['role'])) {
                                     </td>
                                     <td class="py-2 max-w-xs truncate overflow-hidden whitespace-nowrap">
                                         Lorem ipsum dolor sit, amet consectetur adipisicing elit. Soluta dicta ullam
-                                        laborum aperiam cumque autem aliquid adipisci possimus, veniam necessitatibus.
+                                        laborum aperiam cumque autem aliquid adipisci possimus, veniam
+                                        necessitatibus.
                                     </td>
                                     <td class="py-2">
                                         Small
@@ -570,14 +571,7 @@ if (isset($_SESSION['customer']['role'])) {
                                 </tr>
                             </tbody>
                         </table>
-
-
-
                     </div>
-
-
-
-
 
                 </div>
 
@@ -653,97 +647,94 @@ if (isset($_SESSION['customer']['role'])) {
                 </div>
             </div>
 
-
-
             <div id="settings" class="content-section hidden">
                 <h1 class="text-2xl font-semibold">
                     Settings
                 </h1>
             </div>
+        </div>
+    </div>
 
-            <script src="https://cdn.jsdelivr.net/npm/chart.js">
-            </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js">
+    </script>
 
-            <script>
-                // JavaScript to switch content based on sidebar click
-                const links = document.querySelectorAll('nav a');
-                const contentSections = document.querySelectorAll('.content-section');
+    <script>
+        // JavaScript to switch content based on sidebar click
+        const links = document.querySelectorAll('nav a');
+        const contentSections = document.querySelectorAll('.content-section');
 
-                links.forEach(link => {
-                    link.addEventListener('click', (e) => {
-                        e.preventDefault(); // Prevent default anchor behavior
+        links.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault(); // Prevent default anchor behavior
 
-                        // Remove active class from all links
-                        links.forEach(l => l.classList.remove('border-l-4', 'border-blue-500', 'bg-slate-200'));
+                // Remove active class from all links
+                links.forEach(l => l.classList.remove('border-l-4', 'border-blue-500', 'bg-slate-200'));
 
-                        const targetId = link.getAttribute('data-target');
+                const targetId = link.getAttribute('data-target');
 
-                        // Hide all sections
-                        contentSections.forEach(section => {
-                            section.classList.add('hidden');
-                        });
-
-                        // Show the selected section
-                        const targetSection = document.getElementById(targetId);
-                        targetSection.classList.remove('hidden');
-
-                        // Add active class to the clicked link
-                        link.classList.add('border-l-4', 'border-blue-500', 'bg-slate-200');
-                    });
+                // Hide all sections
+                contentSections.forEach(section => {
+                    section.classList.add('hidden');
                 });
 
+                // Show the selected section
+                const targetSection = document.getElementById(targetId);
+                targetSection.classList.remove('hidden');
+
+                // Add active class to the clicked link
+                link.classList.add('border-l-4', 'border-blue-500', 'bg-slate-200');
+            });
+        });
 
 
 
-                const salesCtx = document.getElementById('salesChart').getContext('2d');
-                const salesChart = new Chart(salesCtx, {
-                    type: 'line',
-                    data: {
-                        labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
-                        datasets: [{
-                            label: 'Progreso actual',
-                            data: [20, 40, 60, 50, 70, 80],
-                            borderColor: 'blue',
-                            fill: false
-                        }, {
-                            label: 'Progreso Ideal',
-                            data: [30, 50, 70, 60, 80, 90],
-                            borderColor: 'lightblue',
-                            borderDash: [5, 5],
-                            fill: false
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                max: 100
-                            }
-                        }
+
+        const salesCtx = document.getElementById('salesChart').getContext('2d');
+        const salesChart = new Chart(salesCtx, {
+            type: 'line',
+            data: {
+                labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
+                datasets: [{
+                    label: 'Progreso actual',
+                    data: [20, 40, 60, 50, 70, 80],
+                    borderColor: 'blue',
+                    fill: false
+                }, {
+                    label: 'Progreso Ideal',
+                    data: [30, 50, 70, 60, 80, 90],
+                    borderColor: 'lightblue',
+                    borderDash: [5, 5],
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100
                     }
-                });
+                }
+            }
+        });
 
-                const inventoryCtx = document.getElementById('inventoryChart').getContext('2d');
-                const inventoryChart = new Chart(inventoryCtx, {
-                    type: 'doughnut',
-                    data: {
-                        labels: ['Stock', 'Defectuosos', 'Agotados', 'Obsoletos'],
-                        datasets: [{
-                            data: [65, 10, 20, 5],
-                            backgroundColor: ['blue', 'red', 'orange', 'gray']
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false
-                    }
-                });
-            </script>
-
-
-
+        const inventoryCtx = document.getElementById('inventoryChart').getContext('2d');
+        const inventoryChart = new Chart(inventoryCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Stock', 'Defectuosos', 'Agotados', 'Obsoletos'],
+                datasets: [{
+                    data: [65, 10, 20, 5],
+                    backgroundColor: ['blue', 'red', 'orange', 'gray']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+    </script>
 </body>
 
 
