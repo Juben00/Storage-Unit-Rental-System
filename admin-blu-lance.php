@@ -35,13 +35,13 @@ if (isset($_SESSION['customer']['role'])) {
 
 </head>
 
-<body class="max-h-screen flex flex-col bg-slate-100 overflow-hidden">
+<body class="max-h-screen flex flex-col bg-slate-100">
     <div class="flex h-screen">
         <!-- Sidebar -->
         <?php require_once './components/AdminSidebar.php' ?>
 
         <!-- Main Content -->
-        <div class="flex-1 p-6">
+        <div class="flex-1 p-6 overflow-y-scroll h-screen">
             <div id="dashboard" class="content-section">
                 <div class="flex justify-between items-center mb-6">
                     <h1 class="text-2xl font-semibold">
@@ -206,10 +206,10 @@ if (isset($_SESSION['customer']['role'])) {
                 </h1>
             </div>
 
-            <div id="storages" class="content-section hidden h-screen overflow-y-scroll">
+            <div id="storages" class="content-section hidden">
 
-                <div class="flex-1">
-                    <div class="flex justify-between items-center mb-6">
+                <div class="flex-1 flex flex-col gap-6">
+                    <div class="flex justify-between items-center ">
                         <h1 class="text-2xl font-semibold">
                             Storages
                         </h1>
@@ -573,77 +573,19 @@ if (isset($_SESSION['customer']['role'])) {
                         </table>
                     </div>
 
-                </div>
 
-                <div class="">
-                    <div class="flex justify-between items-center mt-6">
+                    <div class="flex justify-between items-center ">
                         <h1 class="text-2xl font-semibold" id="addStorage">
                             Add Storage
                         </h1>
                     </div>
                     <div class="flex">
-                        <!-- Right Section -->
+                        <!-- left Section -->
                         <div class="w-1/2 ">
-                            <form class="bg-white  my-2 p-6 rounded-lg shadow-lg">
-                                <div class="mb-4">
-                                    <label class="block text-gray-700 font-semibold mb-2" for="image">
-                                        Product Image
-                                    </label>
-                                    <input type="file" id="image"
-                                        class="border-2 w-full border-dashed border-gray-300 rounded-lg p-6 text-center">
-
-                                    </input>
-                                    <label class="block text-gray-700 font-semibold mb-2" for="productName">
-                                        Product Name
-                                    </label>
-                                    <input
-                                        class="w-full border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                                        id="productName" placeholder="Name" type="text" />
-                                </div>
-                                <div class="mb-4">
-                                    <label class="block text-gray-700 font-semibold mb-2" for="description">
-                                        Description
-                                    </label>
-                                    <textarea
-                                        class="w-full border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                                        id="description" placeholder="Storage Description"></textarea>
-                                </div>
-                                <div class="mb-4">
-                                    <label class="block text-gray-700 font-semibold mb-2" for="category">
-                                        Category
-                                    </label>
-                                    <select name="category" id="category"
-                                        class="w-full border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-600">
-                                        <option value="">Select an Option</option>
-                                        <option value="Small">Small</option>
-                                        <option value="Medium">Medium</option>
-                                        <option value="Large">Large</option>
-                                    </select>
-                                </div>
-                                <div class="mb-4">
-                                    <div class="flex items-center gap-2">
-                                        <label class="block text-gray-700 font-semibold " for="stock">
-                                            Stock
-                                        </label>
-                                        <input
-                                            class="w-full border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                                            id="stock" placeholder="Storage Quantity" type="text" />
-
-                                        <label class="block text-gray-700 font-semibold " for="price">
-                                            Price
-                                        </label>
-                                        <input
-                                            class="w-full border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                                            id="price" placeholder="Storage Price" type="text" />
-                                    </div>
-                                </div>
-
-                                <button class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">
-                                    Add Product
-                                </button>
-                                </f>
+                            <?php require_once './addStorageForm.php' ?>
                         </div>
                     </div>
+
                 </div>
             </div>
 
@@ -654,11 +596,38 @@ if (isset($_SESSION['customer']['role'])) {
             </div>
         </div>
     </div>
+    <div class="fixed inset-0 flex items-center justify-center z-50 left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2"
+        id="modal" style="display:none;"> <!-- Modal is hidden initially -->
+        <div class="bg-white rounded-lg overflow-hidden shadow-2xl border-blue-500 border-2 z-10 max-w-sm mx-auto">
+            <div class="p-5">
+                <h2 class="text-lg font-semibold">Feedback</h2>
+                <p id="feedbackMessage" class="mt-2"></p> <!-- Display feedback message here -->
+                <div class="mt-4">
+                    <button id="popupbutt" class="bg-blue-500 text-white font-semibold py-2 px-4 rounded">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js">
     </script>
 
     <script>
+        const popbutton = document.getElementById('popupbutt');
+
+        popbutton.addEventListener("click", () => {
+            document.getElementById('modal').style.display = 'none';
+            if (document.getElementById('feedbackMessage').innerText === 'Signup successful!') {
+                loginModal.classList.remove('hidden');
+                loginModal.classList.add('flex');
+                signupModal.classList.add('hidden');
+                signupModal.classList.remove('flex');
+            } else if (document.getElementById('feedbackMessage').innerText === 'Logged In successfully!') {
+                window.location.reload();
+            }
+        });
         // JavaScript to switch content based on sidebar click
         const links = document.querySelectorAll('nav a');
         const contentSections = document.querySelectorAll('.content-section');
@@ -685,8 +654,6 @@ if (isset($_SESSION['customer']['role'])) {
                 link.classList.add('border-l-4', 'border-blue-500', 'bg-slate-200');
             });
         });
-
-
 
 
         const salesCtx = document.getElementById('salesChart').getContext('2d');
@@ -733,6 +700,37 @@ if (isset($_SESSION['customer']['role'])) {
                 responsive: true,
                 maintainAspectRatio: false
             }
+        });
+
+        const addStorage = document.getElementById('addStorageForm');
+
+        addStorage.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+
+            try {
+                const response = await fetch('./api/addStorage.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+                let feedbackMessage = '';
+
+                if (data.status === 'success') {
+                    feedbackMessage = data.message;
+                } else {
+                    feedbackMessage = data.message;
+                }
+
+                document.getElementById('feedbackMessage').innerText = feedbackMessage;
+                document.getElementById('modal').style.display = 'flex';
+
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('feedbackMessage').innerText = 'An error occurred while processing your request.';
+                document.getElementById('modal').style.display = 'flex';
+            }
+            document.getElementById('addStorageForm').reset();
         });
     </script>
 </body>

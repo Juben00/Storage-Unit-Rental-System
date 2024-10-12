@@ -274,9 +274,9 @@ if (isset($_SESSION['customer']['role'])) {
         const loginSignupRedirect = document.getElementById('Login-Signup-Redirect');
         const signupLoginRedirect = document.getElementById('Signup-Login-Redirect');
 
-        const popbuttond = document.getElementById('popupbutt');
+        const popbutton = document.getElementById('popupbutt');
 
-        popbuttond.addEventListener("click", () => {
+        popbutton.addEventListener("click", () => {
             document.getElementById('modal').style.display = 'none';
             if (document.getElementById('feedbackMessage').innerText === 'Signup successful!') {
                 loginModal.classList.remove('hidden');
