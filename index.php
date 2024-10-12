@@ -8,6 +8,13 @@ session_start();
 $isLoginPop = false;
 $feedbackMessage = "";
 
+if (isset($_SESSION['customer']['role'])) {
+    if ($_SESSION['customer']['role'] === 'Admin') {
+        header('Location: admin-blu-lance.php');
+    }
+}
+
+
 ?>
 
 <!DOCTYPE html>
@@ -19,6 +26,7 @@ $feedbackMessage = "";
     <title>StorageUnit Rental System</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="./output.css">
+    <link rel="icon" href="./images/logo white transparent.png">
 </head>
 
 <body class="min-h-screen flex flex-col bg-slate-100 relative">
@@ -227,15 +235,15 @@ $feedbackMessage = "";
             </div>
         </section>
 
+        <!-- pop up message -->
         <div class="fixed inset-0 flex items-center justify-center z-50 left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2"
             id="modal" style="display:none;"> <!-- Modal is hidden initially -->
-            <div class="bg-white rounded-lg overflow-hidden shadow-2xl border-red-500 border-2 z-10 max-w-sm mx-auto">
+            <div class="bg-white rounded-lg overflow-hidden shadow-2xl border-blue-500 border-2 z-10 max-w-sm mx-auto">
                 <div class="p-5">
                     <h2 class="text-lg font-semibold">Feedback</h2>
                     <p id="feedbackMessage" class="mt-2"></p> <!-- Display feedback message here -->
                     <div class="mt-4">
-                        <button onclick="document.getElementById('modal').style.display='none'; stl();"
-                            class="bg-blue-500 text-white font-semibold py-2 px-4 rounded">
+                        <button id="popupbutt" class="bg-blue-500 text-white font-semibold py-2 px-4 rounded">
                             Close
                         </button>
                     </div>
@@ -266,17 +274,34 @@ $feedbackMessage = "";
         const loginSignupRedirect = document.getElementById('Login-Signup-Redirect');
         const signupLoginRedirect = document.getElementById('Signup-Login-Redirect');
 
+        const popbuttond = document.getElementById('popupbutt');
+
+        popbuttond.addEventListener("click", () => {
+            document.getElementById('modal').style.display = 'none';
+            if (document.getElementById('feedbackMessage').innerText === 'Signup successful!') {
+                loginModal.classList.remove('hidden');
+                loginModal.classList.add('flex');
+                signupModal.classList.add('hidden');
+                signupModal.classList.remove('flex');
+            } else if (document.getElementById('feedbackMessage').innerText === 'Logged In successfully!') {
+                window.location.reload();
+            }
+        });
 
         // Login Button Event Listeners
         loginButton.addEventListener('click', () => {
             loginModal.classList.remove('hidden');
             loginModal.classList.add('flex');
+            signupModal.classList.add('hidden');
+            signupModal.classList.remove('flex');
             console.log("click login");
         });
 
         loginButtonMobile.addEventListener('click', () => {
             loginModal.classList.remove('hidden');
             loginModal.classList.add('flex');
+            signupModal.classList.add('hidden');
+            signupModal.classList.remove('flex');
             console.log("click login");
         });
 
@@ -287,14 +312,18 @@ $feedbackMessage = "";
 
         // Signup Button Event Listeners
         signupButton.addEventListener('click', () => {
-            signupModal.classList.remove('hidden');
             signupModal.classList.add('flex');
+            signupModal.classList.remove('hidden');
+            loginModal.classList.remove('flex');
+            loginModal.classList.add('hidden');
             console.log("click signup");
         });
 
         signupButtonMobile.addEventListener('click', () => {
-            signupModal.classList.remove('hidden');
             signupModal.classList.add('flex');
+            signupModal.classList.remove('hidden');
+            loginModal.classList.remove('flex');
+            loginModal.classList.add('hidden');
             console.log("click signup");
         });
 
@@ -317,12 +346,6 @@ $feedbackMessage = "";
             loginModal.classList.add('flex');
         });
 
-        function stl() {
-            signupModal.classList.add('hidden');
-            signupModal.classList.remove('flex');
-            loginModal.classList.remove('hidden');
-            loginModal.classList.add('flex');
-        }
 
         document.getElementById('signup-form').addEventListener('submit', async (e) => {
             e.preventDefault();

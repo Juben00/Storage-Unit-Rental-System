@@ -4,6 +4,7 @@ USE Storage_db;
 
 CREATE TABLE customer(
     id INT AUTO_INCREMENT PRIMARY KEY,
+    role ENUM('Admin', 'Customer') NOT NULL,
     firstname VARCHAR(100) NOT NULL,
     lastname VARCHAR(100) NOT NULL,
     birthdate DATE NOT NULL,

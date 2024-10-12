@@ -73,7 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         // Compile errors and return them
         $feedbackMessage = implode("<br>", array_filter([$firstnameErr, $lastnameErr, $birthdateErr, $sexErr, $phoneErr, $addressErr, $emailErr, $passwordErr, $cpasswordErr]));
-        $response = ["status" => "error", "message" => $feedbackMessage];
+        $response = ["status" => "error", "message" => $feedbackMessage, "source" => "signup"];
         echo json_encode($response);
         exit;
     }

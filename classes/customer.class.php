@@ -5,6 +5,7 @@ require_once __DIR__ . '/../db.php';
 class Customer
 {
     public $id;
+    public $role = 'Customer';
     public $firstname;
     public $lastname;
     public $birthdate;
@@ -42,10 +43,11 @@ class Customer
                 }
 
                 // Prepare to insert new customer
-                $sql = "INSERT INTO customer (firstname, lastname, birthdate, sex, phone, address, email, password) 
-                    VALUES (:firstname, :lastname, :birthdate, :sex, :phone, :address, :email, :password);";
+                $sql = "INSERT INTO customer (role, firstname, lastname, birthdate, sex, phone, address, email, password) 
+                    VALUES (:role, :firstname, :lastname, :birthdate, :sex, :phone, :address, :email, :password);";
 
                 $stmt = $this->db->connect()->prepare($sql);
+                $stmt->bindParam(':role', $this->role);
                 $stmt->bindParam(':firstname', $this->firstname);
                 $stmt->bindParam(':lastname', $this->lastname);
                 $stmt->bindParam(':birthdate', $this->birthdate);
@@ -60,7 +62,7 @@ class Customer
 
                 // Try executing the insert statement
                 if ($stmt->execute()) {
-                    return ['status' => 'success', 'message' => 'Signup successful'];
+                    return ['status' => 'success', 'message' => 'Signup successful!'];
                 } else {
                     // Log the error for debugging
                     error_log("Insert error: " . implode(", ", $stmt->errorInfo()));
