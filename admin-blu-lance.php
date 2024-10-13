@@ -12,6 +12,7 @@ $Storage = [];
 $Admin = $adminObj->getAdmin();
 $Customer = $adminObj->getAllCustomers();
 $Storage = $adminObj->getAllStorage();
+$totalStorage = count($Storage);
 $totalCustomers = count($Customer);
 
 
@@ -178,15 +179,34 @@ if (isset($_SESSION['customer']['role'])) {
                     <!-- Card 2 -->
                     <div class="bg-white p-4 rounded-lg shadow-md border-t-4 border-green-500">
                         <div class="flex justify-between items-center mb-4">
-                            <div class="flex items-center">
-                                <i class="fas fa-wallet text-gray-500 text-2xl mr-2">
-                                </i>
+                            <div class="flex items-center gap-2">
+                                <svg width="50px" height="50px" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                    <g id="SVGRepo_iconCarrier">
+                                        <path d="M22 22L2 22" stroke="#1C274C" stroke-width="0.744"
+                                            stroke-linecap="round"></path>
+                                        <path
+                                            d="M3 22.0001V11.3472C3 10.4903 3.36644 9.67432 4.00691 9.10502L10.0069 3.77169C11.1436 2.76133 12.8564 2.76133 13.9931 3.77169L19.9931 9.10502C20.6336 9.67432 21 10.4903 21 11.3472V22.0001"
+                                            stroke="#1C274C" stroke-width="0.744" stroke-linecap="round"></path>
+                                        <path d="M10 9H14" stroke="#1C274C" stroke-width="0.744" stroke-linecap="round">
+                                        </path>
+                                        <path d="M9 15.5H15" stroke="#1C274C" stroke-width="0.744"
+                                            stroke-linecap="round"></path>
+                                        <path d="M9 18.5H15" stroke="#1C274C" stroke-width="0.744"
+                                            stroke-linecap="round"></path>
+                                        <path
+                                            d="M18 22V16C18 14.1144 18 13.1716 17.4142 12.5858C16.8284 12 15.8856 12 14 12H10C8.11438 12 7.17157 12 6.58579 12.5858C6 13.1716 6 14.1144 6 16V22"
+                                            stroke="#1C274C" stroke-width="0.744"></path>
+                                    </g>
+                                </svg>
                                 <div>
                                     <p class="text-gray-500">
                                         Total Number of Storages
                                     </p>
                                     <p class="text-2xl font-semibold">
-                                        $105 500.00
+                                        <?php echo $totalStorage ?>
                                     </p>
                                 </div>
                             </div>
@@ -198,12 +218,12 @@ if (isset($_SESSION['customer']['role'])) {
                     <!-- Card 3 -->
                     <div class="bg-white p-4 rounded-lg shadow-md border-t-4 border-red-500">
                         <div class="flex justify-between items-center">
-                            <div class="flex items-center">
+                            <div class="flex items-center gap-2">
                                 <i class="fas fa-money-bill-wave text-gray-500 text-2xl mr-2">
                                 </i>
                                 <div>
                                     <p class="text-gray-500">
-                                        Gastos Diarios
+                                        Sales
                                     </p>
                                     <p class="text-2xl font-semibold">
                                         $3 480.00
@@ -216,7 +236,7 @@ if (isset($_SESSION['customer']['role'])) {
 
                     </div>
                     <!-- Card 4 -->
-                    <div class="col-span-2 bg-white p-4 rounded-lg shadow-md">
+                    <!-- <div class="col-span-2 bg-white p-4 rounded-lg shadow-md">
                         <div class="flex justify-between items-center ">
                             <div class="flex items-center">
                                 <i class="fas fa-chart-line text-gray-500 text-2xl mr-2">
@@ -234,9 +254,9 @@ if (isset($_SESSION['customer']['role'])) {
                             <canvas id="salesChart">
                             </canvas>
                         </div>
-                    </div>
+                    </div> -->
                     <!-- Card 5 -->
-                    <div class="bg-white p-4 rounded-lg shadow-md">
+                    <!-- <div class="bg-white p-4 rounded-lg shadow-md">
                         <div class="flex justify-between items-center mb-4">
                             <div class="flex items-center">
                                 <i class="fas fa-boxes text-gray-500 text-2xl mr-2">
@@ -254,7 +274,7 @@ if (isset($_SESSION['customer']['role'])) {
                             <canvas id="inventoryChart">
                             </canvas>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
 
@@ -397,6 +417,12 @@ if (isset($_SESSION['customer']['role'])) {
                 </div>
             </div>
 
+            <div id="sales" class="content-section hidden">
+                <h1 class="text-2xl font-semibold">
+                    Customers
+                </h1>
+            </div>
+
             <div id="settings" class="content-section hidden">
                 <h1 class="text-2xl font-semibold">
                     Settings
@@ -404,6 +430,7 @@ if (isset($_SESSION['customer']['role'])) {
             </div>
         </div>
     </div>
+
     <div class="fixed inset-0 flex items-center justify-center z-50 left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2"
         id="modal" style="display:none;"> <!-- Modal is hidden initially -->
         <div class="bg-white rounded-lg overflow-hidden shadow-2xl border-blue-500 border-2 z-10 max-w-sm mx-auto">
@@ -532,8 +559,6 @@ if (isset($_SESSION['customer']['role'])) {
             }
         }
 
-
-
         const popbutton = document.getElementById('popupbutt');
 
         popbutton.addEventListener("click", () => {
@@ -560,7 +585,7 @@ if (isset($_SESSION['customer']['role'])) {
                 e.preventDefault(); // Prevent default anchor behavior
 
                 // Remove active class from all links
-                links.forEach(l => l.classList.remove('border-l-4', 'border-blue-500', 'bg-slate-200'));
+                links.forEach(l => l.classList.remove('border-l-4', 'border-blue-500', 'bg-slate-200', 'font-semibold'));
 
                 const targetId = link.getAttribute('data-target');
 
@@ -574,56 +599,55 @@ if (isset($_SESSION['customer']['role'])) {
                 targetSection.classList.remove('hidden');
 
                 // Add active class to the clicked link
-                link.classList.add('border-l-4', 'border-blue-500', 'bg-slate-200');
+                link.classList.add('border-l-4', 'border-blue-500', 'bg-slate-200', 'font-semibold');
             });
         });
 
+        // const salesCtx = document.getElementById('salesChart').getContext('2d');
+        // const salesChart = new Chart(salesCtx, {
+        //     type: 'line',
+        //     data: {
+        //         labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
+        //         datasets: [{
+        //             label: 'Progreso actual',
+        //             data: [20, 40, 60, 50, 70, 80],
+        //             borderColor: 'blue',
+        //             fill: false
+        //         }, {
+        //             label: 'Progreso Ideal',
+        //             data: [30, 50, 70, 60, 80, 90],
+        //             borderColor: 'lightblue',
+        //             borderDash: [5, 5],
+        //             fill: false
+        //         }]
+        //     },
+        //     options: {
+        //         responsive: true,
+        //         maintainAspectRatio: false,
+        //         scales: {
+        //             y: {
+        //                 beginAtZero: true,
+        //                 max: 100
+        //             }
+        //         }
+        //     }
+        // });
 
-        const salesCtx = document.getElementById('salesChart').getContext('2d');
-        const salesChart = new Chart(salesCtx, {
-            type: 'line',
-            data: {
-                labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
-                datasets: [{
-                    label: 'Progreso actual',
-                    data: [20, 40, 60, 50, 70, 80],
-                    borderColor: 'blue',
-                    fill: false
-                }, {
-                    label: 'Progreso Ideal',
-                    data: [30, 50, 70, 60, 80, 90],
-                    borderColor: 'lightblue',
-                    borderDash: [5, 5],
-                    fill: false
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 100
-                    }
-                }
-            }
-        });
-
-        const inventoryCtx = document.getElementById('inventoryChart').getContext('2d');
-        const inventoryChart = new Chart(inventoryCtx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Stock', 'Defectuosos', 'Agotados', 'Obsoletos'],
-                datasets: [{
-                    data: [65, 10, 20, 5],
-                    backgroundColor: ['blue', 'red', 'orange', 'gray']
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false
-            }
-        });
+        // const inventoryCtx = document.getElementById('inventoryChart').getContext('2d');
+        // const inventoryChart = new Chart(inventoryCtx, {
+        //     type: 'doughnut',
+        //     data: {
+        //         labels: ['Stock', 'Defectuosos', 'Agotados', 'Obsoletos'],
+        //         datasets: [{
+        //             data: [65, 10, 20, 5],
+        //             backgroundColor: ['blue', 'red', 'orange', 'gray']
+        //         }]
+        //     },
+        //     options: {
+        //         responsive: true,
+        //         maintainAspectRatio: false
+        //     }
+        // });
 
         const addStorage = document.getElementById('addStorageForm');
 

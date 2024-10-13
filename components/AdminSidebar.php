@@ -3,7 +3,7 @@
         <img alt="Company Logo" src="./images/logo black transparent with name.png" />
     </div>
     <nav>
-        <a class="flex items-center px-6 py-2 text-gray-700 border-l-4 border-blue-500 bg-slate-200"
+        <a class="flex items-center px-6 py-2 text-gray-700 border-l-4 border-blue-500 bg-slate-200 font-semibold"
             data-target="dashboard" href="#">
             <i class="fas fa-home mr-3"></i>
             Dashboard
@@ -16,6 +16,11 @@
             <i class="fas fa-boxes mr-3"></i>
             Storages
         </a>
+        <a class="flex items-center px-6 py-2 text-gray-700" data-target="sales" href="#">
+            <i class="fas fa-dollar-sign mr-3"></i>
+            Sales
+        </a>
+
         <a class="flex items-center px-6 py-2 text-gray-700" data-target="settings" href="#">
             <i class="fas fa-cog mr-3"></i>
             Settings
