@@ -121,8 +121,19 @@ $Storages = $customerObj->getAllStorage();
                 <?php if (!empty($Storages)): ?>
                     <?php foreach ($Storages as $storage): ?>
                         <div class="border p-2 bg-neutral-100 shadow-md">
-                            <img alt="<?php echo htmlspecialchars($storage['name']); ?>" class="w-full h-64 object-cover"
-                                src="<?php echo htmlspecialchars($storage['image']); ?>" width="400" height="400" />
+                            <?php
+                            // Decode the JSON image field
+                            $images = json_decode($storage['image'], true); // 'true' returns as associative array
+                            $firstImage = !empty($images) ? $images[0] : ''; // Get the first image
+                            ?>
+                            <?php if ($firstImage): ?>
+                                <img alt="<?php echo htmlspecialchars($storage['name']); ?>" class="w-full h-64 object-cover"
+                                    src="<?php echo htmlspecialchars($firstImage); ?>" width="400" height="400" />
+                            <?php else: ?>
+                                <img alt="No Image" class="w-8 h-8 mr-2" height="30" src="./image/bg-storage-removebg-preview.png"
+                                    width="30" />
+                            <?php endif; ?>
+
                             <div class="text-sm mt-2 flex items-center">
                                 <span class="flex-1">
                                     <?php echo htmlspecialchars($storage['name']); ?>

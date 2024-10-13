@@ -570,7 +570,7 @@ if (isset($_SESSION['customer']['role'])) {
 
     <script>
 
-        document.getElementById('updateStorageFormParent').addEventListener('click', (event) => {
+        document.getElementById('updateStorageFormParent').addEventListener('dblclick', (event) => {
             if (event.target === document.getElementById('updateStorageFormParent')) {
                 document.getElementById('updateStorageFormParent').classList.add('hidden');
             }

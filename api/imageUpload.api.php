@@ -5,7 +5,7 @@ use Cloudinary\Cloudinary;
 use Cloudinary\Api\Upload\UploadApi;
 use Cloudinary\Configuration\Configuration;
 
-function uploadImage($file)
+function uploadImage($fileTmpName)
 {
     Configuration::instance([
         'cloud' => [
@@ -19,13 +19,11 @@ function uploadImage($file)
     ]);
 
     try {
-        // Uploading the image to Cloudinary
-        $uploadResult = (new UploadApi())->upload($file['tmp_name'], [
+        $uploadResult = (new UploadApi())->upload($fileTmpName, [
             'folder' => 'blu',
             'public_id' => 'user_' . uniqid(),
         ]);
 
-        // Return the secure URL of the uploaded image
         return $uploadResult['secure_url'];
 
     } catch (Exception $e) {
