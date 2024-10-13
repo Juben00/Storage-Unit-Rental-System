@@ -57,6 +57,41 @@ class Admin
         }
     }
 
+    public function updateStorage()
+    {
+        // Start the SQL query
+        $sql = "UPDATE storage SET name = :name, category = :category, description = :description, stock = :stock, price = :price";
+
+        // If a new image is provided, add it to the query
+        if ($this->image) {
+            $sql .= ", image = :image";
+        }
+
+        $sql .= " WHERE id = :id";
+
+        // Prepare and bind the SQL statement
+        $stmt = $this->db->connect()->prepare($sql);
+        $stmt->bindParam(':name', $this->name);
+        $stmt->bindParam(':category', $this->category);
+        $stmt->bindParam(':description', $this->description);
+        $stmt->bindParam(':stock', $this->stock);
+        $stmt->bindParam(':price', $this->price);
+        $stmt->bindParam(':id', $this->id);
+
+        // If an image is provided, bind the image parameter
+        if ($this->image) {
+            $stmt->bindParam(':image', $this->image);
+        }
+
+        // Execute the statement and return the result
+        if ($stmt->execute()) {
+            return ['status' => 'success', 'message' => 'Storage updated successfully'];
+        } else {
+            return ['status' => 'error', 'message' => 'Failed to update storage'];
+        }
+    }
+
+
     public function getAllStorage()
     {
         $sql = "SELECT * FROM storage;";

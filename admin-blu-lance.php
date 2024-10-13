@@ -40,6 +40,66 @@ if (isset($_SESSION['customer']['role'])) {
 </head>
 
 <body class="max-h-screen flex flex-col bg-slate-100 text-neutral-800">
+    <div class="bg-neutral-900/20 w-screen h-screen z-50 absolute hidden" id="updateStorageFormParent">
+        <form class="bg-white p-6 rounded-lg shadow-lg left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 absolute"
+            id="updateStorageForm">
+            <div class="mb-4">
+                <input type="hidden" name="u_id" id="u_id">
+                <input type="hidden" name="existing_image" id="existing_image">
+                <label class="block text-gray-700 font-semibold mb-2" for="image">
+                    Storage Image </label>
+                <input type="file" id="u_image" name="u_image"
+                    class="border-2 w-full border-dashed border-gray-300 rounded-lg p-6 text-center" />
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-gray-700 font-semibold mb-2" for="productName">
+                    Product Name </label>
+                <input
+                    class="w-full border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                    id="u_storageName" name="u_storageName" placeholder="Storage Name" type="text" required />
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-gray-700 font-semibold mb-2" for="description"> Description
+                </label>
+                <input
+                    class="w-full border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                    id="u_description" name="u_description" placeholder="Storage Description" type="text" required />
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-gray-700 font-semibold mb-2" for="category">
+                    Category </label>
+                <select name="u_category" id="u_category"
+                    class="w-full border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-600">
+                    <option value="" disabled selected>Select an Option</option>
+                    <option value='Small'>Small</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Large">Large</option>
+                </select>
+            </div>
+
+            <div class="mb-4">
+                <div class="flex items-center gap-2">
+                    <label class="block text-gray-700 font-semibold " for="stock"> Stock </label>
+                    <input
+                        class="w-full border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                        id="u_stock" name="u_stock" placeholder="Storage Quantity" type="text" required />
+
+                    <label class="block text-gray-700 font-semibold " for="price"> Price </label>
+                    <input
+                        class="w-full border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                        id="u_price" name="u_price" placeholder="Storage Price" type="text" required />
+                </div>
+            </div>
+
+            <input type="submit" value="Update Product"
+                class="w-full bg-blue-600 text-white py-2 rounded-lg text-center font-semibold hover:bg-blue-700" />
+        </form>
+    </div>
+
+
     <div class="flex h-screen">
         <!-- Sidebar -->
         <?php require_once './components/AdminSidebar.php' ?>
@@ -210,8 +270,7 @@ if (isset($_SESSION['customer']['role'])) {
                 </h1>
             </div>
 
-            <div id="storages" class="content-section hidden">
-
+            <div id="storages" class="content-section hidden relative">
                 <div class="flex-1 flex flex-col gap-6">
                     <div class="flex justify-between items-center ">
                         <h1 class="text-2xl font-semibold">
@@ -292,8 +351,19 @@ if (isset($_SESSION['customer']['role'])) {
                                                     onclick="disableStorage(<?php echo htmlspecialchars($item['id']); ?>)">Disable
                                                 </button>
                                                 <button
-                                                    class="p-2 border-2 border-orange-500 w-[70px] rounded-md font-semibold shadow-md">Edit
+                                                    class="p-2 border-2 border-orange-500 w-[70px] rounded-md font-semibold shadow-md"
+                                                    onclick="populateForm({
+                                                        id: '<?php echo htmlspecialchars($item['id']); ?>',
+                                                        name: '<?php echo htmlspecialchars(addslashes($item['name'])); ?>',
+                                                        description: '<?php echo htmlspecialchars(addslashes($item['description'])); ?>',
+                                                        category: '<?php echo htmlspecialchars($item['category']); ?>',
+                                                        stock: '<?php echo htmlspecialchars($item['stock']); ?>',
+                                                        price: '<?php echo htmlspecialchars($item['price']); ?>',
+                                                        image: '<?php echo htmlspecialchars($item['image']); ?>'
+                                                    })">
+                                                    Edit
                                                 </button>
+
                                                 <button
                                                     class="p-2 border-2 border-neutral-800 w-[70px] rounded-md font-semibold shadow-md"
                                                     onclick="deleteStorage(<?php echo htmlspecialchars($item['id']); ?>)">Delete
@@ -354,6 +424,87 @@ if (isset($_SESSION['customer']['role'])) {
 
     <script>
 
+        document.getElementById('updateStorageForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+
+            try {
+                const response = await fetch('./api/UpdateStorage.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                console.log(data);
+
+                let feedbackMessage = '';
+
+                if (data.status === 'success') {
+                    feedbackMessage = data.message;
+                    // Close the modal
+                    document.getElementById('updateStorageForm').classList.add('hidden');
+                    // Update the table row with the new data
+                    // const updatedRow = document.querySelector(`#storage-row-${data.id}`);
+                    // updatedRow.querySelector('td:nth-child(2) img').src = data.image;
+                    // updatedRow.querySelector('td:nth-child(2) span').innerText = data.name;
+                    // updatedRow.querySelector('td:nth-child(3)').innerText = data.description;
+                    // updatedRow.querySelector('td:nth-child(4)').innerText = data.category;
+                    // updatedRow.querySelector('td:nth-child(5)').innerText = data.stock;
+                    // updatedRow.querySelector('td:nth-child(6)').innerText = data.price;
+                    // updatedRow.querySelector('td:nth-child(7)').innerText = data.status;
+
+                } else {
+                    feedbackMessage = data.message;
+                }
+
+                document.getElementById('feedbackMessage').innerText = feedbackMessage;
+                document.getElementById('modal').style.display = 'flex';
+
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('feedbackMessage').innerText = 'An error occurred while updating the storage item.';
+                document.getElementById('modal').style.display = 'flex';
+            }
+        });
+
+        function populateForm(item) {
+            // Ensure the form is visible
+            document.getElementById('updateStorageFormParent').classList.remove('hidden');
+
+            // Populate the form fields with the item's data
+            document.getElementById('u_id').value = item.id;
+            document.getElementById('u_storageName').value = item.name;
+            document.getElementById('u_description').value = item.description;
+            document.getElementById('u_category').value = item.category;
+            document.getElementById('u_stock').value = item.stock;
+            document.getElementById('u_price').value = item.price;
+
+            // Set the existing image
+            document.getElementById('existing_image').value = item.image; // Set existing image URL to hidden field
+        }
+
+
+
+        // Function to open the modal and populate the form with the selected storage item's data
+        // function populateForm(item) {
+        //     // Open the modal
+        //     document.getElementById('updateStorageFormParent').classList.remove('hidden');
+
+        //     // Populate the form fields with the item data
+        //     document.getElementById('u_id').value = item.id;
+        //     document.getElementById('u_storageName').value = item.name;
+        //     document.getElementById('u_description').value = item.description;
+        //     document.getElementById('u_category').value = item.category;
+        //     document.getElementById('u_stock').value = item.stock;
+        //     document.getElementById('u_price').value = item.price;
+
+        //     // Set the form action if needed (e.g., update URL or handling)
+        //     // document.getElementById('updateStorageForm').action = 'update_storage.php?id=' + item.id;
+        //     console.log("hello");
+
+        // }
+
+
         async function deleteStorage(id) {
             if (confirm('Are you sure you want to delete this storage item?')) {
                 try {
@@ -393,6 +544,10 @@ if (isset($_SESSION['customer']['role'])) {
                 signupModal.classList.add('hidden');
                 signupModal.classList.remove('flex');
             } else if (document.getElementById('feedbackMessage').innerText === 'Logged In successfully!') {
+                window.location.reload();
+            } else if (document.getElementById('feedbackMessage').innerText === 'Storage added successfully') {
+                window.location.reload();
+            } else if (document.getElementById('feedbackMessage').innerText === 'Storage updated successfully') {
                 window.location.reload();
             }
         });
@@ -492,6 +647,7 @@ if (isset($_SESSION['customer']['role'])) {
 
                 document.getElementById('feedbackMessage').innerText = feedbackMessage;
                 document.getElementById('modal').style.display = 'flex';
+
 
             } catch (error) {
                 console.error('Error:', error);
