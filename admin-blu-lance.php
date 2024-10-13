@@ -359,7 +359,8 @@ if (isset($_SESSION['customer']['role'])) {
                                                 <button class="p-2 border-2 border-blue-500 rounded-md font-semibold">
                                                     Restrict
                                                 </button>
-                                                <button class="p-2 border-2 border-red-500 rounded-md font-semibold">
+                                                <button class="p-2 border-2 border-red-500 rounded-md font-semibold"
+                                                    onclick="deleteCustomer(<?php echo htmlspecialchars($cust['id']); ?>)">
                                                     Delete
                                                 </button>
                                             </td>
@@ -630,6 +631,31 @@ if (isset($_SESSION['customer']['role'])) {
             }
         }
 
+        async function deleteCustomer(id) {
+            if (confirm('Are you sure you want to delete this storage item?')) {
+                try {
+                    let response = await fetch(`./api/deleteCustomer.php?id=${id}`, {
+                        method: 'GET',
+                    });
+                    let data = await response.json();
+                    let feedbackMessage = '';
+
+                    if (data.status === 'success') {
+                        feedbackMessage = data.message;
+                    } else {
+                        feedbackMessage = data.message;
+                    }
+
+                    document.getElementById('feedbackMessage').innerText = feedbackMessage;
+                    document.getElementById('modal').style.display = 'flex';
+
+                } catch (error) {
+                    document.getElementById('feedbackMessage').innerText = 'An error occurred while deleting the Customer item.';
+                    document.getElementById('modal').style.display = 'flex';
+                }
+            }
+        }
+
         const popbutton = document.getElementById('popupbutt');
 
         popbutton.addEventListener("click", () => {
@@ -644,6 +670,8 @@ if (isset($_SESSION['customer']['role'])) {
             } else if (document.getElementById('feedbackMessage').innerText === 'Storage added successfully') {
                 window.location.reload();
             } else if (document.getElementById('feedbackMessage').innerText === 'Storage updated successfully') {
+                window.location.reload();
+            } else if (document.getElementById('feedbackMessage').innerText === 'Customer deleted successfully') {
                 window.location.reload();
             }
         });
