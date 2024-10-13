@@ -23,5 +23,5 @@ CREATE TABLE storage (
     stock INT NOT NULL,
     price DECIMAL(10, 2) NOT NULL,
     status ENUM('In-stock', 'Out-of-Stock') NOT NULL,
-    image VARCHAR(100) NOT NULL
+    image JSON NOT NULL
 )

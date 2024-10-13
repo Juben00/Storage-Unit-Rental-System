@@ -42,15 +42,21 @@ if (isset($_SESSION['customer']['role'])) {
 
 <body class="max-h-screen flex flex-col bg-slate-100 text-neutral-800">
     <div class="bg-neutral-900/20 w-screen h-screen z-50 absolute hidden" id="updateStorageFormParent">
-        <form class="bg-white p-6 rounded-lg shadow-lg left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 absolute"
-            id="updateStorageForm">
+        <form
+            class="bg-white max-h-[600px] overflow-y-scroll p-6 rounded-lg shadow-lg left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 absolute"
+            id="updateStorageForm" enctype="multipart/form-data">
             <div class="mb-4">
                 <input type="hidden" name="u_id" id="u_id">
                 <input type="hidden" name="existing_image" id="existing_image">
+                <div id="imagePreview" class="mb-4 flex gap-2">
+                    <!-- This will be populated dynamically with images -->
+                </div>
+
                 <label class="block text-gray-700 font-semibold mb-2" for="image">
                     Storage Image </label>
-                <input type="file" id="u_image" name="u_image"
+                <input type="file" id="u_image" name="u_image[]" multiple
                     class="border-2 w-full border-dashed border-gray-300 rounded-lg p-6 text-center" />
+
             </div>
 
             <div class="mb-4">
@@ -456,8 +462,18 @@ if (isset($_SESSION['customer']['role'])) {
                                         <tr id="storage-row-<?php echo htmlspecialchars($item['id']); ?>" class="border-b">
                                             <td class="py-2"><?php echo htmlspecialchars($item['id']); ?></td>
                                             <td class="py-2 flex items-center">
-                                                <img alt="Product Image" class="w-8 h-8 mr-2" height="30"
-                                                    src="<?php echo htmlspecialchars($item['image']); ?>" width="30" />
+                                                <?php
+                                                // Decode the JSON image field
+                                                $images = json_decode($item['image'], true); // 'true' returns as associative array
+                                                $firstImage = !empty($images) ? $images[0] : ''; // Get the first image
+                                                ?>
+                                                <?php if ($firstImage): ?>
+                                                    <img alt="Product Image" class="w-8 h-8 mr-2" height="30"
+                                                        src="<?php echo htmlspecialchars($firstImage); ?>" width="30" />
+                                                <?php else: ?>
+                                                    <img alt="No Image" class="w-8 h-8 mr-2" height="30"
+                                                        src="./image/bg-storage-removebg-preview.png" width="30" />
+                                                <?php endif; ?>
                                                 <span class="truncate"><?php echo htmlspecialchars($item['name']); ?></span>
                                             </td>
                                             <td class="py-2 max-w-xs truncate overflow-hidden whitespace-nowrap">
@@ -476,17 +492,16 @@ if (isset($_SESSION['customer']['role'])) {
                                                 <button
                                                     class="p-2 border-2 border-orange-500 w-[70px] rounded-md font-semibold shadow-md"
                                                     onclick="populateForm({
-                                                        id: '<?php echo htmlspecialchars($item['id']); ?>',
-                                                        name: '<?php echo htmlspecialchars(addslashes($item['name'])); ?>',
-                                                        description: '<?php echo htmlspecialchars(addslashes($item['description'])); ?>',
-                                                        category: '<?php echo htmlspecialchars($item['category']); ?>',
-                                                        stock: '<?php echo htmlspecialchars($item['stock']); ?>',
-                                                        price: '<?php echo htmlspecialchars($item['price']); ?>',
-                                                        image: '<?php echo htmlspecialchars($item['image']); ?>'
-                                                    })">
+                                id: '<?php echo htmlspecialchars($item['id']); ?>',
+                                name: '<?php echo htmlspecialchars(addslashes($item['name'])); ?>',
+                                description: '<?php echo htmlspecialchars(addslashes($item['description'])); ?>',
+                                category: '<?php echo htmlspecialchars($item['category']); ?>',
+                                stock: '<?php echo htmlspecialchars($item['stock']); ?>',
+                                price: '<?php echo htmlspecialchars($item['price']); ?>',
+                                image: '<?php echo htmlspecialchars(addslashes($item['image'])); ?>'
+                            })">
                                                     Edit
                                                 </button>
-
                                                 <button
                                                     class="p-2 border-2 border-neutral-800 w-[70px] rounded-md font-semibold shadow-md"
                                                     onclick="deleteStorage(<?php echo htmlspecialchars($item['id']); ?>)">Delete
@@ -500,6 +515,7 @@ if (isset($_SESSION['customer']['role'])) {
                                     </tr>
                                 <?php endif; ?>
                             </tbody>
+
                         </table>
 
                     </div>
@@ -554,9 +570,20 @@ if (isset($_SESSION['customer']['role'])) {
 
     <script>
 
+        document.getElementById('updateStorageFormParent').addEventListener('click', (event) => {
+            if (event.target === document.getElementById('updateStorageFormParent')) {
+                document.getElementById('updateStorageFormParent').classList.add('hidden');
+            }
+        });
+
         document.getElementById('updateStorageForm').addEventListener('submit', async (event) => {
             event.preventDefault();
             const formData = new FormData(event.target);
+
+            // Debugging: Log the form data
+            for (const [key, value] of formData.entries()) {
+                console.log(key, value);
+            }
 
             try {
                 const response = await fetch('./api/UpdateStorage.php', {
@@ -567,15 +594,11 @@ if (isset($_SESSION['customer']['role'])) {
                 const data = await response.json();
                 console.log(data);
 
-                let feedbackMessage = '';
+                let feedbackMessage = data.status === 'success' ? data.message : data.message;
 
                 if (data.status === 'success') {
-                    feedbackMessage = data.message;
                     // Close the modal
-                    document.getElementById('updateStorageForm').classList.add('hidden');
-
-                } else {
-                    feedbackMessage = data.message;
+                    document.getElementById('updateStorageFormParent').classList.add('hidden');
                 }
 
                 document.getElementById('feedbackMessage').innerText = feedbackMessage;
@@ -587,6 +610,7 @@ if (isset($_SESSION['customer']['role'])) {
                 document.getElementById('modal').style.display = 'flex';
             }
         });
+
 
         function populateForm(item) {
             // Ensure the form is visible
@@ -600,9 +624,63 @@ if (isset($_SESSION['customer']['role'])) {
             document.getElementById('u_stock').value = item.stock;
             document.getElementById('u_price').value = item.price;
 
-            // Set the existing image
-            document.getElementById('existing_image').value = item.image; // Set existing image URL to hidden field
+            // Decode the image JSON string and display the images
+            let existingImages = JSON.parse(item.image); // Assuming image is a JSON string
+            let imagePreview = document.getElementById('imagePreview');
+            imagePreview.innerHTML = ''; // Clear previous images
+            existingImages.forEach((imgUrl, index) => {
+                let imgTag = `<div class="relative w-20">
+                <img src="${imgUrl}" alt="Storage Image" class="w-20 h-20 inline-block mr-2">
+                <button type="button" class="absolute top-1 right-1 text-red-500" onclick="removeImage(${index})">
+                    <svg width="10px" height="10px" viewBox="0 0 512.00 512.00" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#FF0000">
+                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                        <g id="SVGRepo_iconCarrier">
+                            <title>cancel</title>
+                            <g id="Page-1" stroke-width="0.00512" fill="none" fill-rule="evenodd">
+                                <g id="work-case" fill="#FF0000" transform="translate(91.520000, 91.520000)">
+                                    <polygon id="Close" points="328.96 30.2933333 298.666667 0 164.48 134.4 30.2933333 0 0 30.2933333 134.4 164.48 0 298.666667 30.2933333 328.96 164.48 194.56 298.666667 328.96 328.96 298.666667 194.56 164.48"></polygon>
+                                </g>
+                            </g>
+                        </g>
+                    </svg>
+                </button>
+              </div>`;
+
+                imagePreview.innerHTML += imgTag;
+            });
+
+            // Set the existing images in a hidden input
+            document.getElementById('existing_image').value = JSON.stringify(existingImages); // Set existing image URLs
         }
+
+        // Function to remove an image from the preview and update the hidden field
+        function removeImage(index) {
+            let existingImages = JSON.parse(document.getElementById('existing_image').value);
+            existingImages.splice(index, 1); // Remove the selected image
+            document.getElementById('existing_image').value = JSON.stringify(existingImages); // Update the hidden field
+            populateForm({ ...document.getElementById('u_id').value, image: JSON.stringify(existingImages) }); // Refresh the form
+        }
+
+        document.getElementById('u_image').addEventListener('change', function (event) {
+            const files = event.target.files;
+            const previewDiv = document.getElementById('imagePreview');
+            previewDiv.innerHTML = ''; // Clear previous previews
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.className = "w-20 h-20 object-cover mr-2"; // Tailwind styling for preview
+                    previewDiv.appendChild(img);
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+
 
         async function deleteStorage(id) {
             if (confirm('Are you sure you want to delete this storage item?')) {

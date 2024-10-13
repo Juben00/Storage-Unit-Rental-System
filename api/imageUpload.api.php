@@ -18,14 +18,14 @@ function uploadImage($file)
         ]
     ]);
 
-    $uploadedFile = $file['tmp_name'];
-
     try {
-        $uploadResult = (new UploadApi())->upload($uploadedFile, [
+        // Uploading the image to Cloudinary
+        $uploadResult = (new UploadApi())->upload($file['tmp_name'], [
             'folder' => 'blu',
             'public_id' => 'user_' . uniqid(),
         ]);
 
+        // Return the secure URL of the uploaded image
         return $uploadResult['secure_url'];
 
     } catch (Exception $e) {

@@ -17,12 +17,40 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stock = clean_input($_POST["u_stock"]);
 
     // Check if a new image was uploaded
-    if ($_FILES['u_image']['error'] === 0 && getimagesize($_FILES['u_image']['tmp_name']) !== false) {
-        $image = uploadImage($_FILES['u_image']); // Upload new image if provided
+    if (!empty($_FILES['u_image']['name'][0])) {
+        $uploadedImages = []; // Array to store newly uploaded images
+        foreach ($_FILES['u_image']['tmp_name'] as $key => $tmp_name) {
+            // Check if the file is a valid image before attempting to upload
+            if (getimagesize($tmp_name) !== false) {
+                // Prepare file data
+                $fileData = [
+                    'tmp_name' => $tmp_name,
+                    'name' => $_FILES['u_image']['name'][$key]
+                ];
+
+                // Call uploadImage with the single file data
+                $uploadResult = uploadImage($fileData);
+
+                if (strpos($uploadResult, "Upload failed:") === false) {
+                    // If upload was successful, add the secure URL to the uploaded images array
+                    $uploadedImages[] = $uploadResult;
+                } else {
+                    // Log the error message or handle the failed upload
+                    error_log("Failed to upload image: " . $uploadResult);
+                }
+            }
+        }
+
+        // Merge existing images with new uploads
+        $existingImages = json_decode($_POST['existing_image'], true);
+        $imageArray = array_merge($existingImages, $uploadedImages);
+        $image = json_encode($imageArray); // Encode back to JSON for storing
     } else {
-        // If no new image is uploaded, use the existing image
+        // If no new image is uploaded, keep the existing images
         $image = $_POST['existing_image'];
     }
+
+
 
     // Validate input fields
     if (empty($name)) {
