@@ -285,9 +285,110 @@ if (isset($_SESSION['customer']['role'])) {
             </div>
 
             <div id="customers" class="content-section hidden">
-                <h1 class="text-2xl font-semibold">
-                    Customers
-                </h1>
+                <div class="flex-1 flex flex-col gap-6">
+                    <div class="flex justify-between items-center ">
+                        <h1 class="text-2xl font-semibold">
+                            Customers
+                        </h1>
+                        <a href="#addCustomerForm" class="bg-blue-600 text-white px-4 py-2 rounded " id="addStore">
+                            + Enroll New Customer
+                        </a>
+                    </div>
+
+                    <div class="bg-white p-4 py-6  rounded shadow-md">
+
+                        <div class="flex items-center">
+                            <div class="flex items-center mb-4 gap-1">
+                                <label for="status">Status: </label>
+                                <select id="status" class="bg-gray-100 px-2 py-1 rounded mr-4">
+                                    <option>
+                                        Select
+                                    </option>
+                                    <option>
+                                        Restricted
+                                    </option>
+                                    <option>
+                                        Not Restricted
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <table class="w-full text-left border-collapse overflow-scroll">
+                            <thead>
+                                <tr class="text-gray-600">
+                                    <th class="py-2">Customer ID</th>
+                                    <th class="py-2">First Name</th>
+                                    <th class="py-2">Last Name</th>
+                                    <th class="py-2">Birthdate</th>
+                                    <th class="py-2">Sex</th>
+                                    <th class="py-2">Phone</th>
+                                    <th class="py-2">Address</th>
+                                    <th class="py-2">Email</th>
+                                    <th class="py-2">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php if (!empty($Customer)): ?>
+                                    <?php foreach ($Customer as $cust): ?>
+                                        <tr class="border-b">
+                                            <td class="py-2">
+                                                <?php echo htmlspecialchars($cust['id']); ?>
+                                            </td>
+                                            <td class="py-2">
+                                                <?php echo htmlspecialchars($cust['firstname']); ?>
+                                            </td>
+                                            <td class="py-2">
+                                                <?php echo htmlspecialchars($cust['lastname']); ?>
+                                            </td>
+                                            <td class="py-2">
+                                                <?php echo htmlspecialchars($cust['birthdate']); ?>
+                                            </td>
+                                            <td class="py-2">
+                                                <?php echo htmlspecialchars($cust['sex']); ?>
+                                            </td>
+                                            <td class="py-2">
+                                                <?php echo htmlspecialchars($cust['phone']); ?>
+                                            </td>
+                                            <td class="py-2">
+                                                <?php echo htmlspecialchars($cust['address']); ?>
+                                            </td>
+                                            <td class="py-2">
+                                                <?php echo htmlspecialchars($cust['email']); ?>
+                                            </td>
+                                            <td class="py-2">
+                                                <button class="p-2 border-2 border-blue-500 rounded-md font-semibold">
+                                                    Restrict
+                                                </button>
+                                                <button class="p-2 border-2 border-red-500 rounded-md font-semibold">
+                                                    Delete
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr>
+                                        <td colspan="9" class="py-2 text-center">No customers found.</td>
+                                    </tr>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
+
+
+                    </div>
+
+                    <div class="flex justify-between items-center ">
+                        <h1 class="text-2xl font-semibold" id="addStorage">
+                            Add Customer
+                        </h1>
+                    </div>
+
+                    <div class="flex">
+                        <!-- left Section -->
+                        <div class="w-1/2 ">
+                            <?php require_once './addCustomerForm.php' ?>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div id="storages" class="content-section hidden relative">
@@ -300,6 +401,7 @@ if (isset($_SESSION['customer']['role'])) {
                             + Add Storage
                         </a>
                     </div>
+
                     <div class="bg-white p-4 py-6  rounded shadow-md">
                         <div class="flex items-center">
                             <div class="flex items-center mb-4 gap-1">
@@ -401,12 +503,12 @@ if (isset($_SESSION['customer']['role'])) {
 
                     </div>
 
-
                     <div class="flex justify-between items-center ">
                         <h1 class="text-2xl font-semibold" id="addStorage">
                             Add Storage
                         </h1>
                     </div>
+
                     <div class="flex">
                         <!-- left Section -->
                         <div class="w-1/2 ">
@@ -470,15 +572,6 @@ if (isset($_SESSION['customer']['role'])) {
                     feedbackMessage = data.message;
                     // Close the modal
                     document.getElementById('updateStorageForm').classList.add('hidden');
-                    // Update the table row with the new data
-                    // const updatedRow = document.querySelector(`#storage-row-${data.id}`);
-                    // updatedRow.querySelector('td:nth-child(2) img').src = data.image;
-                    // updatedRow.querySelector('td:nth-child(2) span').innerText = data.name;
-                    // updatedRow.querySelector('td:nth-child(3)').innerText = data.description;
-                    // updatedRow.querySelector('td:nth-child(4)').innerText = data.category;
-                    // updatedRow.querySelector('td:nth-child(5)').innerText = data.stock;
-                    // updatedRow.querySelector('td:nth-child(6)').innerText = data.price;
-                    // updatedRow.querySelector('td:nth-child(7)').innerText = data.status;
 
                 } else {
                     feedbackMessage = data.message;
@@ -509,28 +602,6 @@ if (isset($_SESSION['customer']['role'])) {
             // Set the existing image
             document.getElementById('existing_image').value = item.image; // Set existing image URL to hidden field
         }
-
-
-
-        // Function to open the modal and populate the form with the selected storage item's data
-        // function populateForm(item) {
-        //     // Open the modal
-        //     document.getElementById('updateStorageFormParent').classList.remove('hidden');
-
-        //     // Populate the form fields with the item data
-        //     document.getElementById('u_id').value = item.id;
-        //     document.getElementById('u_storageName').value = item.name;
-        //     document.getElementById('u_description').value = item.description;
-        //     document.getElementById('u_category').value = item.category;
-        //     document.getElementById('u_stock').value = item.stock;
-        //     document.getElementById('u_price').value = item.price;
-
-        //     // Set the form action if needed (e.g., update URL or handling)
-        //     // document.getElementById('updateStorageForm').action = 'update_storage.php?id=' + item.id;
-        //     console.log("hello");
-
-        // }
-
 
         async function deleteStorage(id) {
             if (confirm('Are you sure you want to delete this storage item?')) {

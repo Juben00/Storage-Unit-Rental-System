@@ -1,4 +1,4 @@
-<div class="z-40 flex-col shadow-2xl min-w-96 fixed bg-cyan-700 p-4 rounded-xl left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 hidden"
+<div class="z-50 flex-col shadow-2xl min-w-96 fixed bg-cyan-700 p-4 rounded-xl left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 hidden"
     id="signupModal">
     <button class="absolute top-3 right-4 hover:text-gray-400 duration-100" id="closeSignup">
         <i class="fa fa-times fa-lg"></i>

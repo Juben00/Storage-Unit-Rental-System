@@ -38,6 +38,18 @@ class Admin
         return $result;
     }
 
+    public function deleteCustomer($id)
+    {
+        $sql = "DELETE FROM customer WHERE id = :id;";
+        $stmt = $this->db->connect()->prepare($sql);
+        $stmt->bindParam(':id', $id);
+        if ($stmt->execute()) {
+            return ['status' => 'success', 'message' => 'Customer deleted successfully'];
+        } else {
+            return ['status' => 'error', 'message' => 'Failed to delete customer'];
+        }
+    }
+
     public function addStorage()
     {
         $sql = "INSERT INTO storage (name, category, description, stock, price, status, image) VALUES (:name, :category, :description, :stock, :price, :status, :image);";
@@ -90,7 +102,6 @@ class Admin
             return ['status' => 'error', 'message' => 'Failed to update storage'];
         }
     }
-
 
     public function getAllStorage()
     {
