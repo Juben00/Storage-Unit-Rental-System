@@ -226,7 +226,7 @@ if (isset($_SESSION['customer']['role'])) {
                                         Sales
                                     </p>
                                     <p class="text-2xl font-semibold">
-                                        $3 480.00
+                                        3 480.00
                                     </p>
                                 </div>
                             </div>
@@ -465,7 +465,7 @@ if (isset($_SESSION['customer']['role'])) {
                                             </td>
                                             <td class="py-2"><?php echo htmlspecialchars($item['category']); ?></td>
                                             <td class="py-2"><?php echo htmlspecialchars($item['stock']); ?></td>
-                                            <td class="py-2">$<?php echo htmlspecialchars(number_format($item['price'], 2)); ?>
+                                            <td class="py-2"><?php echo htmlspecialchars(number_format($item['price'], 2)); ?>
                                             </td>
                                             <td class="py-2"><?php echo htmlspecialchars($item['status']); ?></td>
                                             <td class="py-2">

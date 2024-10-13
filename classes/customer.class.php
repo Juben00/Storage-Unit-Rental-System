@@ -115,4 +115,16 @@ class Customer
         session_destroy();
         return ['status' => 'success', 'message' => 'Logged Out successfully!'];
     }
+
+    public function getAllStorage()
+    {
+        $sql = "SELECT * FROM storage;";
+        $stmt = $this->db->connect()->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
 }
+$customerObj = new Customer();
+
+// var_dump($customerObj->getAllStorage());

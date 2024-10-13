@@ -3,16 +3,20 @@
 require_once './classes/customer.class.php';
 require_once './sanitize.php';
 
+$customerObj = new Customer();
 session_start();
-
-$isLoginPop = false;
-$feedbackMessage = "";
 
 if (isset($_SESSION['customer']['role'])) {
     if ($_SESSION['customer']['role'] === 'Admin') {
         header('Location: admin-blu-lance.php');
     }
 }
+
+
+$isLoginPop = false;
+$feedbackMessage = "";
+$Storages = [];
+$Storages = $customerObj->getAllStorage();
 
 
 ?>
@@ -100,6 +104,7 @@ if (isset($_SESSION['customer']['role'])) {
 
         <!-- Storages section -->
         <section class="px-4 py-8">
+
             <div class="flex justify-center mb-4 gap-4">
                 <button class="text-black font-semibold">
                     Small
@@ -111,70 +116,42 @@ if (isset($_SESSION['customer']['role'])) {
                     Large
                 </button>
             </div>
+
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ">
-                <div class="border p-2 bg-neutral-100 shadow-md">
-                    <img alt="Woman wearing a casual letter print top" class="w-full h-64 object-cover" height="400"
-                        src="./images/bg-storage-removebg-preview.png" width="400" />
-                    <p class="text-sm mt-2">
-                        Small Storage Unit (50 sq. ft.)
-                    </p>
-                    <p class="text-red-500 font-semibold">
-                        ₱281
-                    </p>
-                </div>
-                <div class="border p-2 bg-neutral-100 shadow-md">
-                    <img alt="Woman wearing a metal V neck blouse" class="w-full h-64 object-cover" height="400"
-                        src="./images/bg-storage-removebg-preview.png" width="400" />
-                    <p class="text-sm mt-2">
-                        Small Storage Unit (55 sq. ft.)
-                    </p>
-                    <p class="text-red-500 font-semibold">
-                        ₱141
-                        <span class="line-through text-gray-500">
-                            ₱395
-                        </span>
-                    </p>
-                </div>
-                <div class="border p-2 bg-neutral-100 shadow-md">
-                    <img alt="Woman wearing a textured pocket decor round neck top" class="w-full h-64 object-cover"
-                        height="400" src="./images/bg-storage-removebg-preview.png" width="400" />
-                    <p class="text-sm mt-2">
-                        Medium Storage Unit (80 sq. ft.)
-                    </p>
-                    <p class="text-red-500 font-semibold">
-                        ₱322
-                        <span class="text-orange-500">
-                            10%
-                        </span>
-                    </p>
-                </div>
-                <div class="border p-2 bg-neutral-100 shadow-md">
-                    <img alt="Vintage racing pattern tee" class="w-full h-64 object-cover" height="400"
-                        src="./images/bg-storage-removebg-preview.png" width="400" />
-                    <p class="text-sm mt-2">
-                        Large Storage Unit (100 sq. ft.)
-                    </p>
-                    <p class="text-red-500 font-semibold">
-                        ₱166
-                        <span class="text-orange-500">
-                            10%
-                        </span>
-                    </p>
-                </div>
-                <div class="border p-2 bg-neutral-100 shadow-md">
-                    <img alt="Women's vacation blouse with blue floral print" class="w-full h-64 object-cover"
-                        height="400" src="./images/bg-storage-removebg-preview.png" width="400" />
-                    <p class="text-sm mt-2">
-                        Large Storage Unit (110 sq. ft.)
-                    </p>
-                    <p class="text-red-500 font-semibold">
-                        ₱163
-                        <span class="text-orange-500">
-                            10%
-                        </span>
-                    </p>
-                </div>
+                <?php if (!empty($Storages)): ?>
+                    <?php foreach ($Storages as $storage): ?>
+                        <div class="border p-2 bg-neutral-100 shadow-md">
+                            <img alt="<?php echo htmlspecialchars($storage['name']); ?>" class="w-full h-64 object-cover"
+                                src="<?php echo htmlspecialchars($storage['image']); ?>" width="400" height="400" />
+                            <div class="text-sm mt-2 flex items-center">
+                                <span class="flex-1">
+                                    <?php echo htmlspecialchars($storage['name']); ?>
+                                    <span class="text-xs">
+                                        (<?php echo htmlspecialchars($storage['description']); ?>)
+                                    </span>
+                                </span>
+                                <span class="text-xs text-gray-500">
+                                    <?php echo htmlspecialchars($storage['category']); ?>
+                                </span>
+                            </div>
+                            <p class="text-red-500 font-semibold">
+                                ₱<?php echo htmlspecialchars(number_format($storage['price'], 0)); ?>
+                                <?php if (isset($storage['discount']) && $storage['discount'] > 0): ?>
+                                    <span class="line-through text-gray-500">
+                                        ₱<?php echo htmlspecialchars(number_format($storage['original_price'], 0)); ?>
+                                    </span>
+                                    <span class="text-orange-500">
+                                        <?php echo htmlspecialchars($storage['discount']); ?>% Off
+                                    </span>
+                                <?php endif; ?>
+                            </p>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p>No storage units found.</p>
+                <?php endif; ?>
             </div>
+
         </section>
 
         <!-- Testimonial Section -->
