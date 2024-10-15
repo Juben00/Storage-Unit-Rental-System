@@ -48,6 +48,7 @@ if (isset($_SESSION['customer']['role'])) {
             <div class="mb-4">
                 <input type="hidden" name="u_id" id="u_id">
                 <input type="hidden" name="existing_image" id="existing_image">
+
                 <div id="imagePreview" class="mb-4 flex gap-2">
                     <!-- This will be populated dynamically with images -->
                 </div>
@@ -92,12 +93,12 @@ if (isset($_SESSION['customer']['role'])) {
                     <label class="block text-gray-700 font-semibold " for="stock"> Stock </label>
                     <input
                         class="w-full border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                        id="u_stock" name="u_stock" placeholder="Storage Quantity" type="text" required />
+                        id="u_stock" name="u_stock" placeholder="Storage Quantity" type="number" required />
 
                     <label class="block text-gray-700 font-semibold " for="price"> Price </label>
                     <input
                         class="w-full border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                        id="u_price" name="u_price" placeholder="Storage Price" type="text" required />
+                        id="u_price" name="u_price" placeholder="Storage Price" type="number" required />
                 </div>
             </div>
 
@@ -472,7 +473,7 @@ if (isset($_SESSION['customer']['role'])) {
                                                         src="<?php echo htmlspecialchars($firstImage); ?>" width="30" />
                                                 <?php else: ?>
                                                     <img alt="No Image" class="w-8 h-8 mr-2" height="30"
-                                                        src="./image/bg-storage-removebg-preview.png" width="30" />
+                                                        src="./images/bg-storage-removebg-preview.png" width="30" />
                                                 <?php endif; ?>
                                                 <span class="truncate"><?php echo htmlspecialchars($item['name']); ?></span>
                                             </td>
@@ -611,12 +612,11 @@ if (isset($_SESSION['customer']['role'])) {
             }
         });
 
-
         function populateForm(item) {
-            // Ensure the form is visible
+            // Show the form
             document.getElementById('updateStorageFormParent').classList.remove('hidden');
 
-            // Populate the form fields with the item's data
+            // Populate form fields
             document.getElementById('u_id').value = item.id;
             document.getElementById('u_storageName').value = item.name;
             document.getElementById('u_description').value = item.description;
@@ -624,43 +624,54 @@ if (isset($_SESSION['customer']['role'])) {
             document.getElementById('u_stock').value = item.stock;
             document.getElementById('u_price').value = item.price;
 
-            // Decode the image JSON string and display the images
-            let existingImages = JSON.parse(item.image); // Assuming image is a JSON string
+            // Handle existing images
+            let existingImages = JSON.parse(item.image || '[]'); // Default to empty array if no images
             let imagePreview = document.getElementById('imagePreview');
             imagePreview.innerHTML = ''; // Clear previous images
+
             existingImages.forEach((imgUrl, index) => {
-                let imgTag = `<div class="relative w-20">
+                const imgTag = `
+            <div class="relative w-20">
                 <img src="${imgUrl}" alt="Storage Image" class="w-20 h-20 inline-block mr-2">
                 <button type="button" class="absolute top-1 right-1 text-red-500" onclick="removeImage(${index})">
-                    <svg width="10px" height="10px" viewBox="0 0 512.00 512.00" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#FF0000">
-                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                        <g id="SVGRepo_iconCarrier">
-                            <title>cancel</title>
-                            <g id="Page-1" stroke-width="0.00512" fill="none" fill-rule="evenodd">
-                                <g id="work-case" fill="#FF0000" transform="translate(91.520000, 91.520000)">
-                                    <polygon id="Close" points="328.96 30.2933333 298.666667 0 164.48 134.4 30.2933333 0 0 30.2933333 134.4 164.48 0 298.666667 30.2933333 328.96 164.48 194.56 298.666667 328.96 328.96 298.666667 194.56 164.48"></polygon>
-                                </g>
-                            </g>
+                    <svg width="10px" height="10px" viewBox="0 0 512 512" fill="#FF0000">
+                        <g>
+                            <polygon points="328.96 30.2933333 298.666667 0 164.48 134.4 30.2933333 0 0 30.2933333 134.4 164.48 0 298.666667 30.2933333 328.96 164.48 194.56 298.666667 328.96 328.96 298.666667 194.56 164.48"></polygon>
                         </g>
                     </svg>
                 </button>
-              </div>`;
-
+            </div>`;
                 imagePreview.innerHTML += imgTag;
             });
 
             // Set the existing images in a hidden input
-            document.getElementById('existing_image').value = JSON.stringify(existingImages); // Set existing image URLs
+            document.getElementById('existing_image').value = JSON.stringify(existingImages);
         }
 
-        // Function to remove an image from the preview and update the hidden field
+        // Remove image function adjusted
         function removeImage(index) {
             let existingImages = JSON.parse(document.getElementById('existing_image').value);
             existingImages.splice(index, 1); // Remove the selected image
-            document.getElementById('existing_image').value = JSON.stringify(existingImages); // Update the hidden field
-            populateForm({ ...document.getElementById('u_id').value, image: JSON.stringify(existingImages) }); // Refresh the form
+            document.getElementById('existing_image').value = JSON.stringify(existingImages); // Update hidden input
+
+            // Update the displayed images by clearing and repopulating
+            document.getElementById('imagePreview').innerHTML = '';
+            existingImages.forEach((imgUrl, idx) => {
+                const imgTag = `
+            <div class="relative w-20">
+                <img src="${imgUrl}" alt="Storage Image" class="w-20 h-20 inline-block mr-2">
+                <button type="button" class="absolute top-1 right-1 text-red-500" onclick="removeImage(${idx})">
+                    <svg width="10px" height="10px" viewBox="0 0 512 512" fill="#FF0000">
+                        <g>
+                            <polygon points="328.96 30.2933333 298.666667 0 164.48 134.4 30.2933333 0 0 30.2933333 134.4 164.48 0 298.666667 30.2933333 328.96 164.48 194.56 298.666667 328.96 328.96 298.666667 194.56 164.48"></polygon>
+                        </g>
+                    </svg>
+                </button>
+            </div>`;
+                document.getElementById('imagePreview').innerHTML += imgTag;
+            });
         }
+
 
         document.getElementById('u_image').addEventListener('change', function (event) {
             const files = event.target.files;

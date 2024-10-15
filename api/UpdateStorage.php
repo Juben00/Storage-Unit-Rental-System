@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 ];
 
                 // Call uploadImage with the single file data
-                $uploadResult = uploadImage($fileData);
+                $uploadResult = uploadImage($fileData['tmp_name']);
 
                 if (strpos($uploadResult, "Upload failed:") === false) {
                     // If upload was successful, add the secure URL to the uploaded images array
@@ -46,9 +46,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $imageArray = array_merge($existingImages, $uploadedImages);
         $image = json_encode($imageArray); // Encode back to JSON for storing
     } else {
-        // If no new image is uploaded, keep the existing images
+        // If no new images were uploaded, use the existing images
         $image = $_POST['existing_image'];
     }
+
 
 
 
