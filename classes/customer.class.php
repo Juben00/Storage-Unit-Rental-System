@@ -5,7 +5,7 @@ require_once __DIR__ . '/../db.php';
 class Customer
 {
     public $id;
-    public $role = 'Customer';
+    public $role = 2;
     public $firstname;
     public $lastname;
     public $birthdate;
@@ -43,11 +43,12 @@ class Customer
                 }
 
                 // Prepare to insert new customer
-                $sql = "INSERT INTO customer (role, firstname, lastname, birthdate, sex, phone, address, email, password) 
-                    VALUES (:role, :firstname, :lastname, :birthdate, :sex, :phone, :address, :email, :password);";
+
+                $sql = "INSERT INTO customer (role_id, firstname, lastname, birthdate, sex, phone, address, email, password) 
+                    VALUES (:role_id, :firstname, :lastname, :birthdate, :sex, :phone, :address, :email, :password);";
 
                 $stmt = $this->db->connect()->prepare($sql);
-                $stmt->bindParam(':role', $this->role);
+                $stmt->bindParam(':role_id', $this->role);
                 $stmt->bindParam(':firstname', $this->firstname);
                 $stmt->bindParam(':lastname', $this->lastname);
                 $stmt->bindParam(':birthdate', $this->birthdate);
@@ -81,7 +82,7 @@ class Customer
         try {
             session_start(); // Make sure session is started
 
-            $sql = "SELECT * FROM customer WHERE email = :email;";
+            $sql = "SELECT c.*, r.role_name FROM customer c JOIN roles r ON c.role_id = r.id WHERE email = :email;";
             $stmt = $this->db->connect()->prepare($sql);
             $stmt->bindParam(':email', $this->email);
 

@@ -3,21 +3,22 @@ require_once './classes/admin.class.php';
 require_once './sanitize.php';
 $adminObj = new Admin();
 session_start();
+
 $isLoginPop = false;
 $feedbackMessage = "";
 $Customer = [];
 $Admin = [];
 $Storage = [];
 
-$Admin = $adminObj->getAdmin();
+$Admin = $adminObj->getAdmin($_SESSION['customer']['email']);
 $Customer = $adminObj->getAllCustomers();
 $Storage = $adminObj->getAllStorage();
 $totalStorage = count($Storage);
 $totalCustomers = count($Customer);
 
 
-if (isset($_SESSION['customer']['role'])) {
-    if ($_SESSION['customer']['role'] === 'Customer') {
+if (isset($_SESSION['customer']['role_name'])) {
+    if ($_SESSION['customer']['role_name'] === 'Customer') {
         header('Location: index.php');
     }
 } else {
@@ -512,7 +513,7 @@ if (isset($_SESSION['customer']['role'])) {
                                     <?php endforeach; ?>
                                 <?php else: ?>
                                     <tr>
-                                        <td colspan="8" class="py-2 text-center">No storage items found.</td>
+                                        <td colspan="8" class="py-2 text-center ">No storage items found.</td>
                                     </tr>
                                 <?php endif; ?>
                             </tbody>

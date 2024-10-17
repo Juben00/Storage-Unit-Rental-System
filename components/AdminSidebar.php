@@ -3,31 +3,31 @@
         <img alt="Company Logo" src="./images/logo black transparent with name.png" />
     </div>
     <nav>
-        <a class="flex items-center px-6 py-2 text-gray-700 border-l-4 border-blue-500 bg-slate-200 font-semibold"
+        <a class="flex items-center px-6 py-2 gap-2 text-gray-700 border-l-4 border-blue-500 bg-slate-200 font-semibold"
             data-target="dashboard" href="#">
-            <i class="fas fa-home mr-3"></i>
-            Dashboard
+            <i class="fas fa-home "></i>
+            <p>Dashboard</p>
         </a>
-        <a class="flex items-center px-6 py-2 text-gray-700" data-target="customers" href="#">
-            <i class="fas fa-chart-line mr-3"></i>
-            Customers
+        <a class="flex items-center px-6 py-2 gap-2 text-gray-700" data-target="customers" href="#">
+            <i class="fas fa-chart-line "></i>
+            <p>Customers</p>
         </a>
-        <a class="flex items-center px-6 py-2 text-gray-700" data-target="storages" href="#">
-            <i class="fas fa-boxes mr-3"></i>
-            Storages
+        <a class="flex items-center px-6 py-2 gap-2 text-gray-700" data-target="storages" href="#">
+            <i class="fas fa-boxes "></i>
+            <p>Storages</p>
         </a>
-        <a class="flex items-center px-6 py-2 text-gray-700" data-target="sales" href="#">
-            <i class="fas fa-dollar-sign mr-3"></i>
-            Sales
+        <a class="flex items-center px-6 py-2 gap-2 text-gray-700" data-target="sales" href="#">
+            <i class="fas fa-dollar-sign ml-1 mr-1  "></i>
+            <p>Sales</p>
         </a>
 
-        <a class="flex items-center px-6 py-2 text-gray-700" data-target="settings" href="#">
-            <i class="fas fa-cog mr-3"></i>
-            Settings
+        <a class="flex items-center px-6 py-2 gap-2 text-gray-700" data-target="settings" href="#">
+            <i class="fas fa-cog "></i>
+            <p>Settings</p>
         </a>
 
     </nav>
-    <a class="flex items-center px-6 py-2 text-gray-700 hover:bg-gray-100" href="logout.php"
+    <a class="flex items-center px-6 py-2  text-gray-700 hover:bg-gray-100" href="logout.php"
         onclick="return confirmLogout();">
         <svg viewBox="0 0 24 24" height="20" class="mr-2" width="20" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -42,7 +42,7 @@
                     stroke="#323232" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
             </g>
         </svg>
-        Logout
+        <p>Logout</p>
     </a>
 
     <script>

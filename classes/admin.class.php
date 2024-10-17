@@ -20,10 +20,11 @@ class Admin
         $this->db = new Database();
     }
 
-    public function getAdmin()
+    public function getAdmin($email)
     {
-        $sql = "SELECT * FROM customer WHERE role = 'Admin' LIMIT 1;";
+        $sql = "SELECT c.*, r.role_name FROM customer c JOIN roles r ON c.role_id = r.id WHERE r.role_name = 'Admin' AND c.email = :email LIMIT 1;";
         $stmt = $this->db->connect()->prepare($sql);
+        $stmt->bindParam(':email', $email);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC); // Use fetch() instead of fetchAll()
 
@@ -31,7 +32,7 @@ class Admin
     }
     public function getAllCustomers()
     {
-        $sql = "SELECT *  FROM customer WHERE role = 'Customer';";
+        $sql = "SELECT c.* FROM customer c JOIN roles r ON c.role_id = r.id WHERE r.role_name = 'Customer';";
         $stmt = $this->db->connect()->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);

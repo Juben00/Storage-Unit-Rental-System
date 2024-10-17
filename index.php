@@ -6,8 +6,8 @@ require_once './sanitize.php';
 $customerObj = new Customer();
 session_start();
 
-if (isset($_SESSION['customer']['role'])) {
-    if ($_SESSION['customer']['role'] === 'Admin') {
+if (isset($_SESSION['customer']['role_name'])) {
+    if ($_SESSION['customer']['role_name'] === 'Admin') {
         header('Location: admin-blu-lance.php');
     }
 }
@@ -41,7 +41,7 @@ $Storages = $customerObj->getAllStorage();
 
     ?>
 
-    <main class="flex-grow flex flex-col container mx-auto pt-24">
+    <main class="flex-grow flex flex-col container mx-auto pt-24 ">
         <?php
         include_once './components/cover.php';
         ?>
