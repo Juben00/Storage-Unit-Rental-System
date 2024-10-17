@@ -36,8 +36,8 @@ $Storages = $customerObj->getAllStorage();
 <body class="min-h-screen flex flex-col bg-slate-100 relative">
     <?php
     include_once './components/header.php';
-    require_once './login.php';
-    require_once './sigup.php';
+    require_once './components/login.php';
+    require_once './components/signup.php';
 
     ?>
 

@@ -286,12 +286,6 @@ if (isset($_SESSION['customer']['role_name'])) {
                 </div>
             </div>
 
-            <div id="sales" class="content-section hidden">
-                <h1 class="text-2xl font-semibold">
-                    Sales
-                </h1>
-            </div>
-
             <div id="customers" class="content-section hidden">
                 <div class="flex-1 flex flex-col gap-6">
                     <div class="flex justify-between items-center ">
@@ -338,7 +332,7 @@ if (isset($_SESSION['customer']['role_name'])) {
                             <tbody>
                                 <?php if (!empty($Customer)): ?>
                                     <?php foreach ($Customer as $cust): ?>
-                                        <tr class="border-b">
+                                        <tr class="border-b truncate">
                                             <td class="py-2">
                                                 <?php echo htmlspecialchars($cust['id']); ?>
                                             </td>
@@ -394,7 +388,7 @@ if (isset($_SESSION['customer']['role_name'])) {
                     <div class="flex">
                         <!-- left Section -->
                         <div class="w-1/2 ">
-                            <?php require_once './addCustomerForm.php' ?>
+                            <?php require_once './components/addCustomerForm.php' ?>
                         </div>
                     </div>
                 </div>
@@ -531,7 +525,7 @@ if (isset($_SESSION['customer']['role_name'])) {
                     <div class="flex">
                         <!-- left Section -->
                         <div class="w-1/2 ">
-                            <?php require_once './addStorageForm.php' ?>
+                            <?php require_once './components/addStorageForm.php' ?>
                         </div>
                     </div>
 
@@ -540,7 +534,7 @@ if (isset($_SESSION['customer']['role_name'])) {
 
             <div id="sales" class="content-section hidden">
                 <h1 class="text-2xl font-semibold">
-                    Customers
+                    sales
                 </h1>
             </div>
 
