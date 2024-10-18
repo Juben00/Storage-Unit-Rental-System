@@ -43,9 +43,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['id'])) {
     ?>
 
     <main class="flex-grow flex flex-col container mx-auto pt-24">
-        <div class="min-h-screen flex flex-col lg:flex-row ">
+        <div class="min-h-screen flex flex-col lg:flex-row bg-slate-50 shadow-lg">
             <!-- Left side - Image Gallery -->
-            <div class="w-full lg:w-1/2 bg-slate-50 p-4 lg:p-8 flex flex-col">
+            <div class="w-full lg:w-1/2  p-4 lg:p-8 flex flex-col">
                 <!-- Main Image (First Image from Array) -->
                 <?php if (!empty($storage['images'])): ?>
                     <a class="flex-grow mb-4" href="<?php echo htmlspecialchars($storage['images'][0]); ?>" target="_blank">
@@ -70,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['id'])) {
             </div>
 
             <!-- Right side - Product Information -->
-            <div class="w-full lg:w-1/2 bg-gray-50 p-4 sm:p-8 lg:p-12 overflow-y-auto">
+            <div class="w-full lg:w-1/2 p-4 sm:p-8 lg:p-12 overflow-y-auto">
                 <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
                     <?php echo htmlspecialchars($storage['name']) ?>
                 </h1>
