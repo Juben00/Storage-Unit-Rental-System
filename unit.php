@@ -14,8 +14,14 @@ if (!isset($_SESSION['customer']['role_name'])) {
 if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['id'])) {
     $idparam = $_GET['id'];
     $storage = $customerObj->getSingleStorage($idparam);
+
+    // Decode the JSON-encoded images field
+    if (!empty($storage['image'])) {
+        $storage['images'] = json_decode($storage['image'], true);
+    }
 } else {
-    echo 'No ID provided.';
+    header('Location: ./index.php');
+    exit();
 }
 
 ?>
@@ -40,23 +46,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['id'])) {
         <div class="min-h-screen flex flex-col lg:flex-row ">
             <!-- Left side - Image Gallery -->
             <div class="w-full lg:w-1/2 bg-slate-50 p-4 lg:p-8 flex flex-col">
-                <div class="flex-grow mb-4">
-                    <img src="/placeholder.svg?height=600&width=600" alt="Eco-Friendly Water Bottle"
-                        class="w-full h-64 sm:h-96 lg:h-full object-cover rounded-lg">
-                </div>
-                <div class="flex justify-between space-x-4">
-                    <img src="/placeholder.svg?height=100&width=100" alt="Thumbnail 1"
-                        class="w-1/3 h-20 sm:h-32 object-cover rounded-lg">
-                    <img src="/placeholder.svg?height=100&width=100" alt="Thumbnail 2"
-                        class="w-1/3 h-20 sm:h-32 object-cover rounded-lg">
-                    <img src="/placeholder.svg?height=100&width=100" alt="Thumbnail 3"
-                        class="w-1/3 h-20 sm:h-32 object-cover rounded-lg">
-                </div>
+                <!-- Main Image (First Image from Array) -->
+                <?php if (!empty($storage['images'])): ?>
+                    <a class="flex-grow mb-4" href="<?php echo htmlspecialchars($storage['images'][0]); ?>" target="_blank">
+                        <img src="<?php echo htmlspecialchars($storage['images'][0]); ?>" alt="Main Image"
+                            class="w-full h-64 sm:h-96 lg:h-full object-cover rounded-lg">
+                    </a>
+
+                    <!-- Thumbnail Images (All Other Images) -->
+                    <div class="flex justify-start space-x-4 overflow-x-auto ">
+                        <?php foreach ($storage['images'] as $index => $image): ?>
+                            <?php if ($index > 0): // Skip the first image, already displayed ?>
+                                <a href="<?php echo htmlspecialchars($image); ?>" target="_blank" class="flex-shrink-0 w-[200px]">
+                                    <img src="<?php echo htmlspecialchars($image); ?>" alt="Thumbnail <?php echo $index; ?>"
+                                        class="h-20 sm:h-32 w-full object-cover rounded-lg">
+                                </a>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    </div>
+                <?php else: ?>
+                    <p>No images available for this storage unit.</p>
+                <?php endif; ?>
             </div>
 
             <!-- Right side - Product Information -->
             <div class="w-full lg:w-1/2 bg-gray-50 p-4 sm:p-8 lg:p-12 overflow-y-auto">
-                <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Eco-Friendly Water Bottle</h1>
+                <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+                    <?php echo htmlspecialchars($storage['name']) ?>
+                </h1>
 
                 <div class="flex items-center mb-6">
                     <div class="flex">
@@ -89,35 +106,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['id'])) {
                     <p class="ml-2 text-sm sm:text-base text-gray-600">(4.5) 150 reviews</p>
                 </div>
 
-                <p class="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">$24.99</p>
-
-                <p class="text-sm sm:text-base text-gray-600 mb-8">
-                    Stay hydrated in style with our eco-friendly water bottle. Made from sustainable materials, this
-                    20oz
-                    bottle keeps your drinks cold for up to 24 hours or hot for up to 12 hours. Perfect for outdoor
-                    adventures or everyday use.
+                <p class="text-2xl sm:text-3xl font-semibold text-gray-900 mb-6"> ₱
+                    <?php echo htmlspecialchars($storage['price']) ?>
                 </p>
 
-                <div class="mb-8">
-                    <h2 class="text-lg font-semibold text-gray-900 mb-2">Color</h2>
-                    <div class="flex space-x-2">
-                        <button
-                            class="w-8 h-8 bg-blue-500 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"></button>
-                        <button
-                            class="w-8 h-8 bg-green-500 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"></button>
-                        <button
-                            class="w-8 h-8 bg-red-500 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"></button>
-                    </div>
-                </div>
-
-                <div class="mb-8">
-                    <h2 class="text-lg font-semibold text-gray-900 mb-2">Quantity</h2>
-                    <div class="flex items-center">
-                        <button class="bg-gray-200 text-gray-700 py-2 px-4 rounded-l hover:bg-gray-300">-</button>
-                        <span class="bg-gray-200 text-gray-700 py-2 px-4">1</span>
-                        <button class="bg-gray-200 text-gray-700 py-2 px-4 rounded-r hover:bg-gray-300">+</button>
-                    </div>
-                </div>
+                <p class="text-sm sm:text-base text-gray-600 mb-8">
+                    <?php echo htmlspecialchars($storage['description']) ?>
+                </p>
 
                 <button
                     class="w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition duration-300 flex items-center justify-center">

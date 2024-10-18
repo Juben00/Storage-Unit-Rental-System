@@ -140,7 +140,7 @@ class Customer
         $stmt = $this->db->connect()->prepare($sql);
         $stmt->bindParam(':id', $id);
         $stmt->execute();
-        $result = $stmt->fetchColumn(PDO::FETCH_ASSOC);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result;
     }
 }
