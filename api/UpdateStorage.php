@@ -5,8 +5,8 @@ require_once './imageUpload.api.php';
 
 $adminObj = new Admin();
 
-$name = $category = $price = $status = $description = $image = $stock = $id = $area = "";
-$nameErr = $categoryErr = $priceErr = $statusErr = $descriptionErr = $imageErr = $stockErr = $areaErr = "";
+$name = $category = $price = $status = $description = $image = $id = $area = "";
+$nameErr = $categoryErr = $priceErr = $statusErr = $descriptionErr = $imageErr = $areaErr = "";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $id = clean_input($_POST["u_id"]);
@@ -14,7 +14,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $category = clean_input($_POST["u_category"]);
     $price = clean_input($_POST["u_price"]);
     $description = clean_input($_POST["u_description"]);
-    $stock = clean_input($_POST["u_stock"]);
     $area = clean_input($_POST['u_area']);
 
     // Check if a new image was uploaded
@@ -64,18 +63,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (empty($description)) {
         $descriptionErr = "Description is required";
     }
-    if (empty($stock)) {
-        $stockErr = "Stock is required";
-    }
 
-    if (empty($nameErr) && empty($categoryErr) && empty($priceErr) && empty($descriptionErr) && empty($stockErr)) {
+    if (empty($nameErr) && empty($categoryErr) && empty($priceErr) && empty($descriptionErr)) {
         $adminObj->id = $id;
         $adminObj->name = $name;
         $adminObj->category = $category;
         $adminObj->price = $price;
         $adminObj->description = $description;
         $adminObj->image = $image;
-        $adminObj->stock = $stock;
         $adminObj->area = $area;
 
 
@@ -85,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo json_encode($response);
         exit;
     } else {
-        $feedbackMessage = implode("<br>", array_filter([$nameErr, $categoryErr, $priceErr, $descriptionErr, $stockErr]));
+        $feedbackMessage = implode("<br>", array_filter([$nameErr, $categoryErr, $priceErr, $descriptionErr]));
         $response = ["status" => "error", "message" => $feedbackMessage];
         echo json_encode($response);
         exit;

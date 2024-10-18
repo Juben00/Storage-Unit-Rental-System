@@ -37,12 +37,6 @@
         id="storageCategory" name="storageCategory" placeholder="Storage Category" type="text" readonly />
 
     <div class="flex items-center gap-2 mb-4">
-        <span class="flex flex-col w-full">
-            <label class="block text-gray-700 font-semibold " for="stock"> Stock </label>
-            <input
-                class="w-full border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                id="stock" name="storageStock" placeholder="Storage Quantity" type="number" required />
-        </span>
 
         <span class="flex flex-col w-full">
             <label class="block text-gray-700 font-semibold " for="price"> Price </label>

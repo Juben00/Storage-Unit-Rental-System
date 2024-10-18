@@ -4,7 +4,7 @@
         <i class="fa fa-times fa-lg"></i>
     </button>
 
-    <h2 class="text-center text-2xl text-white mb-4 font-semibold">USER SIGNUP</h2>
+    <h2 class="text-center text-2xl text-white mb-4 font-semibold">SIGNUP</h2>
     <form id="signup-form">
         <div class="lg:mb-1 lg:flex lg:items-center lg:gap-2 block">
             <div class="mb-1 lg:mb-0 flex flex-col w-full">

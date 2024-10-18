@@ -48,7 +48,6 @@ CREATE TABLE storage (
     category_id INT NOT NULL, -- Foreign key to category table
     description TEXT NOT NULL,
     area DECIMAL(10, 2) NOT NULL,
-    stock INT NOT NULL,
     price DECIMAL(10, 2) NOT NULL,
     status_id INT NOT NULL, -- Foreign key to status table
     image VARCHAR(255) NOT NULL, -- URL for image

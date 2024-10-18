@@ -119,13 +119,31 @@ class Customer
 
     public function getAllStorage()
     {
-        $sql = "SELECT * FROM storage;";
+        $sql = "SELECT s.*, c.name AS category_name, st.status_name 
+            FROM storage s 
+            JOIN category c ON s.category_id = c.id 
+            JOIN status st ON s.status_id = st.id;";
         $stmt = $this->db->connect()->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
+
+    public function getSingleStorage($id)
+    {
+        $sql = "SELECT s.*, c.name AS category_name, st.status_name 
+            FROM storage s 
+            JOIN category c ON s.category_id = c.id 
+            JOIN status st ON s.status_id = st.id
+            WHERE s.id = :id
+            ;";
+        $stmt = $this->db->connect()->prepare($sql);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        $result = $stmt->fetchColumn(PDO::FETCH_ASSOC);
+        return $result;
+    }
 }
 $customerObj = new Customer();
 
-// var_dump($customerObj->getAllStorage());
+// var_dump($customerObj->getSingleStorage(2));

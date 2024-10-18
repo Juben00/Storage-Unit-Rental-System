@@ -5,15 +5,14 @@ require_once './imageUpload.api.php';
 
 $adminObj = new Admin();
 
-$name = $area = $category = $price = $status = $description = $image = $stock = "";
-$nameErr = $areaErr = $categoryErr = $priceErr = $statusErr = $descriptionErr = $imageErr = $stockErr = "";
+$name = $area = $category = $price = $status = $description = $image = "";
+$nameErr = $areaErr = $categoryErr = $priceErr = $statusErr = $descriptionErr = $imageErr = "";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $name = clean_input($_POST["storageName"]);
     $area = clean_input($_POST["storageArea"]);
     $description = clean_input($_POST["storageDescription"]);
     $category = clean_input($_POST["storageCategory"]);
-    $stock = clean_input($_POST["storageStock"]);
     $price = clean_input($_POST["storagePrice"]);
 
     // Check if images were uploaded
@@ -56,21 +55,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (empty($image)) {
         $imageErr = "Image is required";
     }
-    if (empty($stock)) {
-        $stockErr = "Stock is required";
-    }
     if (empty($area)) {
         $areaErr = "Area is required";
     }
 
     // If no errors, proceed with saving to the database
-    if (empty($nameErr) && empty($areaErr) && empty($categoryErr) && empty($priceErr) && empty($descriptionErr) && empty($imageErr) && empty($stockErr)) {
+    if (empty($nameErr) && empty($areaErr) && empty($categoryErr) && empty($priceErr) && empty($descriptionErr) && empty($imageErr)) {
         $adminObj->image = $image; // Store the image URLs as JSON
         $adminObj->name = $name;
         $adminObj->area = $area;
         $adminObj->description = $description;
         $adminObj->category = $category;
-        $adminObj->stock = $stock;
         $adminObj->price = $price;
 
         $addStorageResult = $adminObj->addStorage();
@@ -81,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit; // Prevent any unintended output
     } else {
         // Compile errors and return them
-        $feedbackMessage = implode("<br>", array_filter([$nameErr, $categoryErr, $priceErr, $descriptionErr, $imageErr, $stockErr]));
+        $feedbackMessage = implode("<br>", array_filter([$nameErr, $categoryErr, $priceErr, $descriptionErr, $imageErr]));
         $response = ["status" => "error", "message" => $feedbackMessage];
         echo json_encode($response);
         exit;

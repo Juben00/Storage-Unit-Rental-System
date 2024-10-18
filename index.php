@@ -120,7 +120,8 @@ $Storages = $customerObj->getAllStorage();
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ">
                 <?php if (!empty($Storages)): ?>
                     <?php foreach ($Storages as $storage): ?>
-                        <div class="border p-2 bg-neutral-100 shadow-md">
+                        <a class="border p-2 bg-neutral-100 shadow-md"
+                            href="unit.php?id=<?php echo htmlspecialchars($storage['id']); ?>">
                             <?php
                             // Decode the JSON image field
                             $images = json_decode($storage['image'], true); // 'true' returns as associative array
@@ -138,11 +139,11 @@ $Storages = $customerObj->getAllStorage();
                                 <span class="flex-1">
                                     <?php echo htmlspecialchars($storage['name']); ?>
                                     <span class="text-xs">
-                                        (<?php echo htmlspecialchars($storage['description']); ?>)
+                                        (<?php echo htmlspecialchars($storage['area']); ?> sqm)
                                     </span>
                                 </span>
                                 <span class="text-xs text-gray-500">
-                                    <?php echo htmlspecialchars($storage['category']); ?>
+                                    <?php echo htmlspecialchars($storage['category_name']); ?>
                                 </span>
                             </div>
                             <p class="text-red-500 font-semibold">
@@ -156,7 +157,7 @@ $Storages = $customerObj->getAllStorage();
                                     </span>
                                 <?php endif; ?>
                             </p>
-                        </div>
+                        </a>
                     <?php endforeach; ?>
                 <?php else: ?>
                     <p>No storage units found.</p>
@@ -266,12 +267,12 @@ $Storages = $customerObj->getAllStorage();
 
         popbutton.addEventListener("click", () => {
             document.getElementById('modal').style.display = 'none';
-            if (document.getElementById('feedbackMessage').innerText === 'Signup successful!') {
+            if (document.getElementById('feedbackMessage').innerHTML === 'Signup successful!') {
                 loginModal.classList.remove('hidden');
                 loginModal.classList.add('flex');
                 signupModal.classList.add('hidden');
                 signupModal.classList.remove('flex');
-            } else if (document.getElementById('feedbackMessage').innerText === 'Logged In successfully!') {
+            } else if (document.getElementById('feedbackMessage').innerHTML === 'Logged In successfully!') {
                 window.location.reload();
             }
         });
@@ -353,12 +354,12 @@ $Storages = $customerObj->getAllStorage();
                     feedbackMessage = data.message;
                 }
 
-                document.getElementById('feedbackMessage').innerText = feedbackMessage;
+                document.getElementById('feedbackMessage').innerHTML = feedbackMessage;
                 document.getElementById('modal').style.display = 'flex';
 
             } catch (error) {
                 console.error('Error:', error);
-                document.getElementById('feedbackMessage').innerText = 'An error occurred while processing your request.';
+                document.getElementById('feedbackMessage').innerHTML = 'An error occurred while processing your request.';
                 document.getElementById('modal').style.display = 'flex';
             }
             document.getElementById('signup-form').reset();
@@ -383,12 +384,12 @@ $Storages = $customerObj->getAllStorage();
                     feedbackMessage = data.message;
                 }
 
-                document.getElementById('feedbackMessage').innerText = feedbackMessage;
+                document.getElementById('feedbackMessage').innerHTML = feedbackMessage;
                 document.getElementById('modal').style.display = 'flex';
 
             } catch (error) {
                 console.error('Error:', error);
-                document.getElementById('feedbackMessage').innerText = 'An error occurred while processing your request.';
+                document.getElementById('feedbackMessage').innerHTML = 'An error occurred while processing your request.';
                 document.getElementById('modal').style.display = 'flex';
             }
             document.getElementById('login-form').reset();

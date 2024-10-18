@@ -5,7 +5,7 @@
     </button>
 
 
-    <h2 class="text-center text-2xl text-white mb-4 font-semibold">USER LOGIN</h2>
+    <h2 class="text-center text-2xl text-white mb-4 font-semibold">LOGIN</h2>
     <form id="login-form">
         <div class="mb-1">
             <label for="Email" class="text-neutral-100">Email</label>

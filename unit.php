@@ -6,15 +6,20 @@ require_once './sanitize.php';
 $customerObj = new Customer();
 session_start();
 
-if (isset($_SESSION['customer']['role'])) {
-    if ($_SESSION['customer']['role'] === 'Admin') {
-        header('Location: admin-blu-lance.php');
-    }
+if (!isset($_SESSION['customer']['role_name'])) {
+    header('Location: ./index.php');
+    exit();
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['id'])) {
+    $idparam = $_GET['id'];
+    $storage = $customerObj->getSingleStorage($idparam);
 } else {
-    header('Location: index.php');
+    echo 'No ID provided.';
 }
 
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 

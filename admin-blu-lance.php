@@ -386,7 +386,6 @@ if (isset($_SESSION['customer']['role_name'])) {
                                     <th class="py-2">Description</th>
                                     <th class="py-2">Area</th>
                                     <th class="py-2">Category</th>
-                                    <th class="py-2">Stock</th>
                                     <th class="py-2">Price</th>
                                     <th class="py-2">Status</th>
                                     <th class="py-2">Action</th>
@@ -420,7 +419,6 @@ if (isset($_SESSION['customer']['role_name'])) {
                                             <td class="py-2 truncate"><?php echo htmlspecialchars($item['category_name']); ?>
                                             </td>
                                             <!-- Updated category name -->
-                                            <td class="py-2 truncate"><?php echo htmlspecialchars($item['stock']); ?></td>
                                             <td class="py-2 truncate">
                                                 <?php echo htmlspecialchars(number_format($item['price'], 2)); ?>
                                             </td>
@@ -439,7 +437,6 @@ if (isset($_SESSION['customer']['role_name'])) {
                                 description: '<?php echo htmlspecialchars(addslashes($item['description'])); ?>',
                                 area: '<?php echo htmlspecialchars($item['area']); ?>',
                                 category: '<?php echo htmlspecialchars($item['category_id']); ?>', 
-                                stock: '<?php echo htmlspecialchars($item['stock']); ?>',
                                 price: '<?php echo htmlspecialchars($item['price']); ?>',
                                 image: '<?php echo htmlspecialchars(addslashes($item['image'])); ?>'
                             })">
@@ -480,7 +477,7 @@ if (isset($_SESSION['customer']['role_name'])) {
 
             <div id="sales" class="content-section hidden">
                 <h1 class="text-2xl font-semibold">
-                    sales
+                    Sales
                 </h1>
             </div>
 
@@ -563,7 +560,6 @@ if (isset($_SESSION['customer']['role_name'])) {
             document.getElementById('u_description').value = item.description;
             document.getElementById('u_area').value = item.area;
             document.getElementById('u_category').value = item.category; // Ensure this matches the category ID
-            document.getElementById('u_stock').value = item.stock;
             document.getElementById('u_price').value = item.price;
 
             // Handle existing images

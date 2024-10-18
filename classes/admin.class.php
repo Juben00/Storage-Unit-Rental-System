@@ -11,7 +11,6 @@ class Admin
     public $category;
     public $price;
     public $image;
-    public $stock;
     public $area;
 
     protected $db;
@@ -54,8 +53,8 @@ class Admin
 
     public function addStorage()
     {
-        $sql = "INSERT INTO storage (name, category_id, description, area, stock, price, status_id, image) 
-            VALUES (:name, :category_id, :description, :area, :stock, :price, :status_id, :image);";
+        $sql = "INSERT INTO storage (name, category_id, description, area, price, status_id, image) 
+            VALUES (:name, :category_id, :description, :area, :price, :status_id, :image);";
         $stmt = $this->db->connect()->prepare($sql);
 
         // Bind parameters
@@ -63,7 +62,6 @@ class Admin
         $stmt->bindParam(':category_id', $this->category); // Ensure this is the ID from the category table
         $stmt->bindParam(':description', $this->description);
         $stmt->bindParam(':area', $this->area); // Ensure you have an area variable to bind
-        $stmt->bindParam(':stock', $this->stock);
         $stmt->bindParam(':price', $this->price);
         $stmt->bindParam(':status_id', $this->status); // Ensure this is the ID from the status table
         $stmt->bindParam(':image', $this->image);
@@ -78,7 +76,7 @@ class Admin
 
     public function updateStorage()
     {
-        $sql = "UPDATE storage SET name = :name, category_id = :category_id, price = :price, description = :description, area = :area, image = :image, stock = :stock WHERE id = :id";
+        $sql = "UPDATE storage SET name = :name, category_id = :category_id, price = :price, description = :description, area = :area, image = :image WHERE id = :id";
 
         $stmt = $this->db->connect()->prepare($sql);
         $stmt->bindParam(':id', $this->id);
@@ -88,7 +86,6 @@ class Admin
         $stmt->bindParam(':description', $this->description);
         $stmt->bindParam(':area', $this->area);
         $stmt->bindParam(':image', $this->image);
-        $stmt->bindParam(':stock', $this->stock);
 
         return $stmt->execute() ?
             ['status' => 'success', 'message' => 'Storage updated successfully'] :
