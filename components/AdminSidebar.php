@@ -3,25 +3,25 @@
         <img alt="Company Logo" src="./images/logo black transparent with name.png" />
     </div>
     <nav>
-        <a class="flex items-center px-6 py-2 gap-2 text-gray-700 border-l-4 border-blue-500 bg-slate-200 font-semibold"
+        <a class="navlink flex items-center px-6 py-2 gap-2 text-gray-700 border-l-4 border-blue-500 bg-slate-200 font-semibold"
             data-target="dashboard" href="#">
             <i class="fas fa-home "></i>
             <p>Dashboard</p>
         </a>
-        <a class="flex items-center px-6 py-2 gap-2 text-gray-700" data-target="customers" href="#">
+        <a class="navlink flex items-center px-6 py-2 gap-2 text-gray-700" data-target="customers" href="#">
             <i class="fas fa-chart-line "></i>
             <p>Customers</p>
         </a>
-        <a class="flex items-center px-6 py-2 gap-2 text-gray-700" data-target="storages" href="#">
+        <a class="navlink flex items-center px-6 py-2 gap-2 text-gray-700" data-target="storages" href="#">
             <i class="fas fa-boxes "></i>
             <p>Storages</p>
         </a>
-        <a class="flex items-center px-6 py-2 gap-2 text-gray-700" data-target="sales" href="#">
+        <a class="navlink flex items-center px-6 py-2 gap-2 text-gray-700" data-target="sales" href="#">
             <i class="fas fa-dollar-sign ml-1 mr-1  "></i>
             <p>Sales</p>
         </a>
 
-        <a class="flex items-center px-6 py-2 gap-2 text-gray-700" data-target="settings" href="#">
+        <a class="navlink flex items-center px-6 py-2 gap-2 text-gray-700" data-target="settings" href="#">
             <i class="fas fa-cog "></i>
             <p>Settings</p>
         </a>

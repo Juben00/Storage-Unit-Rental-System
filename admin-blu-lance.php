@@ -42,70 +42,9 @@ if (isset($_SESSION['customer']['role_name'])) {
 </head>
 
 <body class="max-h-screen flex flex-col bg-slate-100 text-neutral-800">
+
     <div class="bg-neutral-900/20 w-screen h-screen z-50 absolute hidden" id="updateStorageFormParent">
-        <form
-            class="bg-white max-h-[600px] overflow-y-scroll p-6 rounded-lg shadow-lg left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 absolute"
-            id="updateStorageForm" enctype="multipart/form-data">
-            <div class="mb-4">
-                <input type="hidden" name="u_id" id="u_id">
-                <input type="hidden" name="existing_image" id="existing_image">
-
-                <div id="imagePreview" class="mb-4 flex gap-2">
-                    <!-- This will be populated dynamically with images -->
-                </div>
-
-                <label class="block text-gray-700 font-semibold mb-2" for="image">
-                    Storage Image </label>
-                <input type="file" id="u_image" name="u_image[]" multiple
-                    class="border-2 w-full border-dashed border-gray-300 rounded-lg p-6 text-center" />
-
-            </div>
-
-            <div class="mb-4">
-                <label class="block text-gray-700 font-semibold mb-2" for="productName">
-                    Product Name </label>
-                <input
-                    class="w-full border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                    id="u_storageName" name="u_storageName" placeholder="Storage Name" type="text" required />
-            </div>
-
-            <div class="mb-4">
-                <label class="block text-gray-700 font-semibold mb-2" for="description"> Description
-                </label>
-                <input
-                    class="w-full border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                    id="u_description" name="u_description" placeholder="Storage Description" type="text" required />
-            </div>
-
-            <div class="mb-4">
-                <label class="block text-gray-700 font-semibold mb-2" for="category">
-                    Category </label>
-                <select name="u_category" id="u_category"
-                    class="w-full border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-600">
-                    <option value="" disabled selected>Select an Option</option>
-                    <option value='Small'>Small</option>
-                    <option value="Medium">Medium</option>
-                    <option value="Large">Large</option>
-                </select>
-            </div>
-
-            <div class="mb-4">
-                <div class="flex items-center gap-2">
-                    <label class="block text-gray-700 font-semibold " for="stock"> Stock </label>
-                    <input
-                        class="w-full border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                        id="u_stock" name="u_stock" placeholder="Storage Quantity" type="number" required />
-
-                    <label class="block text-gray-700 font-semibold " for="price"> Price </label>
-                    <input
-                        class="w-full border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                        id="u_price" name="u_price" placeholder="Storage Price" type="number" required />
-                </div>
-            </div>
-
-            <input type="submit" value="Update Product"
-                class="w-full bg-blue-600 text-white py-2 rounded-lg text-center font-semibold hover:bg-blue-700" />
-        </form>
+        <?php require_once './components/updateStorageForm.php' ?>
     </div>
 
 
@@ -332,29 +271,29 @@ if (isset($_SESSION['customer']['role_name'])) {
                             <tbody>
                                 <?php if (!empty($Customer)): ?>
                                     <?php foreach ($Customer as $cust): ?>
-                                        <tr class="border-b truncate">
-                                            <td class="py-2">
+                                        <tr class="border-b ">
+                                            <td class="py-2 truncate">
                                                 <?php echo htmlspecialchars($cust['id']); ?>
                                             </td>
-                                            <td class="py-2">
+                                            <td class="py-2 truncate">
                                                 <?php echo htmlspecialchars($cust['firstname']); ?>
                                             </td>
-                                            <td class="py-2">
+                                            <td class="py-2 truncate">
                                                 <?php echo htmlspecialchars($cust['lastname']); ?>
                                             </td>
-                                            <td class="py-2">
+                                            <td class="py-2 truncate">
                                                 <?php echo htmlspecialchars($cust['birthdate']); ?>
                                             </td>
-                                            <td class="py-2">
+                                            <td class="py-2 truncate">
                                                 <?php echo htmlspecialchars($cust['sex']); ?>
                                             </td>
-                                            <td class="py-2">
+                                            <td class="py-2 truncate">
                                                 <?php echo htmlspecialchars($cust['phone']); ?>
                                             </td>
-                                            <td class="py-2">
+                                            <td class="py-2 truncate">
                                                 <?php echo htmlspecialchars($cust['address']); ?>
                                             </td>
-                                            <td class="py-2">
+                                            <td class="py-2 truncate">
                                                 <?php echo htmlspecialchars($cust['email']); ?>
                                             </td>
                                             <td class="py-2">
@@ -445,6 +384,7 @@ if (isset($_SESSION['customer']['role_name'])) {
                                     <th class="py-2">Storage ID</th>
                                     <th class="py-2">Name</th>
                                     <th class="py-2">Description</th>
+                                    <th class="py-2">Area</th>
                                     <th class="py-2">Category</th>
                                     <th class="py-2">Stock</th>
                                     <th class="py-2">Price</th>
@@ -475,11 +415,17 @@ if (isset($_SESSION['customer']['role_name'])) {
                                             <td class="py-2 max-w-xs truncate overflow-hidden whitespace-nowrap">
                                                 <?php echo htmlspecialchars($item['description']); ?>
                                             </td>
-                                            <td class="py-2"><?php echo htmlspecialchars($item['category']); ?></td>
-                                            <td class="py-2"><?php echo htmlspecialchars($item['stock']); ?></td>
-                                            <td class="py-2"><?php echo htmlspecialchars(number_format($item['price'], 2)); ?>
+                                            <td class="py-2 truncate"><?php echo htmlspecialchars($item['area']); ?>
                                             </td>
-                                            <td class="py-2"><?php echo htmlspecialchars($item['status']); ?></td>
+                                            <td class="py-2 truncate"><?php echo htmlspecialchars($item['category_name']); ?>
+                                            </td>
+                                            <!-- Updated category name -->
+                                            <td class="py-2 truncate"><?php echo htmlspecialchars($item['stock']); ?></td>
+                                            <td class="py-2 truncate">
+                                                <?php echo htmlspecialchars(number_format($item['price'], 2)); ?>
+                                            </td>
+                                            <td class="py-2 truncate"><?php echo htmlspecialchars($item['status_name']); ?></td>
+                                            <!-- Updated status name -->
                                             <td class="py-2">
                                                 <button
                                                     class="p-2 border-2 border-red-500 w-[70px] rounded-md font-semibold shadow-md"
@@ -491,7 +437,8 @@ if (isset($_SESSION['customer']['role_name'])) {
                                 id: '<?php echo htmlspecialchars($item['id']); ?>',
                                 name: '<?php echo htmlspecialchars(addslashes($item['name'])); ?>',
                                 description: '<?php echo htmlspecialchars(addslashes($item['description'])); ?>',
-                                category: '<?php echo htmlspecialchars($item['category']); ?>',
+                                area: '<?php echo htmlspecialchars($item['area']); ?>',
+                                category: '<?php echo htmlspecialchars($item['category_id']); ?>', 
                                 stock: '<?php echo htmlspecialchars($item['stock']); ?>',
                                 price: '<?php echo htmlspecialchars($item['price']); ?>',
                                 image: '<?php echo htmlspecialchars(addslashes($item['image'])); ?>'
@@ -511,7 +458,6 @@ if (isset($_SESSION['customer']['role_name'])) {
                                     </tr>
                                 <?php endif; ?>
                             </tbody>
-
                         </table>
 
                     </div>
@@ -615,7 +561,8 @@ if (isset($_SESSION['customer']['role_name'])) {
             document.getElementById('u_id').value = item.id;
             document.getElementById('u_storageName').value = item.name;
             document.getElementById('u_description').value = item.description;
-            document.getElementById('u_category').value = item.category;
+            document.getElementById('u_area').value = item.area;
+            document.getElementById('u_category').value = item.category; // Ensure this matches the category ID
             document.getElementById('u_stock').value = item.stock;
             document.getElementById('u_price').value = item.price;
 
@@ -760,31 +707,36 @@ if (isset($_SESSION['customer']['role_name'])) {
             }
         });
         // JavaScript to switch content based on sidebar click
-        const links = document.querySelectorAll('nav a');
-        const contentSections = document.querySelectorAll('.content-section');
+        document.addEventListener("DOMContentLoaded", function () {
+            const links = document.querySelectorAll('.navlink');
+            const contentSections = document.querySelectorAll('.content-section');
 
-        links.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault(); // Prevent default anchor behavior
+            links.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault(); // Prevent default anchor behavior
 
-                // Remove active class from all links
-                links.forEach(l => l.classList.remove('border-l-4', 'border-blue-500', 'bg-slate-200', 'font-semibold'));
+                    // Remove active class from all links
+                    links.forEach(l => l.classList.remove('border-l-4', 'border-blue-500', 'bg-slate-200', 'font-semibold'));
 
-                const targetId = link.getAttribute('data-target');
+                    const targetId = link.getAttribute('data-target');
+                    console.log(targetId);
 
-                // Hide all sections
-                contentSections.forEach(section => {
-                    section.classList.add('hidden');
+                    // Hide all sections
+                    contentSections.forEach(section => {
+                        section.classList.add('hidden');
+                    });
+
+                    // Show the selected section
+                    const targetSection = document.getElementById(targetId);
+                    targetSection.classList.remove('hidden');
+
+                    // Add active class to the clicked link
+                    link.classList.add('border-l-4', 'border-blue-500', 'bg-slate-200', 'font-semibold');
+
                 });
-
-                // Show the selected section
-                const targetSection = document.getElementById(targetId);
-                targetSection.classList.remove('hidden');
-
-                // Add active class to the clicked link
-                link.classList.add('border-l-4', 'border-blue-500', 'bg-slate-200', 'font-semibold');
             });
         });
+
 
         // const salesCtx = document.getElementById('salesChart').getContext('2d');
         // const salesChart = new Chart(salesCtx, {

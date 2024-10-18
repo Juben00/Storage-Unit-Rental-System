@@ -5,15 +5,16 @@ require_once './imageUpload.api.php';
 
 $adminObj = new Admin();
 
-$name = $category = $price = $status = $description = $image = $stock = "";
-$nameErr = $categoryErr = $priceErr = $statusErr = $descriptionErr = $imageErr = $stockErr = "";
+$name = $area = $category = $price = $status = $description = $image = $stock = "";
+$nameErr = $areaErr = $categoryErr = $priceErr = $statusErr = $descriptionErr = $imageErr = $stockErr = "";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $name = clean_input($_POST["storageName"]);
-    $description = clean_input($_POST["description"]);
-    $category = clean_input($_POST["category"]);
-    $stock = clean_input($_POST["stock"]);
-    $price = clean_input($_POST["price"]);
+    $area = clean_input($_POST["storageArea"]);
+    $description = clean_input($_POST["storageDescription"]);
+    $category = clean_input($_POST["storageCategory"]);
+    $stock = clean_input($_POST["storageStock"]);
+    $price = clean_input($_POST["storagePrice"]);
 
     // Check if images were uploaded
     if (!empty($_FILES['storageImages']['name'][0])) {
@@ -58,15 +59,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (empty($stock)) {
         $stockErr = "Stock is required";
     }
+    if (empty($area)) {
+        $areaErr = "Area is required";
+    }
 
     // If no errors, proceed with saving to the database
-    if (empty($nameErr) && empty($categoryErr) && empty($priceErr) && empty($descriptionErr) && empty($imageErr) && empty($stockErr)) {
-        $adminObj->name = $name;
-        $adminObj->category = $category;
-        $adminObj->price = $price;
-        $adminObj->description = $description;
+    if (empty($nameErr) && empty($areaErr) && empty($categoryErr) && empty($priceErr) && empty($descriptionErr) && empty($imageErr) && empty($stockErr)) {
         $adminObj->image = $image; // Store the image URLs as JSON
+        $adminObj->name = $name;
+        $adminObj->area = $area;
+        $adminObj->description = $description;
+        $adminObj->category = $category;
         $adminObj->stock = $stock;
+        $adminObj->price = $price;
 
         $addStorageResult = $adminObj->addStorage();
 

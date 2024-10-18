@@ -5,13 +5,14 @@ require_once __DIR__ . '/../db.php';
 class Admin
 {
     public $id;
-    public $status = 'In-Stock';
+    public $status = '1';
     public $description;
     public $name;
     public $category;
     public $price;
     public $image;
     public $stock;
+    public $area;
 
     protected $db;
 
@@ -53,16 +54,21 @@ class Admin
 
     public function addStorage()
     {
-        $sql = "INSERT INTO storage (name, category, description, stock, price, status, image) VALUES (:name, :category, :description, :stock, :price, :status, :image);";
+        $sql = "INSERT INTO storage (name, category_id, description, area, stock, price, status_id, image) 
+            VALUES (:name, :category_id, :description, :area, :stock, :price, :status_id, :image);";
         $stmt = $this->db->connect()->prepare($sql);
+
+        // Bind parameters
         $stmt->bindParam(':name', $this->name);
-        $stmt->bindParam(':category', $this->category);
+        $stmt->bindParam(':category_id', $this->category); // Ensure this is the ID from the category table
         $stmt->bindParam(':description', $this->description);
+        $stmt->bindParam(':area', $this->area); // Ensure you have an area variable to bind
         $stmt->bindParam(':stock', $this->stock);
         $stmt->bindParam(':price', $this->price);
-        $stmt->bindParam(':status', $this->status);
+        $stmt->bindParam(':status_id', $this->status); // Ensure this is the ID from the status table
         $stmt->bindParam(':image', $this->image);
 
+        // Execute and return status
         if ($stmt->execute()) {
             return ['status' => 'success', 'message' => 'Storage added successfully'];
         } else {
@@ -72,31 +78,30 @@ class Admin
 
     public function updateStorage()
     {
-        $sql = "UPDATE storage SET 
-            name = :name, 
-            category = :category, 
-            price = :price, 
-            description = :description, 
-            image = :image, 
-            stock = :stock 
-            WHERE id = :id";
+        $sql = "UPDATE storage SET name = :name, category_id = :category_id, price = :price, description = :description, area = :area, image = :image, stock = :stock WHERE id = :id";
 
         $stmt = $this->db->connect()->prepare($sql);
         $stmt->bindParam(':id', $this->id);
         $stmt->bindParam(':name', $this->name);
-        $stmt->bindParam(':category', $this->category);
+        $stmt->bindParam(':category_id', $this->category); // Ensure this holds the category ID
         $stmt->bindParam(':price', $this->price);
         $stmt->bindParam(':description', $this->description);
+        $stmt->bindParam(':area', $this->area);
         $stmt->bindParam(':image', $this->image);
         $stmt->bindParam(':stock', $this->stock);
-        return $stmt->execute() ? ['status' => 'success', 'message' => 'Storage updated successfully'] : ['status' => 'error', 'message' => 'Update failed'];
+
+        return $stmt->execute() ?
+            ['status' => 'success', 'message' => 'Storage updated successfully'] :
+            ['status' => 'error', 'message' => 'Update failed'];
     }
-
-
 
     public function getAllStorage()
     {
-        $sql = "SELECT * FROM storage;";
+        $sql = "SELECT s.*, c.name AS category_name, st.status_name 
+            FROM storage s 
+            JOIN category c ON s.category_id = c.id 
+            JOIN status st ON s.status_id = st.id;";
+
         $stmt = $this->db->connect()->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -108,12 +113,14 @@ class Admin
         $sql = "DELETE FROM storage WHERE id = :id;";
         $stmt = $this->db->connect()->prepare($sql);
         $stmt->bindParam(':id', $id);
+
         if ($stmt->execute()) {
             return ['status' => 'success', 'message' => 'Storage deleted successfully'];
         } else {
             return ['status' => 'error', 'message' => 'Failed to delete storage'];
         }
     }
+
     public function logout()
     {
         session_destroy();
@@ -127,4 +134,4 @@ class Admin
 }
 $adminObj = new Admin();
 
-// var_dump($adminObj->deleteStorage(3));
+// var_dump($adminObj->getAllStorage());

@@ -5,8 +5,8 @@ require_once './imageUpload.api.php';
 
 $adminObj = new Admin();
 
-$name = $category = $price = $status = $description = $image = $stock = $id = "";
-$nameErr = $categoryErr = $priceErr = $statusErr = $descriptionErr = $imageErr = $stockErr = "";
+$name = $category = $price = $status = $description = $image = $stock = $id = $area = "";
+$nameErr = $categoryErr = $priceErr = $statusErr = $descriptionErr = $imageErr = $stockErr = $areaErr = "";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $id = clean_input($_POST["u_id"]);
@@ -15,6 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $price = clean_input($_POST["u_price"]);
     $description = clean_input($_POST["u_description"]);
     $stock = clean_input($_POST["u_stock"]);
+    $area = clean_input($_POST['u_area']);
 
     // Check if a new image was uploaded
     if (!empty($_FILES['u_image']['name'][0])) {
@@ -50,9 +51,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $image = $_POST['existing_image'];
     }
 
-
-
-
     // Validate input fields
     if (empty($name)) {
         $nameErr = "Storage Name is required";
@@ -78,6 +76,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $adminObj->description = $description;
         $adminObj->image = $image;
         $adminObj->stock = $stock;
+        $adminObj->area = $area;
+
 
         $updateStorageResult = $adminObj->updateStorage();
 
