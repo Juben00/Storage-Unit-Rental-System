@@ -257,7 +257,7 @@ if (isset($_SESSION['customer']['role_name'])) {
                         <table class="w-full text-left border-collapse overflow-scroll">
                             <thead>
                                 <tr class="text-gray-600">
-                                    <th class="py-2">Customer ID</th>
+                                    <th class="py-2">ID</th>
                                     <th class="py-2">First Name</th>
                                     <th class="py-2">Last Name</th>
                                     <th class="py-2">Birthdate</th>
