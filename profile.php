@@ -55,7 +55,7 @@ $profile = $customerObj->getUserInfo($id);
 <body class="bg-gray-100">
     <div class="flex h-screen">
         <!-- Sidebar -->
-        <div class="w-1/5 bg-white sm:p-4 border-2 flex flex-col relative " id="sidebar">
+        <div class="w-1/5 bg-white sm:p-4 border-2 flex flex-col relative" id="sidebar">
             <button class="text-white z-50 bg-blue-500 p-2 rounded absolute top-2 right-2" id="toggle-button"
                 onclick="toggleSidebar()">
                 <span class="toggle-text">
@@ -71,8 +71,7 @@ $profile = $customerObj->getUserInfo($id);
                     </svg>
                 </span>
             </button>
-            <img src="./images/logo black transparent with name.png"
-                class="h-[100px] mt-10 lg:mt-0 lg:h-[200px] w-auto relative mb-2" id="logo" />
+            <img src="./images/logo black transparent with name.png" class=" w-auto relative mb-2" id="logo" />
 
             <div class="" id="proflinks">
                 <ul>
@@ -178,21 +177,50 @@ $profile = $customerObj->getUserInfo($id);
                                 value="<?php echo htmlentities($profile['lastname']) ?>" />
                         </span>
                     </div>
-                    <div class="mb-4">
-                        <label class="block text-gray-700 mb-2"> Username </label>
-                        <input class="w-full border rounded px-4 py-2 bg-gray-100" readonly="" type="text"
-                            value="@kevinheart" />
-                        <p class="text-gray-500 mt-2"> Available for change in 10/10/2024 </p>
+                    <div class="mb-4 flex items-center gap-2">
+                        <span class="w-full">
+                            <label class="block text-gray-700 mb-2"> Birthdate </label>
+                            <input class="w-full border rounded px-4 py-2" type="date"
+                                value="<?php echo htmlentities($profile['birthdate']) ?>" />
+                        </span>
+                        <span class="w-full">
+                            <label class="block text-gray-700 mb-2"> Sex </label>
+                            <input class="w-full border rounded px-4 py-2" type="text"
+                                value="<?php echo htmlentities($profile['sex']) ?>" />
+                        </span>
+                    </div>
+                    <div class="mb-4 flex items-center gap-2">
+                        <span class="w-full">
+                            <label class="block text-gray-700 mb-2"> Email </label>
+                            <input class="w-full border rounded px-4 py-2 " type="text"
+                                value="<?php echo htmlentities($profile['email']) ?>" />
+                        </span>
+                        <span class="w-full">
+                            <label class="block text-gray-700 mb-2"> Phone Number</label>
+                            <input class="w-full border rounded px-4 py-2" type="text"
+                                value="<?php echo htmlentities($profile['phone']) ?>" />
+                        </span>
                     </div>
                     <div class="mb-4">
-                        <label class="block text-gray-700 mb-2"> Status recently </label>
-                        <input class="w-full border rounded px-4 py-2" type="text" value="On duty" />
+                        <label class="block text-gray-700 mb-2">
+                            Address
+                        </label>
+                        <input class="w-full border rounded px-4 py-2 " type="text"
+                            value="<?php echo htmlentities($profile['address']) ?>" />
                     </div>
-                    <div class="mb-4"> <label class="block text-gray-700 mb-2"> About me </label>
-                        <textarea class="w-full border rounded px-4 py-2"
-                            rows="4">Discuss only on work hour, unless you wanna discuss about music</textarea>
+                    <div class="mb-4 flex items-center gap-2">
+                        <span class="w-full">
+                            <label class="block text-gray-700 mb-2"> Password </label>
+                            <input class="w-full border rounded px-4 py-2 " type="password"
+                                placeholder="Input Password to update your data." />
+                        </span>
+                        <span class="w-full">
+                            <label class="block text-gray-700 mb-2"> Confirm password </label>
+                            <input class="w-full border rounded px-4 py-2" type="password"
+                                placeholder="Confirm Password to update your data." />
+                        </span>
                     </div>
-                    <button class="bg-gray-300 text-gray-500 px-4 py-2 rounded" disabled=""> Save changes </button>
+                    <button class="bg-blue-500 text-slate-50 px-4 py-2 rounded"> Save changes </button>
                 </div>
             </div>
 
