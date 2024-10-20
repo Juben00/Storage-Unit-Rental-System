@@ -18,6 +18,8 @@ $feedbackMessage = "";
 $Storages = [];
 $Storages = $customerObj->getAllStorage();
 
+$userId = $_SESSION['customer']['id'];
+
 
 ?>
 

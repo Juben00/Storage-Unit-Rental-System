@@ -61,9 +61,8 @@
                     <!-- Profile Icon (FontAwesome) -->
                     <span class="flex items-center w-full">
                         <i class="fas fa-user text-gray-700 mr-2"></i>
-                        <a href="profile.php"
-                            class="block w-full text-center text-gray-700 hover:text-blue-500 hover:bg-gray-100 rounded duration-150"
-                            href="#">Profile</a>
+                        <a href="profile.php?userId=<?php echo htmlspecialchars($userId); ?>"
+                            class="block w-full text-center text-gray-700 hover:text-blue-500 hover:bg-gray-100 rounded duration-150">Profile</a>
                     </span>
                 </li>
                 <li class="py-2 flex items-center  justify-center">
@@ -89,7 +88,7 @@
     <?php
     if (isset($_SESSION['customer'])) {
         echo '
-        <a class=" w-full text-center hover:text-gray-400 duration-150" href="profile.php">Profile</a>
+        <a class=" w-full text-center hover:text-gray-400 duration-150" href="profile.php?userId=<?php echo htmlspecialchars($userId); ?>">Profile</a>
         <a class=" w-full text-center hover:text-gray-400 duration-150" href="#">Storages</a>
         <a class=" w-full text-center hover:text-gray-400 duration-150" href="#">Pricing</a>
         <a class=" w-full text-center hover:text-gray-400 duration-150" href="#">About Us</a>
