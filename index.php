@@ -107,6 +107,9 @@ $Storages = $customerObj->getAllStorage();
 
             <div class="flex justify-center mb-4 gap-4">
                 <button class="text-black font-semibold">
+                    All
+                </button>
+                <button class="text-gray-500">
                     Small
                 </button>
                 <button class="text-gray-500">

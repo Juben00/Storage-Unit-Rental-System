@@ -117,13 +117,14 @@ class Customer
         return ['status' => 'success', 'message' => 'Logged Out successfully!'];
     }
 
-    public function getAllStorage()
+    public function getAllStorage($category = "")
     {
         $sql = "SELECT s.*, c.name AS category_name, st.status_name 
             FROM storage s 
             JOIN category c ON s.category_id = c.id 
-            JOIN status st ON s.status_id = st.id;";
+            JOIN status st ON s.status_id = st.id WHERE (c.id LIKE CONCAT('%', :cat, '%'));";
         $stmt = $this->db->connect()->prepare($sql);
+        $stmt->bindParam(':cat', $category);
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $result;

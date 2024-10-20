@@ -59,3 +59,5 @@ CREATE TABLE storage (
 CREATE INDEX idx_category_id ON storage(category_id);
 CREATE INDEX idx_status_id ON storage(status_id);
 CREATE INDEX idx_email ON customer(email);
+
+
