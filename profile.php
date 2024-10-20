@@ -8,7 +8,6 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="./output.css">
     <link rel="icon" href="./images/logo white transparent.png">
-    -
     <style>
         .hidden-content {
             display: none;
@@ -131,9 +130,9 @@
                                 </path>
                             </g>
                         </svg>
-                        <span class="sidebar-text">
+                        <a class="sidebar-text" href="logout.php">
                             Logout
-                        </span>
+                        </a>
                     </li>
                 </ul>
             </div>
