@@ -7,6 +7,7 @@ $customerObj = new Customer();
 session_start();
 
 if (isset($_SESSION['customer']['role_name'])) {
+    $userId = $_SESSION['customer']['id'];
     if ($_SESSION['customer']['role_name'] === 'Admin') {
         header('Location: admin-blu-lance.php');
     }
@@ -18,7 +19,7 @@ $feedbackMessage = "";
 $Storages = [];
 $Storages = $customerObj->getAllStorage();
 
-$userId = $_SESSION['customer']['id'];
+
 
 
 ?>

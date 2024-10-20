@@ -1,3 +1,15 @@
+<?php
+require_once './classes/customer.class.php';
+require_once './sanitize.php';
+
+$customerObj = new Customer();
+
+session_start();
+
+$id = $_GET['userId'];
+$profile = $customerObj->getUserInfo($id);
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -144,14 +156,18 @@
             <div id="profile-content" class="active-content">
                 <div class="bg-white p-6 rounded-lg shadow ">
                     <h2 class="text-xl font-semibold mb-4"> Profile Picture </h2>
-                    <div class="flex items-center mb-6"> <img alt="Profile picture of a person"
-                            class="w-16 h-16 rounded-full mr-4" height="100" src="./images/OIP.jpg" width="100" />
-                        <div class="space-x-4"> <button class="bg-blue-500 text-white px-4 py-2 rounded"> Change picture
-                            </button> <button class="bg-red-500 text-white px-4 py-2 rounded"> Delete picture </button>
+                    <div class="flex items-center mb-6">
+                        <img alt="Profile picture of a person" class="w-16 h-16 rounded-full mr-4" height="100"
+                            src="./images/OIP.jpg" width="100" />
+                        <div class="space-x-4">
+                            <button class="bg-blue-500 text-white px-4 py-2 rounded"> Change picture </button>
+                            <button class="bg-red-500 text-white px-4 py-2 rounded"> Delete picture </button>
                         </div>
                     </div>
-                    <div class="mb-4"> <label class="block text-gray-700 mb-2"> Profile name </label> <input
-                            class="w-full border rounded px-4 py-2" type="text" value="Kevin Heart" /> </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 mb-2"> Profile name </label>
+                        <input class="w-full border rounded px-4 py-2" type="text" value="Kevin Heart" />
+                    </div>
                     <div class="mb-4"> <label class="block text-gray-700 mb-2"> Username </label> <input
                             class="w-full border rounded px-4 py-2 bg-gray-100" readonly="" type="text"
                             value="@kevinheart" />

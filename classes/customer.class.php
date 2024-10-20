@@ -144,7 +144,17 @@ class Customer
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result;
     }
+
+    public function getUserInfo($userId)
+    {
+        $sql = "SELECT c.*, r.role_name FROM customer c JOIN roles r ON c.role_id = r.id WHERE c.id = :id;";
+        $stmt = $this->db->connect()->prepare($sql);
+        $stmt->bindParam("id", $userId);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result;
+    }
 }
 $customerObj = new Customer();
 
-// var_dump($customerObj->getSingleStorage(2));
+// var_dump($customerObj->getUserInfo(2));
