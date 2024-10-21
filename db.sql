@@ -55,6 +55,14 @@ CREATE TABLE storage (
     FOREIGN KEY (status_id) REFERENCES status(id)
 );
 
+CREATE TABLE bookmark (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    customer_id INT NOT NULL, -- Foreign key to customer table
+    storage_id INT NOT NULL, -- Foreign key to storage table
+    FOREIGN KEY (customer_id) REFERENCES customer(id) ON DELETE CASCADE,
+    FOREIGN KEY (storage_id) REFERENCES storage(id) ON DELETE CASCADE
+);
+
 -- Create indexes for performance
 CREATE INDEX idx_category_id ON storage(category_id);
 CREATE INDEX idx_status_id ON storage(status_id);

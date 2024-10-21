@@ -1,5 +1,4 @@
 <?php
-
 require_once './classes/customer.class.php';
 require_once './sanitize.php';
 
@@ -12,7 +11,9 @@ if (!isset($_SESSION['customer']['role_name'])) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['id'])) {
-    $idparam = $_GET['id'];
+    // Sanitize the ID
+    $userId = $_SESSION['customer']['id'];
+    $idparam = clean_input($_GET['id']);
     $storage = $customerObj->getSingleStorage($idparam);
 
     // Decode the JSON-encoded images field
@@ -24,8 +25,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['id'])) {
     exit();
 }
 
-?>
+$isLoginPop = false;
+$feedbackMessage = "";
 
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -81,10 +86,58 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['id'])) {
 
 
                 <div>
-                    <div class="mb-2">
+                    <div class="mb-2 flex justify-between items-center">
                         <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 ">
                             <?php echo htmlspecialchars($storage['name']) ?>
                         </h1>
+                        <form id="bookmark">
+                            <input type="hidden" value="<?php echo htmlspecialchars($idparam) ?>" name="storageId">
+                            <input type="hidden" name="userId" value="<?php echo htmlspecialchars($userId) ?>">
+                            <!-- shaded -->
+                            <!-- <svg width="25px" height="25px" viewBox="-4 0 30 30" version="1.1"
+                                xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" fill="#000000">
+                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                <g id="SVGRepo_iconCarrier">
+                                    <title>bookmark</title>
+                                    <desc>Created with Sketch Beta.</desc>
+                                    <defs> </defs>
+                                    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"
+                                        sketch:type="MSPage">
+                                        <g id="Icon-Set-Filled" sketch:type="MSLayerGroup"
+                                            transform="translate(-419.000000, -153.000000)" fill="#000000">
+                                            <path
+                                                d="M437,153 L423,153 C420.791,153 419,154.791 419,157 L419,179 C419,181.209 420.791,183 423,183 L430,176 L437,183 C439.209,183 441,181.209 441,179 L441,157 C441,154.791 439.209,153 437,153"
+                                                id="bookmark" sketch:type="MSShapeGroup"> </path>
+                                        </g>
+                                    </g>
+                                </g>
+                            </svg> -->
+                            <button type="submit">
+                                <svg width="25px" height="25px" viewBox="-4 0 30 30" version="1.1"
+                                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                    xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" fill="#000000">
+                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round">
+                                    </g>
+                                    <g id="SVGRepo_iconCarrier">
+                                        <title>bookmark</title>
+                                        <desc>Created with Sketch Beta.</desc>
+                                        <defs> </defs>
+                                        <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"
+                                            sketch:type="MSPage">
+                                            <g id="Icon-Set" sketch:type="MSLayerGroup"
+                                                transform="translate(-417.000000, -151.000000)" fill="#000000">
+                                                <path
+                                                    d="M437,177 C437,178.104 436.104,179 435,179 L428,172 L421,179 C419.896,179 419,178.104 419,177 L419,155 C419,153.896 419.896,153 421,153 L435,153 C436.104,153 437,153.896 437,155 L437,177 L437,177 Z M435,151 L421,151 C418.791,151 417,152.791 417,155 L417,177 C417,179.209 418.791,181 421,181 L428,174 L435,181 C437.209,181 439,179.209 439,177 L439,155 C439,152.791 437.209,151 435,151 L435,151 Z"
+                                                    id="bookmark" sketch:type="MSShapeGroup"> </path>
+                                            </g>
+                                        </g>
+                                    </g>
+                                </svg>
+                            </button>
+                        </form>
                     </div>
 
                     <!-- rating -->
@@ -166,7 +219,67 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['id'])) {
             </div>
         </div>
     </main>
+    <div class="fixed inset-0 flex items-center justify-center z-50 left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2"
+        id="modal" style="display:none;"> <!-- Modal is hidden initially -->
+        <div class="bg-white rounded-lg overflow-hidden shadow-2xl border-blue-500 border-2 z-10 max-w-sm mx-auto">
+            <div class="p-5">
+                <h2 class="text-lg font-semibold">Feedback</h2>
+                <p id="feedbackMessage" class="mt-2"></p> <!-- Display feedback message here -->
+                <div class="mt-4">
+                    <button id="popupbutt" class="bg-blue-500 text-white font-semibold py-2 px-4 rounded">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
+
+    <script>
+        const popbutton = document.getElementById('popupbutt');
+
+        popbutton.addEventListener("click", () => {
+            document.getElementById('modal').style.display = 'none';
+            if (document.getElementById('feedbackMessage').innerHTML === 'Signup successful!') {
+                loginModal.classList.remove('hidden');
+                loginModal.classList.add('flex');
+                signupModal.classList.add('hidden');
+                signupModal.classList.remove('flex');
+            } else if (document.getElementById('feedbackMessage').innerHTML === 'Logged In successfully!') {
+                window.location.reload();
+            }
+        });
+
+        document.getElementById("bookmark").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(e.target);
+
+            try {
+                const response = await fetch('./api/AddBookmark.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                let feedbackMessage = '';
+
+                if (data.status === 'success') {
+                    feedbackMessage = data.message;
+                } else {
+                    feedbackMessage = data.message;
+                }
+
+                document.getElementById('feedbackMessage').innerHTML = feedbackMessage;
+                document.getElementById('modal').style.display = 'flex';
+
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('feedbackMessage').innerHTML = 'An error occurred while processing your request.';
+                document.getElementById('modal').style.display = 'flex';
+            }
+        })
+    </script>
 </body>
 
 </html>

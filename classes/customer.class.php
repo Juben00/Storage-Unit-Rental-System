@@ -154,6 +154,19 @@ class Customer
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result;
     }
+
+    public function bookmarkStorage($userId, $storageId)
+    {
+        $sql = "INSERT INTO bookmark (customer_id, storage_id) VALUES (:customer_id, :storage_id);";
+        $stmt = $this->db->connect()->prepare($sql);
+        $stmt->bindParam(':customer_id', $userId);
+        $stmt->bindParam(':storage_id', $storageId);
+        if ($stmt->execute()) {
+            return ['status' => 'success', 'message' => 'Storage bookmarked successfully!'];
+        } else {
+            return ['status' => 'error', 'message' => 'Bookmark failed'];
+        }
+    }
 }
 $customerObj = new Customer();
 
