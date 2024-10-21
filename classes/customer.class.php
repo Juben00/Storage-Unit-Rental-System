@@ -183,7 +183,7 @@ class Customer
 
     public function getBookmarkedStorage()
     {
-        $sql = "SELECT s.id as id, c.name AS category_name, st.status_name 
+        $sql = "SELECT s.id as id, s.*, c.name AS category_name, st.status_name 
             FROM storage s 
             JOIN category c ON s.category_id = c.id 
             JOIN status st ON s.status_id = st.id

@@ -126,7 +126,7 @@ $Storages = $customerObj->getAllStorage();
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ">
                 <?php if (!empty($Storages)): ?>
                     <?php foreach ($Storages as $storage): ?>
-                        <a class="border p-2 bg-neutral-100 shadow-md"
+                        <a class="border p-2 bg-neutral-100 shadow-md storage-link"
                             href="unit.php?id=<?php echo htmlspecialchars($storage['id']); ?>">
                             <?php
                             // Decode the JSON image field
@@ -401,6 +401,25 @@ $Storages = $customerObj->getAllStorage();
             document.getElementById('login-form').reset();
         });
 
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const storageLinks = document.querySelectorAll('.storage-link');
+
+            storageLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    // Check if the user is logged in
+                    const isLoggedIn = <?php echo isset($_SESSION['user_id']) ? 'true' : 'false'; ?>;
+
+                    if (!isLoggedIn) {
+                        e.preventDefault(); // Prevent default action (redirect)
+
+                        // Show the login modal
+                        document.getElementById('loginModal').classList.remove('hidden'); // Ensure this matches your modal's structure
+                        document.getElementById('loginModal').classList.remove('flex'); // Ensure this matches your modal's structure
+                    }
+                });
+            });
+        });
 
     </script>
 

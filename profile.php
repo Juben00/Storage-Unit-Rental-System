@@ -8,6 +8,7 @@ session_start();
 
 $id = $_GET['userId'];
 $profile = $customerObj->getUserInfo($id);
+$bookmarkedStorage = $customerObj->getBookmarkedStorage();
 
 ?>
 <!DOCTYPE html>
@@ -230,8 +231,56 @@ $profile = $customerObj->getUserInfo($id);
             </div>
 
             <div id="saved-content" class="hidden-content">
-                <h1 class="text-2xl">Saved Content</h1>
-                <p>This is the saved section.</p>
+                <div class="bg-white p-6 rounded-lg shadow ">
+                    <h1 class="text-2xl mb-4">Saved Content</h1>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ">
+                        <?php if (!empty($bookmarkedStorage)): ?>
+                            <?php foreach ($bookmarkedStorage as $storage): ?>
+                                <a class="border p-2 bg-neutral-100 shadow-md"
+                                    href="unit.php?id=<?php echo htmlspecialchars($storage['id']); ?>">
+                                    <?php
+                                    // Decode the JSON image field
+                                    $images = json_decode($storage['image'], true); // 'true' returns as associative array
+                                    $firstImage = !empty($images) ? $images[0] : ''; // Get the first image
+                                    ?>
+                                    <?php if ($firstImage): ?>
+                                        <img alt="<?php echo htmlspecialchars($storage['name']); ?>"
+                                            class="w-full h-64 object-cover" src="<?php echo htmlspecialchars($firstImage); ?>"
+                                            width="400" height="400" />
+                                    <?php else: ?>
+                                        <img alt="No Image" class="w-8 h-8 mr-2" height="30"
+                                            src="./image/bg-storage-removebg-preview.png" width="30" />
+                                    <?php endif; ?>
+
+                                    <div class="text-sm mt-2 flex items-center">
+                                        <span class="flex-1">
+                                            <?php echo htmlspecialchars($storage['name']); ?>
+                                            <span class="text-xs">
+                                                (<?php echo htmlspecialchars($storage['area']); ?> sqm)
+                                            </span>
+                                        </span>
+                                        <span class="text-xs text-gray-500">
+                                            <?php echo htmlspecialchars($storage['category_name']); ?>
+                                        </span>
+                                    </div>
+                                    <p class="text-red-500 font-semibold">
+                                        ₱<?php echo htmlspecialchars(number_format($storage['price'], 0)); ?>
+                                        <?php if (isset($storage['discount']) && $storage['discount'] > 0): ?>
+                                            <span class="line-through text-gray-500">
+                                                ₱<?php echo htmlspecialchars(number_format($storage['original_price'], 0)); ?>
+                                            </span>
+                                            <span class="text-orange-500">
+                                                <?php echo htmlspecialchars($storage['discount']); ?>% Off
+                                            </span>
+                                        <?php endif; ?>
+                                    </p>
+                                </a>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <p>No storage units found.</p>
+                        <?php endif; ?>
+                    </div>
+                </div>
             </div>
 
         </div>
