@@ -167,6 +167,35 @@ class Customer
             return ['status' => 'error', 'message' => 'Bookmark failed'];
         }
     }
+
+    public function unbookmarkStorage($userId, $storageId)
+    {
+        $sql = "DELETE FROM bookmark WHERE customer_id = :customer_id AND storage_id = :storage_id;";
+        $stmt = $this->db->connect()->prepare($sql);
+        $stmt->bindParam(':customer_id', $userId);
+        $stmt->bindParam(':storage_id', $storageId);
+        if ($stmt->execute()) {
+            return ['status' => 'success', 'message' => 'Storage unbookmarked successfully!'];
+        } else {
+            return ['status' => 'error', 'message' => 'Unbookmark failed'];
+        }
+    }
+
+    public function getBookmarkedStorage()
+    {
+        $sql = "SELECT s.id as id, c.name AS category_name, st.status_name 
+            FROM storage s 
+            JOIN category c ON s.category_id = c.id 
+            JOIN status st ON s.status_id = st.id
+            JOIN bookmark b ON s.id = b.storage_id
+            WHERE b.customer_id = :customer_id
+            ;";
+        $stmt = $this->db->connect()->prepare($sql);
+        $stmt->bindParam(':customer_id', $_SESSION['customer']['id']);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
 }
 $customerObj = new Customer();
 
