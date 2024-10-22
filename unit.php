@@ -43,6 +43,33 @@ $feedbackMessage = "";
     <link rel="stylesheet" href="./output.css">
     <link rel="icon" href="./images/logo white transparent.png">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <style>
+        .hidden {
+            display: none;
+        }
+
+        .tab-content {
+            padding: 16px;
+        }
+
+        .selected {
+            background-color: #cbd5e1;
+        }
+
+        /* Highlight for selected months */
+        .disabled {
+            color: gray;
+            pointer-events: none;
+        }
+
+        .hover:hover {
+            background-color: #e2e8f0;
+        }
+
+        .active {
+            background-color: #1d4ed8;
+        }
+    </style>
 </head>
 
 <body class="min-h-screen flex flex-col bg-slate-100 relative">
@@ -213,6 +240,42 @@ $feedbackMessage = "";
                     </p>
                 </div>
 
+                <div class="mx-auto mt-2">
+                    <div class="mb-4 flex items-center gap-2 ">
+                        <span class=" w-full">
+                            <label for="year-input" class="block text-sm font-semibold mb-2">Enter starting
+                                year:</label>
+                            <span class="flex items-center">
+                                <input type="number" id="year-input" class="border flex-1 w-[40%] p-2 rounded"
+                                    min="2020" value="2024" />
+                                <button id="set-years" class="ml-2 p-2 bg-blue-500 text-white rounded w-28">Set
+                                    Years</button>
+                            </span>
+                        </span>
+
+                        <span class=" w-full">
+                            <label for="month-count" class="block text-sm font-semibold mb-2">Enter number of
+                                consecutive
+                                months:</label>
+                            <span class="flex items-center">
+                                <input type="number" id="month-count" class="border flex-1 w-[40%] p-2 rounded" min="1"
+                                    value="1" />
+                                <button id="set-months"
+                                    class="ml-2 p-2 bg-blue-500 text-white rounded w-28">Set</button>
+                            </span>
+                        </span>
+                    </div>
+
+                    <div class="tabs flex justify-around " id="year-tabs"></div>
+
+                    <div class="tab-contents mt-2  rounded-lg overflow-hidden  h-[200px] overflow-y-scroll"
+                        id="tab-contents">
+                    </div>
+
+                    <div class="my-4" id="booking-confirmation" class="hidden">
+                        <p id="confirmation-message" class="text-lg font-semibold"></p>
+                    </div>
+                </div>
 
                 <button
                     class="w-full bg-blue-600 text-white mt-auto gap-2 py-3 px-6 rounded-lg hover:bg-blue-700 transition duration-300 flex items-center justify-center">
@@ -333,6 +396,156 @@ $feedbackMessage = "";
             }
         })
 
+
+    </script>
+
+    <script>
+        let startYear, endYear;
+
+        // Function to generate months
+        function getMonths() {
+            return [
+                'January', 'February', 'March', 'April',
+                'May', 'June', 'July', 'August',
+                'September', 'October', 'November', 'December'
+            ];
+        }
+
+        // Function to create year tabs and contents dynamically
+        function createTabs() {
+            const tabsContainer = document.getElementById('year-tabs');
+            const contentsContainer = document.getElementById('tab-contents');
+            const months = getMonths();
+
+            // Clear existing tabs and contents
+            tabsContainer.innerHTML = '';
+            contentsContainer.innerHTML = '';
+
+            const currentDate = new Date();
+            const currentMonth = currentDate.getMonth();
+            const currentYear = currentDate.getFullYear();
+
+            for (let year = startYear; year <= endYear; year++) {
+                // Create a tab button
+                const tabButton = document.createElement('button');
+                tabButton.className = "tab-year p-2 bg-blue-500 text-white rounded px-8 active:bg-blue-200";
+                tabButton.setAttribute('data-year', year);
+                tabButton.textContent = year;
+
+                // Create a tab content section
+                const tabContent = document.createElement('div');
+                tabContent.id = `year-${year}`;
+                tabContent.className = "tab-content hidden";
+
+                // Add months to the tab content
+                const monthList = document.createElement('ul');
+                monthList.className = "month-list";
+                months.forEach((month, index) => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = month;
+                    listItem.className = "cursor-pointer hover p-2";
+
+                    // Disable past months
+                    if (year < currentYear || (year === currentYear && index < currentMonth)) {
+                        listItem.classList.add('disabled');
+                    } else {
+                        listItem.addEventListener('click', () => selectMonth(month, year));
+                    }
+
+                    monthList.appendChild(listItem);
+                });
+                tabContent.appendChild(monthList);
+
+                // Append tab button and content to their respective containers
+                tabsContainer.appendChild(tabButton);
+                contentsContainer.appendChild(tabContent);
+            }
+
+            // Activate the first tab by default
+            if (tabsContainer.firstChild) {
+                tabsContainer.firstChild.click();
+            }
+        }
+
+        // Function to handle month selection and highlighting
+        function selectMonth(month, year) {
+            const monthCountInput = document.getElementById('month-count');
+            const monthCount = parseInt(monthCountInput.value);
+            const confirmationMessage = document.getElementById('confirmation-message');
+            const bookingConfirmation = document.getElementById('booking-confirmation');
+
+            // Calculate the range of months to display
+            const months = getMonths();
+            const startIndex = months.indexOf(month);
+            let selectedMonths = [];
+
+            // Clear previous highlights
+            document.querySelectorAll('.month-list li').forEach(item => {
+                item.classList.remove('selected');
+            });
+
+            for (let i = 0; i < monthCount; i++) {
+                const monthIndex = (startIndex + i) % 12; // Wrap around the month array
+                const displayYear = year + Math.floor((startIndex + i) / 12); // Increment year after December
+                selectedMonths.push(`${months[monthIndex]} ${displayYear}`);
+
+                // Highlight the selected months
+                const selectedYearContent = document.getElementById(`year-${displayYear}`);
+                if (selectedYearContent) {
+                    const monthListItems = selectedYearContent.querySelectorAll('.month-list li');
+                    if (monthListItems[monthIndex]) {
+                        monthListItems[monthIndex].classList.add('selected');
+                    }
+                }
+            }
+
+            // Display the selected months and year
+            confirmationMessage.textContent = `You have selected: ${selectedMonths.join(', ')}, please proceed to booking.`;
+            bookingConfirmation.classList.remove('hidden');
+        }
+
+        // Function to handle tab switching
+        // Function to handle tab switching and applying the active class
+        function handleTabSwitching() {
+            const tabs = document.querySelectorAll('.tab-year');
+            const contents = document.querySelectorAll('.tab-content');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function () {
+                    const year = this.getAttribute('data-year');
+
+                    // Remove 'active' class from all tabs
+                    tabs.forEach(t => t.classList.remove('active', 'bg-blue-700', 'font-semibold'));
+
+                    // Add 'active' class to the clicked tab
+                    this.classList.add('active', 'bg-blue-700', 'font-semibold');
+
+                    // Hide all contents
+                    contents.forEach(content => {
+                        content.classList.add('hidden');
+                    });
+
+                    // Show the selected year's content
+                    document.getElementById(`year-${year}`).classList.remove('hidden');
+                });
+            });
+        }
+
+        // Set years based on user input
+        document.getElementById('set-years').addEventListener('click', () => {
+            const yearInput = parseInt(document.getElementById('year-input').value);
+            startYear = yearInput; // Starting year from user input
+            endYear = startYear + 4; // End year is 5 years ahead
+
+            createTabs();
+            handleTabSwitching();
+        });
+
+        // Initialize the year range
+        startYear = new Date().getFullYear(); // Default start year
+        endYear = startYear + 4; // Default end year
+        createTabs();
+        handleTabSwitching();
     </script>
 </body>
 

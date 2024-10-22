@@ -6,9 +6,17 @@ $customerObj = new Customer();
 
 session_start();
 
+if (!isset($_SESSION['customer']['role_name'])) {
+    header('Location: ./index.php');
+    exit();
+}
+
+
 $id = $_GET['userId'];
 $profile = $customerObj->getUserInfo($id);
 $bookmarkedStorage = $customerObj->getBookmarkedStorage();
+
+
 
 ?>
 <!DOCTYPE html>
