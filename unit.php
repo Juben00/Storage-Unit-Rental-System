@@ -17,7 +17,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['id'])) {
     $storage = $customerObj->getSingleStorage($idparam);
     $bookmarkedStorage = $customerObj->getBookmarkedStorage();
 
-
     // Decode the JSON-encoded images field
     if (!empty($storage['image'])) {
         $storage['images'] = json_decode($storage['image'], true);
@@ -29,8 +28,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['id'])) {
 
 $isLoginPop = false;
 $feedbackMessage = "";
-
-
 
 ?>
 <!DOCTYPE html>
@@ -277,8 +274,9 @@ $feedbackMessage = "";
                     </div>
                 </div>
 
-                <button
-                    class="w-full bg-blue-600 text-white mt-auto gap-2 py-3 px-6 rounded-lg hover:bg-blue-700 transition duration-300 flex items-center justify-center">
+                <a id="booking-link"
+                    class="w-full bg-blue-600 text-white mt-auto gap-2 py-3 px-6 rounded-lg hover:bg-blue-700 transition duration-300 flex items-center justify-center"
+                    href="javascript:void(0)">
                     <svg width="20px" class="text-white" height="20px" viewBox="0 0 22.00 22.00" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
                         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -297,10 +295,11 @@ $feedbackMessage = "";
                         </g>
                     </svg>
                     Book This Storage
-                </button>
+                </a>
             </div>
         </div>
     </main>
+
     <div class="fixed inset-0 flex items-center justify-center z-50 left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2"
         id="modal" style="display:none;"> <!-- Modal is hidden initially -->
         <div class="bg-white rounded-lg overflow-hidden shadow-2xl border-blue-500 border-2 z-10 max-w-sm mx-auto">
@@ -399,8 +398,11 @@ $feedbackMessage = "";
 
     </script>
 
+
+
     <script>
         let startYear, endYear;
+        let hasSelectedMonth = false; // Track if a month has been selected
 
         // Function to generate months
         function getMonths() {
@@ -473,6 +475,7 @@ $feedbackMessage = "";
             const monthCount = parseInt(monthCountInput.value);
             const confirmationMessage = document.getElementById('confirmation-message');
             const bookingConfirmation = document.getElementById('booking-confirmation');
+            const bookingLink = document.getElementById('booking-link'); // Reference the booking link
 
             // Calculate the range of months to display
             const months = getMonths();
@@ -502,9 +505,22 @@ $feedbackMessage = "";
             // Display the selected months and year
             confirmationMessage.textContent = `You have selected: ${selectedMonths.join(', ')}, please proceed to booking.`;
             bookingConfirmation.classList.remove('hidden');
+
+            // Append the selected months to the booking link
+            bookingLink.href = `payment-section.php?id=<?php echo $storage['id']; ?>&months=${encodeURIComponent(selectedMonths.join(','))}`;
+
+            // Enable the booking link
+            enableBookingLink();
         }
 
-        // Function to handle tab switching
+        // Function to enable the booking link after month selection
+        function enableBookingLink() {
+            const bookingLink = document.getElementById('booking-link');
+            bookingLink.classList.remove('cursor-not-allowed', 'bg-blue-400');
+            bookingLink.classList.add('bg-blue-600', 'hover:bg-blue-700');
+            bookingLink.onclick = null; // Enable link functionality
+        }
+
         // Function to handle tab switching and applying the active class
         function handleTabSwitching() {
             const tabs = document.querySelectorAll('.tab-year');
@@ -547,6 +563,7 @@ $feedbackMessage = "";
         createTabs();
         handleTabSwitching();
     </script>
+
 </body>
 
 </html>

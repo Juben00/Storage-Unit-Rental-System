@@ -199,4 +199,4 @@ class Customer
 }
 $customerObj = new Customer();
 
-// var_dump($customerObj->getUserInfo(2));
+// var_dump($customerObj->getSingleStorage(3));
