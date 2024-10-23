@@ -10,7 +10,7 @@ if (!isset($_SESSION['customer']['role_name'])) {
     exit();
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['id']) && isset($_GET['months'])) {
+if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['id'])) {
     // Sanitize the ID
     $userId = $_SESSION['customer']['id'];
     $idparam = clean_input($_GET['id']);
@@ -40,12 +40,14 @@ $feedbackMessage = "";
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Payment Page</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="./output.css">
+    <link rel="icon" href="./images/logo white transparent.png">
 </head>
 
 <body class="min-h-screen flex flex-col bg-slate-100 relative">
     <?php
-    include_once './components/header.php';
+    // include_once './components/header.php';
     ?>
     <div
         class="w-full max-w-5xl border-2 mx-auto border-blue-500 mt-24 mb-8 bg-white rounded-lg shadow-md overflow-hidden">
@@ -83,7 +85,11 @@ $feedbackMessage = "";
             </div>
 
             <!-- Payment Form Section -->
-            <div class="lg:w-1/2 p-6 sm:p-8">
+            <div class="lg:w-1/2 p-6 sm:p-8 relative">
+                <button class="absolute top-4 right-5 hover:text-gray-400 text-red-500 duration-100"
+                    onclick="window.history.back()">
+                    <i class="fa fa-times fa-lg"></i>
+                </button>
                 <h2 class="text-2xl font-bold mb-2">Payment Details</h2>
                 <p class="text-gray-600 mb-6">Choose your payment method and enter your details.</p>
                 <form>

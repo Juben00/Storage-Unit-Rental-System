@@ -77,7 +77,7 @@ $feedbackMessage = "";
     <main class="flex-grow flex flex-col container mx-auto pt-24">
         <div class="min-h-screen flex flex-col lg:flex-row bg-slate-50 shadow-md ">
             <!-- Left side - Image Gallery -->
-            <div class="w-full lg:w-1/2 p-4 lg:p-8 flex flex-col shadow-lg bg-neutral-100 relative">
+            <div class="w-full lg:w-1/2 p-4 lg:p-8 flex flex-col shadow-lg relative">
                 <!-- Main Image (First Image from Array) -->
                 <?php if (!empty($storage['images'])): ?>
                     <a class="mb-4 w-full h-auto" href="<?php echo htmlspecialchars($storage['images'][0]); ?>"
@@ -237,65 +237,35 @@ $feedbackMessage = "";
                     </p>
                 </div>
 
-                <div class="mx-auto mt-2">
-                    <div class="mb-4 flex items-center gap-2 ">
-                        <span class=" w-full">
-                            <label for="year-input" class="block text-sm font-semibold mb-2">Enter starting
-                                year:</label>
-                            <span class="flex items-center">
-                                <input type="number" id="year-input" class="border flex-1 w-[40%] p-2 rounded"
-                                    min="2020" value="2024" />
-                                <button id="set-years" class="ml-2 p-2 bg-blue-500 text-white rounded w-28">Set
-                                    Years</button>
-                            </span>
-                        </span>
+                <div class="mx-auto mt-2 w-full flex gap-2">
+                    <span class="w-full flex flex-col">
+                        <label for="month-count" class="block font-semibold mb-2">Number of
+                            consecutive months</label>
+                        <input type="number" id="month-count" class="border-2 flex-1 p-2 rounded bg-white" min="1"
+                            value="1" />
+                    </span>
+                    <span class="w-full flex flex-col">
+                        <label for="start-date" class="block font-semibold mb-2">Select start date</label>
+                        <input type="date" id="start-date" class="border-2 flex-1 p-2 rounded bg-white" />
+                    </span>
 
-                        <span class=" w-full">
-                            <label for="month-count" class="block text-sm font-semibold mb-2">Enter number of
-                                consecutive
-                                months:</label>
-                            <span class="flex items-center">
-                                <input type="number" id="month-count" class="border flex-1 w-[40%] p-2 rounded" min="1"
-                                    value="1" />
-                                <button id="set-months"
-                                    class="ml-2 p-2 bg-blue-500 text-white rounded w-28">Set</button>
-                            </span>
-                        </span>
-                    </div>
 
-                    <div class="tabs flex justify-around " id="year-tabs"></div>
-
-                    <div class="tab-contents mt-2  rounded-lg overflow-hidden  h-[200px] overflow-y-scroll"
-                        id="tab-contents">
-                    </div>
-
-                    <div class="my-4" id="booking-confirmation" class="hidden">
-                        <p id="confirmation-message" class="text-lg font-semibold"></p>
-                    </div>
+                </div>
+                <div class="my-4 hidden" id="booking-confirmation">
+                    <p id="confirmation-message" class="text-lg font-semibold"></p>
                 </div>
 
                 <a id="booking-link"
-                    class="w-full bg-blue-600 text-white mt-auto gap-2 py-3 px-6 rounded-lg hover:bg-blue-700 transition duration-300 flex items-center justify-center"
+                    class="w-full  text-white mt-auto gap-2 py-3 px-6 rounded-lg hover:bg-blue-700 transition duration-300 flex items-center justify-center cursor-not-allowed bg-blue-400"
                     href="javascript:void(0)">
                     <svg width="20px" class="text-white" height="20px" viewBox="0 0 22.00 22.00" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
-                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                        <g id="SVGRepo_iconCarrier">
-                            <path
-                                d="M11 3.99995C12.8839 2.91716 14.9355 2.15669 17.07 1.74995C17.551 1.63467 18.0523 1.63283 18.5341 1.74458C19.016 1.85632 19.4652 2.07852 19.8464 2.39375C20.2276 2.70897 20.5303 3.10856 20.7305 3.56086C20.9307 4.01316 21.0229 4.50585 21 4.99995V13.9999C20.9699 15.117 20.5666 16.1917 19.8542 17.0527C19.1419 17.9136 18.1617 18.5112 17.07 18.7499C14.9355 19.1567 12.8839 19.9172 11 20.9999"
-                                stroke="#FFFFFF" stroke-width="1.166" stroke-linecap="round" stroke-linejoin="round">
-                            </path>
-                            <path
-                                d="M10.9995 3.99995C9.1156 2.91716 7.06409 2.15669 4.92957 1.74995C4.44856 1.63467 3.94731 1.63283 3.46546 1.74458C2.98362 1.85632 2.53439 2.07852 2.15321 2.39375C1.77203 2.70897 1.46933 3.10856 1.26911 3.56086C1.0689 4.01316 0.976598 4.50585 0.999521 4.99995V13.9999C1.0296 15.117 1.433 16.1917 2.14533 17.0527C2.85767 17.9136 3.83793 18.5112 4.92957 18.7499C7.06409 19.1567 9.1156 19.9172 10.9995 20.9999"
-                                stroke="#FFFFFF" stroke-width="1.166" stroke-linecap="round" stroke-linejoin="round">
-                            </path>
-                            <path d="M11 21V4" stroke="#FFFFFF" stroke-width="1.166" stroke-linecap="round"
-                                stroke-linejoin="round"></path>
-                        </g>
+                        <!-- SVG content here -->
                     </svg>
                     Book This Storage
                 </a>
+
+
             </div>
         </div>
     </main>
@@ -401,169 +371,70 @@ $feedbackMessage = "";
 
 
     <script>
-        let startYear, endYear;
-        let hasSelectedMonth = false; // Track if a month has been selected
-
-        // Function to generate months
-        function getMonths() {
-            return [
-                'January', 'February', 'March', 'April',
-                'May', 'June', 'July', 'August',
-                'September', 'October', 'November', 'December'
-            ];
-        }
-
-        // Function to create year tabs and contents dynamically
-        function createTabs() {
-            const tabsContainer = document.getElementById('year-tabs');
-            const contentsContainer = document.getElementById('tab-contents');
-            const months = getMonths();
-
-            // Clear existing tabs and contents
-            tabsContainer.innerHTML = '';
-            contentsContainer.innerHTML = '';
-
-            const currentDate = new Date();
-            const currentMonth = currentDate.getMonth();
-            const currentYear = currentDate.getFullYear();
-
-            for (let year = startYear; year <= endYear; year++) {
-                // Create a tab button
-                const tabButton = document.createElement('button');
-                tabButton.className = "tab-year p-2 bg-blue-500 text-white rounded px-8 active:bg-blue-200";
-                tabButton.setAttribute('data-year', year);
-                tabButton.textContent = year;
-
-                // Create a tab content section
-                const tabContent = document.createElement('div');
-                tabContent.id = `year-${year}`;
-                tabContent.className = "tab-content hidden";
-
-                // Add months to the tab content
-                const monthList = document.createElement('ul');
-                monthList.className = "month-list";
-                months.forEach((month, index) => {
-                    const listItem = document.createElement('li');
-                    listItem.textContent = month;
-                    listItem.className = "cursor-pointer hover p-2";
-
-                    // Disable past months
-                    if (year < currentYear || (year === currentYear && index < currentMonth)) {
-                        listItem.classList.add('disabled');
-                    } else {
-                        listItem.addEventListener('click', () => selectMonth(month, year));
-                    }
-
-                    monthList.appendChild(listItem);
-                });
-                tabContent.appendChild(monthList);
-
-                // Append tab button and content to their respective containers
-                tabsContainer.appendChild(tabButton);
-                contentsContainer.appendChild(tabContent);
-            }
-
-            // Activate the first tab by default
-            if (tabsContainer.firstChild) {
-                tabsContainer.firstChild.click();
-            }
-        }
-
-        // Function to handle month selection and highlighting
-        function selectMonth(month, year) {
+        // Function to handle date selection and month count
+        function handleDateSelection() {
+            const startDateInput = document.getElementById('start-date');
             const monthCountInput = document.getElementById('month-count');
-            const monthCount = parseInt(monthCountInput.value);
             const confirmationMessage = document.getElementById('confirmation-message');
             const bookingConfirmation = document.getElementById('booking-confirmation');
-            const bookingLink = document.getElementById('booking-link'); // Reference the booking link
+            const bookingLink = document.getElementById('booking-link');
 
-            // Calculate the range of months to display
-            const months = getMonths();
-            const startIndex = months.indexOf(month);
-            let selectedMonths = [];
+            startDateInput.addEventListener('change', updateBookingDetails);
+            monthCountInput.addEventListener('input', updateBookingDetails);
 
-            // Clear previous highlights
-            document.querySelectorAll('.month-list li').forEach(item => {
-                item.classList.remove('selected');
-            });
+            function updateBookingDetails() {
+                const startDateValue = startDateInput.value;
+                const monthCount = parseInt(monthCountInput.value);
 
-            for (let i = 0; i < monthCount; i++) {
-                const monthIndex = (startIndex + i) % 12; // Wrap around the month array
-                const displayYear = year + Math.floor((startIndex + i) / 12); // Increment year after December
-                selectedMonths.push(`${months[monthIndex]} ${displayYear}`);
-
-                // Highlight the selected months
-                const selectedYearContent = document.getElementById(`year-${displayYear}`);
-                if (selectedYearContent) {
-                    const monthListItems = selectedYearContent.querySelectorAll('.month-list li');
-                    if (monthListItems[monthIndex]) {
-                        monthListItems[monthIndex].classList.add('selected');
-                    }
+                if (!startDateValue || isNaN(monthCount) || monthCount < 1) {
+                    confirmationMessage.textContent = '';
+                    bookingConfirmation.classList.add('hidden');
+                    bookingLink.classList.add('cursor-not-allowed', 'bg-blue-400');
+                    bookingLink.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+                    return;
                 }
+
+                const startDate = new Date(startDateValue);
+                const endDate = new Date(startDate);
+                endDate.setMonth(startDate.getMonth() + monthCount);
+
+                const months = getMonths();
+
+                // Format the start date and end date
+                const formattedStartDate = `${startDate.getDate()} ${months[startDate.getMonth()]} ${startDate.getFullYear()}`;
+                const formattedEndDate = `${endDate.getDate()} ${months[endDate.getMonth()]} ${endDate.getFullYear()}`;
+
+                // Display only the start and end dates
+                confirmationMessage.textContent = `Booking starts on: ${formattedStartDate} and ends on: ${formattedEndDate}. Please proceed to booking.`;
+                bookingConfirmation.classList.remove('hidden');
+
+                // Update the booking link (use the selected date and months)
+                bookingLink.href = `payment-section.php?id=<?php echo $storage['id']; ?>&startDate=${encodeURIComponent(startDateValue)}&endDate=${encodeURIComponent(endDate.toISOString().split('T')[0])}`;
+
+                // Enable the booking link
+                enableBookingLink();
             }
 
-            // Display the selected months and year
-            confirmationMessage.textContent = `You have selected: ${selectedMonths.join(', ')}, please proceed to booking.`;
-            bookingConfirmation.classList.remove('hidden');
+            // Enable booking link when valid data is selected
+            function enableBookingLink() {
+                bookingLink.classList.remove('cursor-not-allowed', 'bg-blue-400');
+                bookingLink.classList.add('bg-blue-600', 'hover:bg-blue-700');
+            }
 
-            // Append the selected months to the booking link
-            bookingLink.href = `payment-section.php?id=<?php echo $storage['id']; ?>&months=${encodeURIComponent(selectedMonths.join(','))}`;
-
-            // Enable the booking link
-            enableBookingLink();
+            // Get the names of the months
+            function getMonths() {
+                return [
+                    'January', 'February', 'March', 'April',
+                    'May', 'June', 'July', 'August',
+                    'September', 'October', 'November', 'December'
+                ];
+            }
         }
 
-        // Function to enable the booking link after month selection
-        function enableBookingLink() {
-            const bookingLink = document.getElementById('booking-link');
-            bookingLink.classList.remove('cursor-not-allowed', 'bg-blue-400');
-            bookingLink.classList.add('bg-blue-600', 'hover:bg-blue-700');
-            bookingLink.onclick = null; // Enable link functionality
-        }
+        // Initialize date selection handler
+        handleDateSelection();
 
-        // Function to handle tab switching and applying the active class
-        function handleTabSwitching() {
-            const tabs = document.querySelectorAll('.tab-year');
-            const contents = document.querySelectorAll('.tab-content');
-
-            tabs.forEach(tab => {
-                tab.addEventListener('click', function () {
-                    const year = this.getAttribute('data-year');
-
-                    // Remove 'active' class from all tabs
-                    tabs.forEach(t => t.classList.remove('active', 'bg-blue-700', 'font-semibold'));
-
-                    // Add 'active' class to the clicked tab
-                    this.classList.add('active', 'bg-blue-700', 'font-semibold');
-
-                    // Hide all contents
-                    contents.forEach(content => {
-                        content.classList.add('hidden');
-                    });
-
-                    // Show the selected year's content
-                    document.getElementById(`year-${year}`).classList.remove('hidden');
-                });
-            });
-        }
-
-        // Set years based on user input
-        document.getElementById('set-years').addEventListener('click', () => {
-            const yearInput = parseInt(document.getElementById('year-input').value);
-            startYear = yearInput; // Starting year from user input
-            endYear = startYear + 4; // End year is 5 years ahead
-
-            createTabs();
-            handleTabSwitching();
-        });
-
-        // Initialize the year range
-        startYear = new Date().getFullYear(); // Default start year
-        endYear = startYear + 4; // Default end year
-        createTabs();
-        handleTabSwitching();
     </script>
-
 </body>
 
 </html>
