@@ -196,7 +196,51 @@ class Customer
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
+
+    public function bookStorage($customerId, $storageId, $startDate, $endDate, $totalAmount, $paymentMethod)
+    {
+        $sqlBooking = "INSERT INTO booking (customer_id, storage_id, start_date, end_date, total_amount, booking_status_id) 
+                   VALUES (:customer_id, :storage_id, :start_date, :end_date, :total_amount, :booking_status_id);";
+
+        $stmtBooking = $this->db->connect()->prepare($sqlBooking);
+        $stmtBooking->bindParam(':customer_id', $customerId);
+        $stmtBooking->bindParam(':storage_id', $storageId);
+        $stmtBooking->bindParam(':start_date', $startDate);
+        $stmtBooking->bindParam(':end_date', $endDate);
+        $stmtBooking->bindParam(':total_amount', $totalAmount);
+
+        // Assuming '1' is the ID for 'Pending' status in the booking_status table
+        $bookingStatusId = 1;
+        $stmtBooking->bindParam(':booking_status_id', $bookingStatusId);
+
+        if ($stmtBooking->execute()) {
+            // Get the last inserted booking ID
+            $bookingId = $this->db->connect()->lastInsertId();
+
+            $sqlPayment = "INSERT INTO payment (booking_id, amount, payment_method, payment_status_id) 
+                       VALUES (:booking_id, :amount, :payment_method, :payment_status_id);";
+
+            $stmtPayment = $this->db->connect()->prepare($sqlPayment);
+            $stmtPayment->bindParam(':booking_id', $bookingId);
+            $stmtPayment->bindParam(':amount', $totalAmount);
+            $stmtPayment->bindParam(':payment_method', $paymentMethod);
+
+            // Assuming '1' is the ID for 'Pending' status in the payment_status table
+            $paymentStatusId = 1;
+            $stmtPayment->bindParam(':payment_status_id', $paymentStatusId);
+
+            if ($stmtPayment->execute()) {
+                return ['status' => 'success', 'message' => 'Storage booked and payment recorded successfully!'];
+            } else {
+                return ['status' => 'error', 'message' => 'Payment recording failed'];
+            }
+        } else {
+            return ['status' => 'error', 'message' => 'Storage booking failed'];
+        }
+    }
+
 }
 $customerObj = new Customer();
 
 // var_dump($customerObj->getSingleStorage(3));
+// var_dump($customerObj->getSingleStorage(4));

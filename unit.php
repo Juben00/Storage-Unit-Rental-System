@@ -150,7 +150,8 @@ $feedbackMessage = "";
                         } else {
                             ?>
                             <form id="bookmark">
-                                <input type="hidden" value="<?php echo htmlspecialchars($idparam) ?>" name="storageId">
+                                <input type="hidden" id="id" value="<?php echo htmlspecialchars($idparam) ?>"
+                                    name="storageId">
                                 <input type="hidden" name="userId" value="<?php echo htmlspecialchars($userId) ?>">
 
                                 <button type="submit">
@@ -184,90 +185,82 @@ $feedbackMessage = "";
                     </div>
 
                     <!-- rating -->
-                    <div class="flex items-center mb-4 ">
-                        <div class="flex">
-                            <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
-                                <path
-                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                </path>
-                            </svg>
-                            <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
-                                <path
-                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                </path>
-                            </svg>
-                            <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
-                                <path
-                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                </path>
-                            </svg>
-                            <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
-                                <path
-                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                </path>
-                            </svg>
-                            <svg class="w-5 h-5 text-gray-300 fill-current" viewBox="0 0 20 20">
-                                <path
-                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                </path>
-                            </svg>
-                        </div>
-                        <p class="ml-2 text-sm sm:text-base text-gray-600">(4.5) 150 reviews</p>
-                    </div>
-
-
                     <p class="text-2xl sm:text-3xl font-semibold text-gray-900 mb-4 flex items-center gap-1"><span
                             class="text-blue-950">₱</span>
                         <span class="text-xl"><?php echo htmlspecialchars($storage['price']) ?> / month</span>
                     </p>
 
-                    <div class="mb-4 flex flex-col">
-                        <p class="flex items-center gap-1">
-                            <span class="font-semibold text-lg">Area size: </span>
-                            <span class="text-lg"><?php echo htmlspecialchars($storage['area']) ?> sqm</span>
-                        </p>
-                        <p class="flex items-center gap-1">
-                            <span class="font-semibold text-lg">Category: </span>
-                            <span class="text-lg"><?php echo htmlspecialchars($storage['category_name']) ?></span>
-                        </p>
+
+                    <div class="mb-4 flex items-center">
+
+
+
+                        <!-- Area Size Block -->
+                        <div
+                            class="items-center gap-1 border-2 border-blue-500 bg-slate-200 px-2 py-4 flex flex-col rounded-xl">
+                            <span class="text-sm font-semibold">
+                                <span class=" text-lg"><?php echo htmlspecialchars($storage['area']) ?></span>
+                                sqm
+                            </span>
+                            <span class="text-xs">AREA SIZE</span>
+                        </div>
+
+                        <!-- Category Block (Copied Format) -->
+                        <div
+                            class="items-center gap-1 border-2 border-blue-500 bg-slate-200 px-2 py-4 flex flex-col rounded-xl ml-4">
+                            <span class="text-sm">
+                                <span
+                                    class="font-semibold text-lg"><?php echo htmlspecialchars($storage['category_name']) ?></span>
+                            </span>
+                            <span class="text-xs">CATEGORY</span>
+                        </div>
                     </div>
+
 
                     <p class="text-sm sm:text-base text-gray-600 mb-4">
                         <?php echo htmlspecialchars($storage['description']) ?>
                     </p>
                 </div>
 
-                <div class="mx-auto mt-2 w-full flex gap-2">
-                    <span class="w-full flex flex-col">
-                        <label for="month-count" class="block font-semibold mb-2">Number of
-                            consecutive months</label>
-                        <input type="number" id="month-count" class="border-2 flex-1 p-2 rounded bg-white" min="1"
-                            value="1" />
-                    </span>
-                    <span class="w-full flex flex-col">
-                        <label for="start-date" class="block font-semibold mb-2">Select start date</label>
-                        <input type="date" id="start-date" class="border-2 flex-1 p-2 rounded bg-white" />
+                <div class="mx-auto mt-2 w-full flex gap-2 flex-col">
+                    <span class="flex items-center gap-2">
+                        <span class="w-full flex flex-col">
+                            <label for="month-count" class="block font-semibold mb-2">Number of consecutive
+                                months</label>
+                            <input type="number" id="month-count" class="border-2 flex-1 p-2 rounded bg-white" min="1"
+                                value="1" />
+                        </span>
+                        <span class="w-full flex flex-col">
+                            <label for="year-selection" class="block font-semibold mb-2">Select Year</label>
+                            <select id="year-selection" class="border-2 p-2 rounded bg-white">
+                                <!-- Dynamically populated with JavaScript -->
+                            </select>
+                        </span>
                     </span>
 
+                    <!-- Month Selection -->
+                    <div id="month-selection"
+                        class="grid grid-cols-3 gap-2 opacity-0 pointer-events-none transition-all duration-300">
+                        <!-- Month buttons go here -->
+                    </div>
+
+                    <!-- Day Selection -->
+                    <div id="day-selection"
+                        class="grid grid-cols-7 gap-1 opacity-0 pointer-events-none transition-all duration-300">
+                        <!-- Day buttons go here -->
+                    </div>
+
+                    <div class="my-4 opacity-0 pointer-events-none transition-all duration-300"
+                        id="booking-confirmation">
+                        <p id="confirmation-message" class="text-lg font-semibold"></p>
+                    </div>
 
                 </div>
-                <div class="my-4 hidden" id="booking-confirmation">
-                    <p id="confirmation-message" class="text-lg font-semibold"></p>
-                </div>
-
                 <a id="booking-link"
-                    class="w-full  text-white mt-auto gap-2 py-3 px-6 rounded-lg hover:bg-blue-700 transition duration-300 flex items-center justify-center cursor-not-allowed bg-blue-400"
-                    href="javascript:void(0)">
-                    <svg width="20px" class="text-white" height="20px" viewBox="0 0 22.00 22.00" fill="none"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <!-- SVG content here -->
-                    </svg>
+                    class="w-full text-white mt-auto py-3 px-6 rounded-lg cursor-not-allowed bg-blue-400 transition duration-300">
                     Book This Storage
                 </a>
-
-
             </div>
-        </div>
     </main>
 
     <div class="fixed inset-0 flex items-center justify-center z-50 left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2"
@@ -368,73 +361,108 @@ $feedbackMessage = "";
 
     </script>
 
-
-
     <script>
-        // Function to handle date selection and month count
-        function handleDateSelection() {
-            const startDateInput = document.getElementById('start-date');
+        document.addEventListener("DOMContentLoaded", () => {
+            const currentYear = new Date().getFullYear();
+            const currentMonth = new Date().getMonth(); // Month is 0-indexed
+            const currentDay = new Date().getDate();
+            const yearSelection = document.getElementById('year-selection');
+            const monthSelection = document.getElementById('month-selection');
+            const daySelection = document.getElementById('day-selection');
             const monthCountInput = document.getElementById('month-count');
             const confirmationMessage = document.getElementById('confirmation-message');
-            const bookingConfirmation = document.getElementById('booking-confirmation');
             const bookingLink = document.getElementById('booking-link');
+            const bookingConfirmation = document.getElementById('booking-confirmation');
 
-            startDateInput.addEventListener('change', updateBookingDetails);
-            monthCountInput.addEventListener('input', updateBookingDetails);
-
-            function updateBookingDetails() {
-                const startDateValue = startDateInput.value;
-                const monthCount = parseInt(monthCountInput.value);
-
-                if (!startDateValue || isNaN(monthCount) || monthCount < 1) {
-                    confirmationMessage.textContent = '';
-                    bookingConfirmation.classList.add('hidden');
-                    bookingLink.classList.add('cursor-not-allowed', 'bg-blue-400');
-                    bookingLink.classList.remove('bg-blue-600', 'hover:bg-blue-700');
-                    return;
-                }
-
-                const startDate = new Date(startDateValue);
-                const endDate = new Date(startDate);
-                endDate.setMonth(startDate.getMonth() + monthCount);
-
-                const months = getMonths();
-
-                // Format the start date and end date
-                const formattedStartDate = `${startDate.getDate()} ${months[startDate.getMonth()]} ${startDate.getFullYear()}`;
-                const formattedEndDate = `${endDate.getDate()} ${months[endDate.getMonth()]} ${endDate.getFullYear()}`;
-
-                // Display only the start and end dates
-                confirmationMessage.textContent = `Booking starts on: ${formattedStartDate} and ends on: ${formattedEndDate}. Please proceed to booking.`;
-                bookingConfirmation.classList.remove('hidden');
-
-                // Update the booking link (use the selected date and months)
-                bookingLink.href = `payment-section.php?id=<?php echo $storage['id']; ?>&startDate=${encodeURIComponent(startDateValue)}&endDate=${encodeURIComponent(endDate.toISOString().split('T')[0])}`;
-
-                // Enable the booking link
-                enableBookingLink();
+            // Populate year dropdown (for the next 10 years)
+            for (let i = currentYear; i <= currentYear + 10; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = i;
+                yearSelection.appendChild(option);
             }
 
-            // Enable booking link when valid data is selected
-            function enableBookingLink() {
+            const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+            function createMonthButtons() {
+                monthSelection.innerHTML = ''; // Clear previous months
+                months.forEach((month, index) => {
+                    const button = document.createElement('button');
+                    button.textContent = month;
+                    button.classList.add('p-1', 'text-sm', 'rounded', 'bg-blue-100', 'hover:bg-blue-300');
+                    button.dataset.month = index; // Store month index
+                    button.addEventListener('click', () => showDays(index));
+                    monthSelection.appendChild(button);
+
+                    if (parseInt(yearSelection.value) === currentYear && index < currentMonth) {
+                        button.disabled = true;
+                        button.classList.add('cursor-not-allowed', 'bg-gray-200');
+                    }
+                });
+            }
+
+            function showDays(monthIndex) {
+                daySelection.innerHTML = ''; // Clear previous days
+                const selectedYear = parseInt(yearSelection.value);
+                const daysInMonth = new Date(selectedYear, monthIndex + 1, 0).getDate();
+
+                for (let i = 1; i <= daysInMonth; i++) {
+                    const button = document.createElement('button');
+                    button.textContent = i;
+                    button.classList.add('p-2', 'text-xs', 'rounded', 'bg-gray-100', 'hover:bg-gray-300');
+                    button.dataset.day = i;
+
+                    if (selectedYear === currentYear && monthIndex === currentMonth && i < currentDay) {
+                        button.disabled = true;
+                        button.classList.add('cursor-not-allowed', 'bg-gray-200');
+                    }
+
+                    button.addEventListener('click', () => confirmBooking(selectedYear, monthIndex, i));
+                    daySelection.appendChild(button);
+                }
+
+                daySelection.classList.remove('opacity-0', 'pointer-events-none');
+            }
+
+            function confirmBooking(year, month, day) {
+                const monthCount = parseInt(monthCountInput.value); // Get the number of months
+                let selectedMonths = [];
+
+                // Calculate the end date based on the number of months
+                let endMonth = month + monthCount;
+                let endYear = year;
+
+                // Adjust the year and month if the end month exceeds 12
+                if (endMonth >= 12) {
+                    endYear += Math.floor(endMonth / 12);
+                    endMonth = endMonth % 12;
+                }
+
+                const selectedStartDate = new Date(year, month, day);
+                const selectedEndDate = new Date(endYear, endMonth, day);
+
+                // Format dates for display and URL
+                const formattedStartDate = selectedStartDate.toISOString().split('T')[0];
+                const formattedEndDate = selectedEndDate.toISOString().split('T')[0];
+
+                confirmationMessage.textContent = `You have selected: ${day} ${months[month]} ${year} for ${monthCount} month(s). Your booking will end on: ${day} ${months[endMonth]} ${endYear}. Please proceed to booking.`;
+                bookingConfirmation.classList.remove('opacity-0', 'pointer-events-none');
+
+                // Enable booking link with the storage ID, start and end dates
+                bookingLink.href = `payment-section.php?id=<?php echo $idparam ?>&startDate=${encodeURIComponent(formattedStartDate)}&endDate=${encodeURIComponent(formattedEndDate)}`;
                 bookingLink.classList.remove('cursor-not-allowed', 'bg-blue-400');
                 bookingLink.classList.add('bg-blue-600', 'hover:bg-blue-700');
             }
 
-            // Get the names of the months
-            function getMonths() {
-                return [
-                    'January', 'February', 'March', 'April',
-                    'May', 'June', 'July', 'August',
-                    'September', 'October', 'November', 'December'
-                ];
-            }
-        }
-
-        // Initialize date selection handler
-        handleDateSelection();
-
+            // yearSelection.addEventListener('focus', () => {
+            createMonthButtons();
+            monthSelection.classList.remove('opacity-0', 'pointer-events-none');
+            daySelection.classList.add('opacity-0', 'pointer-events-none'); // Reset day selection
+            bookingConfirmation.classList.add('opacity-0', 'pointer-events-none'); // Hide confirmation message
+            // });
+        });
     </script>
+
 </body>
 
 </html>
