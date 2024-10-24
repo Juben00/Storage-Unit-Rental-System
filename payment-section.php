@@ -77,21 +77,16 @@ $feedbackMessage = "";
                     <p class="text-gray-600 mb-2">
                         <?php echo htmlspecialchars($storage['description']); ?>
                     </p>
-                    <h3 class="text-xl font-semibold mb-2">
-                        <?php echo htmlspecialchars($storage['area']); ?> sqm
-                    </h3>
+                    <div
+                        class="text-xl border-2 border-blue-500 w-fit p-2 rounded-lg flex flex-col items-center bg-slate-100">
+                        <span><?php echo htmlspecialchars($storage['area']); ?></span><span class="text-xs">sqm</span>
+                    </div>
                     <span class="text-2xl font-bold text-blue-600">₱
                         <?php echo number_format($storage['price'], 2); ?>/month
                     </span>
                 </div>
 
-                <div class="bg-white p-4 rounded-lg shadow-md">
-                    <h4 class=" text-lg font-semibold mb-2">Booking Details</h4>
-                    <p class="text-gray-600">Booking
-                        Period: <span
-                            class="font-medium"><?php echo htmlspecialchars($startDate) . " to " . htmlspecialchars($endDate); ?></span>
-                    </p>
-                </div>
+
             </div>
 
             <!-- Payment Form Section -->
@@ -103,7 +98,15 @@ $feedbackMessage = "";
                 <h2 class="text-2xl font-bold mb-2">Payment Details</h2>
                 <p class=" text-gray-600 mb-6">Complete your payment information below.</p>
 
-                <form action="process_payment.php" method="POST" class="border-2 border-red-500">
+                <div class="bg-white p-4 rounded-lg shadow-md my-4">
+                    <h4 class=" text-lg font-semibold mb-2">Booking Details</h4>
+                    <p class="text-gray-600">Booking
+                        Period: <span
+                            class="font-medium"><?php echo htmlspecialchars($startDate) . " to " . htmlspecialchars($endDate); ?></span>
+                    </p>
+                </div>
+
+                <form id="bookingForm" method="POST" class="">
                     <input type="hidden" name="customer_id" value="<?php echo $customerId; ?>">
                     <input type="hidden" name="storage_id" value="<?php echo htmlspecialchars($storage['id']); ?>">
                     <input type="hidden" name="start_date" value="<?php echo htmlspecialchars($startDate); ?>">
@@ -145,6 +148,75 @@ $feedbackMessage = "";
             </div>
         </div>
     </div>
+    <div class="fixed inset-0 flex items-center justify-center z-50 left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2"
+        id="modal" style="display:none;"> <!-- Modal is hidden initially -->
+        <div class="bg-white rounded-lg overflow-hidden shadow-2xl border-blue-500 border-2 z-10 max-w-sm mx-auto">
+            <div class="p-5">
+                <h2 class="text-lg font-semibold">Feedback</h2>
+                <p id="feedbackMessage" class="mt-2"></p> <!-- Display feedback message here -->
+                <div class="mt-4">
+                    <button id="popupbutt" class="bg-blue-500 text-white font-semibold py-2 px-4 rounded">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const popbutton = document.getElementById('popupbutt');
+
+        popbutton.addEventListener("click", () => {
+            document.getElementById('modal').style.display = 'none';
+            if (document.getElementById('feedbackMessage').innerHTML === 'Signup successful!') {
+                loginModal.classList.remove('hidden');
+                loginModal.classList.add('flex');
+                signupModal.classList.add('hidden');
+                signupModal.classList.remove('flex');
+            } else if (document.getElementById('feedbackMessage').innerHTML === 'Logged In successfully!') {
+                window.location.reload();
+            } else if (document.getElementById('feedbackMessage').innerHTML === 'Storage unbookmarked successfully!') {
+                window.location.reload();
+            } else if (document.getElementById('feedbackMessage').innerHTML === 'Storage bookmarked successfully!') {
+                window.location.reload();
+            }
+        });
+
+
+        const bookForm = document.getElementById('bookingForm');
+
+        bookForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(e.target);
+
+            try {
+                const response = await fetch('./api/Book.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                let feedbackMessage = '';
+
+                if (data.status === 'success') {
+                    feedbackMessage = data.message;
+                } else {
+                    feedbackMessage = data.message;
+                }
+
+                document.getElementById('feedbackMessage').innerHTML = feedbackMessage;
+                document.getElementById('modal').style.display = 'flex';
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('feedbackMessage').innerHTML = 'An error occurred while processing your request.';
+                document.getElementById('modal').style.display = 'flex';
+            }
+
+
+        })
+    </script>
 </body>
+
 
 </html>

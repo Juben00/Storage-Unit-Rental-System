@@ -197,7 +197,7 @@ class Customer
         return $result;
     }
 
-    public function bookStorage($customerId, $storageId, $startDate, $endDate, $totalAmount, $paymentMethod)
+    public function bookStorage($customerId, $storageId, $startDate, $endDate, $totalAmount, $accountNumber, $paymentMethod)
     {
         $sqlBooking = "INSERT INTO booking (customer_id, storage_id, start_date, end_date, total_amount, booking_status_id) 
                    VALUES (:customer_id, :storage_id, :start_date, :end_date, :total_amount, :booking_status_id);";
@@ -217,12 +217,12 @@ class Customer
             // Get the last inserted booking ID
             $bookingId = $this->db->connect()->lastInsertId();
 
-            $sqlPayment = "INSERT INTO payment (booking_id, amount, payment_method, payment_status_id) 
-                       VALUES (:booking_id, :amount, :payment_method, :payment_status_id);";
+            $sqlPayment = "INSERT INTO payment (booking_id, account_number, payment_method, payment_status_id) 
+                       VALUES (:booking_id, :account_number, :payment_method, :payment_status_id);";
 
             $stmtPayment = $this->db->connect()->prepare($sqlPayment);
             $stmtPayment->bindParam(':booking_id', $bookingId);
-            $stmtPayment->bindParam(':amount', $totalAmount);
+            $stmtPayment->bindParam(':account_number', $accountNumber);
             $stmtPayment->bindParam(':payment_method', $paymentMethod);
 
             // Assuming '1' is the ID for 'Pending' status in the payment_status table
