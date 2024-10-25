@@ -197,14 +197,15 @@ class Customer
         return $result;
     }
 
-    public function bookStorage($customerId, $storageId, $startDate, $endDate, $totalAmount, $accountNumber, $paymentMethod)
+    public function bookStorage($customerId, $storageId, $months, $startDate, $endDate, $totalAmount, $accountNumber, $paymentMethod)
     {
-        $sqlBooking = "INSERT INTO booking (customer_id, storage_id, start_date, end_date, total_amount, booking_status_id) 
-                   VALUES (:customer_id, :storage_id, :start_date, :end_date, :total_amount, :booking_status_id);";
+        $sqlBooking = "INSERT INTO booking (customer_id, storage_id, months, start_date, end_date, total_amount, booking_status_id) 
+                   VALUES (:customer_id, :storage_id, :months, :start_date, :end_date, :total_amount, :booking_status_id);";
 
         $stmtBooking = $this->db->connect()->prepare($sqlBooking);
         $stmtBooking->bindParam(':customer_id', $customerId);
         $stmtBooking->bindParam(':storage_id', $storageId);
+        $stmtBooking->bindParam(':months', $months);
         $stmtBooking->bindParam(':start_date', $startDate);
         $stmtBooking->bindParam(':end_date', $endDate);
         $stmtBooking->bindParam(':total_amount', $totalAmount);

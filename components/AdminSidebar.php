@@ -5,29 +5,47 @@
     <nav>
         <a class="navlink flex items-center px-6 py-2 gap-2 text-gray-700 border-l-4 border-blue-500 bg-slate-200 font-semibold"
             data-target="dashboard" href="#">
-            <i class="fas fa-home "></i>
+            <i class="fas fa-home  "></i>
             <p>Dashboard</p>
         </a>
         <a class="navlink flex items-center px-6 py-2 gap-2 text-gray-700" data-target="customers" href="#">
-            <i class="fas fa-chart-line "></i>
+            <i class="fas fa-chart-line  "></i>
             <p>Customers</p>
         </a>
         <a class="navlink flex items-center px-6 py-2 gap-2 text-gray-700" data-target="storages" href="#">
-            <i class="fas fa-boxes "></i>
+            <i class="fas fa-boxes  "></i>
             <p>Storages</p>
         </a>
-        <a class="navlink flex items-center px-6 py-2 gap-2 text-gray-700" data-target="sales" href="#">
-            <i class="fas fa-dollar-sign ml-1 mr-1  "></i>
-            <p>Sales</p>
-        </a>
+
+        <!-- Booking Section with Dropdown -->
+        <div class="relative">
+            <a class="  flex items-center px-6 py-2 gap-2 text-gray-70cursor-pointer" href="javascript:void(0)"
+                onclick="toggleDropdown()">
+                <i class="fas fa-dollar-sign ml-1 mr-1"></i>
+                <p>Booking</p>
+                <i id="dropdownIcon" class="fas fa-chevron-down ml-auto"></i>
+            </a>
+            <!-- Dropdown Links (Initially Hidden) -->
+            <div id="bookingDropdown" class="hidden ml-8">
+                <a class="navlink flex items-center px-6 text-sm py-2 gap-2 text-gray-700 hover:bg-slate-100"
+                    data-target="pending-req" href="#">
+                    <i class="fas fa-hourglass-start"></i>
+                    <p>Pending Requests</p>
+                </a>
+                <a class="navlink flex items-center px-6 text-sm py-2 gap-2 text-gray-700 hover:bg-slate-100"
+                    data-target="approved-req" href="#">
+                    <i class="fas fa-check-circle"></i>
+                    <p>Approved Requests</p>
+                </a>
+            </div>
+        </div>
 
         <a class="navlink flex items-center px-6 py-2 gap-2 text-gray-700" data-target="settings" href="#">
-            <i class="fas fa-cog "></i>
+            <i class="fas fa-cog"></i>
             <p>Settings</p>
         </a>
-
     </nav>
-    <a class="flex items-center px-6 py-2  text-gray-700 hover:bg-gray-100" href="logout.php"
+    <a class="flex items-center px-6 py-2 text-gray-700 hover:bg-gray-100" href="logout.php"
         onclick="return confirmLogout();">
         <svg viewBox="0 0 24 24" height="20" class="mr-2" width="20" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -49,6 +67,21 @@
         function confirmLogout() {
             return confirm("Are you sure you want to log out?");
         }
-    </script>
 
+        // Toggle dropdown visibility and icon
+        function toggleDropdown() {
+            const dropdown = document.getElementById('bookingDropdown');
+            const icon = document.getElementById('dropdownIcon');
+            dropdown.classList.toggle('hidden');
+
+            // Change icon based on dropdown state
+            if (dropdown.classList.contains('hidden')) {
+                icon.classList.remove('fa-chevron-up');
+                icon.classList.add('fa-chevron-down');
+            } else {
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-up');
+            }
+        }
+    </script>
 </div>

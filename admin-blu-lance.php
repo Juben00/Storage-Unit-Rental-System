@@ -13,6 +13,7 @@ $Storage = [];
 $Admin = $adminObj->getAdmin($_SESSION['customer']['email']);
 $Customer = $adminObj->getAllCustomers();
 $Storage = $adminObj->getAllStorage();
+$Pending = $adminObj->getPendingBooking();
 $totalStorage = count($Storage);
 $totalCustomers = count($Customer);
 
@@ -475,9 +476,150 @@ if (isset($_SESSION['customer']['role_name'])) {
                 </div>
             </div>
 
-            <div id="sales" class="content-section hidden">
+            <div id="pending-req" class="content-section hidden">
+                <div class="flex-1 flex flex-col gap-6">
+                    <div class="flex justify-between items-center ">
+                        <h1 class="text-2xl font-semibold">
+                            Pending Requests
+                        </h1>
+                    </div>
+
+                    <div class="bg-white p-4 py-6  rounded shadow-md">
+                        <div class="flex items-center">
+                            <div class="flex items-center mb-4 gap-1">
+                                <label for="status">Status: </label>
+                                <select id="status" class="bg-gray-100 px-2 py-1 rounded mr-4">
+                                    <option>
+                                        Select
+                                    </option>
+                                    <option>
+                                        In-Stock
+                                    </option>
+                                    <option>
+                                        Out-of-Stock
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="flex items-center mb-4 gap-1">
+                                <label for="category">Category : </label>
+                                <select id="category" class="bg-gray-100 px-2 py-1 rounded mr-4">
+                                    <option>
+                                        Select
+                                    </option>
+                                    <option>
+                                        Small
+                                    </option>
+                                    <option>
+                                        Medium
+                                    </option>
+                                    <option>
+                                        Large
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- table -->
+                        <div class="overflow-x-auto">
+                            <table class="w-full table-fixed text-left border-collapse">
+                                <thead>
+                                    <tr class="text-gray-600">
+                                        <th class="py-2 w-32">First Name</th>
+                                        <th class="py-2 w-32">Last Name</th>
+                                        <th class="py-2 w-40">Email</th>
+                                        <th class="py-2 w-32">Phone</th>
+                                        <th class="py-2 w-32">Booking Date</th>
+                                        <th class="py-2 w-16">Months</th>
+                                        <th class="py-2 w-32">Start Date</th>
+                                        <th class="py-2 w-32">End Date</th>
+                                        <th class="py-2 w-32">Total Amount</th>
+                                        <th class="py-2 w-32">Storage Name</th>
+                                        <th class="py-2 w-32">Area</th>
+                                        <th class="py-2 w-32">Price</th>
+                                        <th class="py-2 w-32">Booking Status</th>
+                                        <th class="py-2 w-32">Payment Method</th>
+                                        <th class="py-2 w-32">Payment Date</th>
+                                        <th class="py-2 w-32">Payment Status</th>
+                                        <th class="py-2">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php if (!empty($Pending)): ?>
+                                        <?php foreach ($Pending as $row): ?>
+                                            <tr class="border-b">
+                                                <td class="py-2 w-32 max-w-xs overflow-hidden truncate">
+                                                    <?php echo htmlspecialchars($row['firstname']); ?>
+                                                </td>
+                                                <td class="py-2 w-32 max-w-xs overflow-hidden truncate">
+                                                    <?php echo htmlspecialchars($row['lastname']); ?>
+                                                </td>
+                                                <td class="py-2 w-40 max-w-xs overflow-hidden truncate">
+                                                    <?php echo htmlspecialchars($row['email']); ?>
+                                                </td>
+                                                <td class="py-2 w-32 max-w-xs overflow-hidden truncate">
+                                                    <?php echo htmlspecialchars($row['phone']); ?>
+                                                </td>
+                                                <td class="py-2 w-32 max-w-xs overflow-hidden truncate">
+                                                    <?php echo htmlspecialchars($row['booking_date']); ?>
+                                                </td>
+                                                <td class="py-2 w-20 overflow-hidden truncate">
+                                                    <?php echo htmlspecialchars($row['months']); ?>
+                                                </td>
+                                                <td class="py-2 w-20 overflow-hidden truncate">
+                                                    <?php echo htmlspecialchars($row['start_date']); ?>
+                                                </td>
+                                                <td class="py-2 w-20 overflow-hidden truncate">
+                                                    <?php echo htmlspecialchars($row['end_date']); ?>
+                                                </td>
+                                                <td class="py-2 w-20 overflow-hidden truncate">
+                                                    <?php echo htmlspecialchars($row['total_amount']); ?>
+                                                </td>
+                                                <td class="py-2 w-20 overflow-hidden truncate">
+                                                    <?php echo htmlspecialchars($row['storage_name']); ?>
+                                                </td>
+                                                <td class="py-2 w-20 overflow-hidden truncate">
+                                                    <?php echo htmlspecialchars($row['area']); ?>
+                                                </td>
+                                                <td class="py-2 w-20 overflow-hidden truncate">
+                                                    <?php echo htmlspecialchars($row['price']); ?>
+                                                </td>
+                                                <td class="py-2 w-20 overflow-hidden truncate">
+                                                    <?php echo htmlspecialchars($row['booking_status']); ?>
+                                                </td>
+                                                <td class="py-2 w-20 overflow-hidden truncate">
+                                                    <?php echo htmlspecialchars($row['payment_method']); ?>
+                                                </td>
+                                                <td class="py-2 w-20 overflow-hidden truncate">
+                                                    <?php echo htmlspecialchars($row['payment_date']); ?>
+                                                </td>
+                                                <td class="py-2 w-20 overflow-hidden truncate">
+                                                    <?php echo htmlspecialchars($row['payment_status']); ?>
+                                                </td>
+                                                <td class="py-2">
+                                                    <button
+                                                        class="p-2 border-2 border-red-500  rounded-md font-semibold shadow-md"
+                                                        onclick="approveBook(<?php echo htmlspecialchars($row['booking_id']); ?>)">Approve
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    <?php else: ?>
+                                        <tr>
+                                            <td colspan="16" class="py-2 text-center">No pending bookings found.</td>
+                                        </tr>
+                                    <?php endif; ?>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <div id="approved-req" class="content-section hidden">
                 <h1 class="text-2xl font-semibold">
-                    Sales
+                    Approved
                 </h1>
             </div>
 
@@ -629,8 +771,6 @@ if (isset($_SESSION['customer']['role_name'])) {
             }
         });
 
-
-
         async function deleteStorage(id) {
             if (confirm('Are you sure you want to delete this storage item?')) {
                 try {
@@ -680,6 +820,33 @@ if (isset($_SESSION['customer']['role_name'])) {
                     document.getElementById('feedbackMessage').innerText = 'An error occurred while deleting the Customer item.';
                     document.getElementById('modal').style.display = 'flex';
                 }
+            }
+        }
+
+        async function approveBook(id) {
+            try {
+                const response = await fetch(`./api/approveBook.php`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ id: id }), // Send the ID in the body of the POST request
+                });
+
+                let data = await response.json();
+                let feedbackMessage = '';
+
+                if (data.status === 'success') {
+                    feedbackMessage = data.message;
+                } else {
+                    feedbackMessage = data.message;
+                }
+
+                document.getElementById('feedbackMessage').innerText = feedbackMessage;
+                document.getElementById('modal').style.display = 'flex';
+            } catch (error) {
+                document.getElementById('feedbackMessage').innerText = 'An error occurred while Approving the request.';
+                document.getElementById('modal').style.display = 'flex';
             }
         }
 

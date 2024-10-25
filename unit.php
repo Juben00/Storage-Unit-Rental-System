@@ -386,6 +386,8 @@ $feedbackMessage = "";
 
             function createMonthButtons() {
                 monthSelection.innerHTML = ''; // Clear previous months
+                const selectedYear = parseInt(yearSelection.value); // Get the selected year
+
                 months.forEach((month, index) => {
                     const button = document.createElement('button');
                     button.textContent = month;
@@ -394,12 +396,17 @@ $feedbackMessage = "";
                     button.addEventListener('click', () => showDays(index));
                     monthSelection.appendChild(button);
 
-                    if (parseInt(yearSelection.value) === currentYear && index < currentMonth) {
+                    // Disable previous months only if the selected year is the current year
+                    if (selectedYear === currentYear && index < currentMonth) {
                         button.disabled = true;
                         button.classList.add('cursor-not-allowed', 'bg-gray-200');
                     }
                 });
             }
+
+
+            yearSelection.addEventListener('change', createMonthButtons);
+
 
             function showDays(monthIndex) {
                 daySelection.innerHTML = ''; // Clear previous days
@@ -416,11 +423,9 @@ $feedbackMessage = "";
                         button.disabled = true;
                         button.classList.add('cursor-not-allowed', 'bg-gray-200');
                     }
-
                     button.addEventListener('click', () => confirmBooking(selectedYear, monthIndex, i));
                     daySelection.appendChild(button);
                 }
-
                 daySelection.classList.remove('opacity-0', 'pointer-events-none');
             }
 
@@ -449,7 +454,7 @@ $feedbackMessage = "";
                 bookingConfirmation.classList.remove('opacity-0', 'pointer-events-none');
 
                 // Enable booking link with the storage ID, start and end dates
-                bookingLink.href = `payment-section.php?id=<?php echo $idparam ?>&startDate=${encodeURIComponent(formattedStartDate)}&endDate=${encodeURIComponent(formattedEndDate)}`;
+                bookingLink.href = `payment-section.php?id=<?php echo $idparam ?>&startDate=${encodeURIComponent(formattedStartDate)}&endDate=${encodeURIComponent(formattedEndDate)}&monthCount=${monthCount}`;
                 bookingLink.classList.remove('cursor-not-allowed', 'bg-blue-400');
                 bookingLink.classList.add('bg-blue-600', 'hover:bg-blue-700');
             }

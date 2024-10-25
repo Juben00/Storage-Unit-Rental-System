@@ -24,9 +24,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['id'])) {
     // Get the start and end dates from the URL
     $startDate = isset($_GET['startDate']) ? clean_input($_GET['startDate']) : '';
     $endDate = isset($_GET['endDate']) ? clean_input($_GET['endDate']) : '';
+    $monthCount = isset($_GET['monthCount']) ? clean_input($_GET['monthCount']) : "";
 
-    $monthsDifference = (new DateTime($endDate))->diff(new DateTime($startDate))->m; // Include start month
-    $totalPrice = $storage['price'] * $monthsDifference;
+    $totalPrice = $storage['price'] * $monthCount;
 
 } else {
     header('Location: ./index.php');
@@ -36,8 +36,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['id'])) {
 $customerId = $_SESSION['customer']['id'];
 $startDate = isset($_GET['startDate']) ? clean_input($_GET['startDate']) : '';
 $endDate = isset($_GET['endDate']) ? clean_input($_GET['endDate']) : '';
-$monthsDifference = (new DateTime($endDate))->diff(new DateTime($startDate))->m;
-$totalPrice = $storage['price'] * $monthsDifference;
+$monthCount = isset($_GET['monthCount']) ? clean_input($_GET['monthCount']) : "";
+$totalPrice = $storage['price'] * $monthCount;
 
 $isLoginPop = false;
 $feedbackMessage = "";
@@ -109,6 +109,7 @@ $feedbackMessage = "";
                 <form id="bookingForm" method="POST" class="">
                     <input type="hidden" name="customer_id" value="<?php echo $customerId; ?>">
                     <input type="hidden" name="storage_id" value="<?php echo htmlspecialchars($storage['id']); ?>">
+                    <input type="hidden" name="month" value="<?php echo htmlspecialchars($monthCount); ?>">
                     <input type="hidden" name="start_date" value="<?php echo htmlspecialchars($startDate); ?>">
                     <input type="hidden" name="end_date" value="<?php echo htmlspecialchars($endDate); ?>">
                     <input type="hidden" name="total_amount" value="<?php echo htmlspecialchars($totalPrice); ?>">
@@ -168,18 +169,7 @@ $feedbackMessage = "";
 
         popbutton.addEventListener("click", () => {
             document.getElementById('modal').style.display = 'none';
-            if (document.getElementById('feedbackMessage').innerHTML === 'Signup successful!') {
-                loginModal.classList.remove('hidden');
-                loginModal.classList.add('flex');
-                signupModal.classList.add('hidden');
-                signupModal.classList.remove('flex');
-            } else if (document.getElementById('feedbackMessage').innerHTML === 'Logged In successfully!') {
-                window.location.reload();
-            } else if (document.getElementById('feedbackMessage').innerHTML === 'Storage unbookmarked successfully!') {
-                window.location.reload();
-            } else if (document.getElementById('feedbackMessage').innerHTML === 'Storage bookmarked successfully!') {
-                window.location.reload();
-            }
+            window.location.href = './index.php';
         });
 
 

@@ -5,13 +5,14 @@ require_once '../sanitize.php';
 
 $customerObj = new Customer();
 
-$customerId = $storageId = $startDate = $endDate = $totalAmount = $accountNumber = $paymentMethod = "";
-$customerIdErr = $storageIdErr = $startDateErr = $endDateErr = $totalAmountErr = $paymentMethodErr = "";
+$customerId = $storageId = $monthCount = $startDate = $endDate = $totalAmount = $accountNumber = $paymentMethod = "";
+$customerIdErr = $storageIdErr = $monthCountErr = $startDateErr = $endDateErr = $totalAmountErr = $paymentMethodErr = "";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $customerId = clean_input($_POST['customer_id']);
     $storageId = clean_input($_POST['storage_id']);
+    $monthCount = clean_input(($_POST['month']));
     $startDate = clean_input($_POST['start_date']);
     $endDate = clean_input($_POST['end_date']);
     $totalAmount = clean_input($_POST['total_amount']);
@@ -30,6 +31,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $customerIdErr = "Customer ID is required";
     } elseif (!is_numeric($customerId)) {
         $customerIdErr = "Invalid Customer ID";
+    }
+
+    if (empty($monthCount)) {
+        $monthCountErr = "Number of Months is Required";
+    } elseif (!is_numeric($monthCount)) {
+        $monthCountErr = "Invalid number of months";
     }
 
     // Validate Storage ID
@@ -68,9 +75,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     // If no errors, proceed to process the form
-    if (empty($customerIdErr) && empty($storageIdErr) && empty($startDateErr) && empty($endDateErr) && empty($totalAmountErr) && empty($paymentMethodErr)) {
+    if (empty($customerIdErr) && empty($storageIdErr) && empty(($monthCountErr)) && empty($startDateErr) && empty($endDateErr) && empty($totalAmountErr) && empty($paymentMethodErr)) {
 
-        $bookingResult = $customerObj->bookStorage($customerId, $storageId, $startDate, $endDate, $totalAmount, $accountNumber, $paymentMethod);
+        $bookingResult = $customerObj->bookStorage($customerId, $storageId, $monthCount, $startDate, $endDate, $totalAmount, $accountNumber, $paymentMethod);
 
         $response = $bookingResult;
 
