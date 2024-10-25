@@ -605,7 +605,7 @@ if (isset($_SESSION['customer']['role_name'])) {
                                         <?php endforeach; ?>
                                     <?php else: ?>
                                         <tr>
-                                            <td colspan="16" class="py-2 text-center">No pending bookings found.</td>
+                                            <td colspan="16" class="py-2">No pending bookings found.</td>
                                         </tr>
                                     <?php endif; ?>
                                 </tbody>
