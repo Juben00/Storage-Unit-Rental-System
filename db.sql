@@ -124,3 +124,15 @@ CREATE TABLE payment (
 CREATE INDEX idx_category_id ON storage(category_id);
 CREATE INDEX idx_status_id ON storage(status_id);
 CREATE INDEX idx_email ON customer(email);
+
+
+--dump 
+--  <td class="py-2 w-20 overflow-hidden truncate">
+--                                                     <?php echo htmlspecialchars($row['payment_status']); ?>
+--                                                 </td>
+--                                                 <td class="py-2">
+--                                                     <button
+--                                                         class="p-2 border-2 border-red-500  rounded-md font-semibold shadow-md"
+--                                                         onclick="approveBook(<?php echo htmlspecialchars($row['booking_id']); ?>)">Approve
+--                                                     </button>
+--                                                 </td>

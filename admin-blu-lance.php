@@ -14,8 +14,10 @@ $Admin = $adminObj->getAdmin($_SESSION['customer']['email']);
 $Customer = $adminObj->getAllCustomers();
 $Storage = $adminObj->getAllStorage();
 $Pending = $adminObj->getPendingBooking();
+$Approved = $adminObj->getApprovedBooking();
 $totalStorage = count($Storage);
 $totalCustomers = count($Customer);
+$totalApproved = count($Approved);
 
 
 if (isset($_SESSION['customer']['role_name'])) {
@@ -184,6 +186,26 @@ if (isset($_SESSION['customer']['role_name'])) {
 
                     </div>
                     <!-- Card 4 -->
+                    <div class="bg-white p-4 rounded-lg shadow-md border-t-4 border-yellow-500">
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-money-bill-wave text-gray-500 text-2xl mr-2">
+                                </i>
+                                <div>
+                                    <p class="text-gray-500">
+                                        Active Booking
+                                    </p>
+                                    <p class="text-2xl font-semibold">
+                                        <?php echo $totalApproved ?>
+                                    </p>
+                                </div>
+                            </div>
+                            <i class="fas fa-ellipsis-v text-gray-500">
+                            </i>
+                        </div>
+
+                    </div>
+                    <!-- Graph 1 -->
                     <!-- <div class="col-span-2 bg-white p-4 rounded-lg shadow-md">
                         <div class="flex justify-between items-center ">
                             <div class="flex items-center">
@@ -203,7 +225,7 @@ if (isset($_SESSION['customer']['role_name'])) {
                             </canvas>
                         </div>
                     </div> -->
-                    <!-- Card 5 -->
+                    <!-- Graph 2 -->
                     <!-- <div class="bg-white p-4 rounded-lg shadow-md">
                         <div class="flex justify-between items-center mb-4">
                             <div class="flex items-center">
@@ -539,7 +561,7 @@ if (isset($_SESSION['customer']['role_name'])) {
                                         <th class="py-2 w-32">Booking Status</th>
                                         <th class="py-2 w-32">Payment Method</th>
                                         <th class="py-2 w-32">Payment Date</th>
-                                        <th class="py-2 w-32">Payment Status</th>
+                                        <!-- <th class="py-2 w-32">Payment Status</th> -->
                                         <th class="py-2">Action</th>
                                     </tr>
                                 </thead>
@@ -592,9 +614,6 @@ if (isset($_SESSION['customer']['role_name'])) {
                                                 <td class="py-2 w-20 overflow-hidden truncate">
                                                     <?php echo htmlspecialchars($row['payment_date']); ?>
                                                 </td>
-                                                <td class="py-2 w-20 overflow-hidden truncate">
-                                                    <?php echo htmlspecialchars($row['payment_status']); ?>
-                                                </td>
                                                 <td class="py-2">
                                                     <button
                                                         class="p-2 border-2 border-red-500  rounded-md font-semibold shadow-md"
@@ -618,17 +637,144 @@ if (isset($_SESSION['customer']['role_name'])) {
             </div>
 
             <div id="approved-req" class="content-section hidden">
-                <h1 class="text-2xl font-semibold">
-                    Approved
-                </h1>
-            </div>
+                <div class="flex-1 flex flex-col gap-6">
+                    <div class="flex justify-between items-center ">
+                        <h1 class="text-2xl font-semibold">
+                            Confirmed Booking
+                        </h1>
+                    </div>
 
-            <div id="settings" class="content-section hidden">
-                <h1 class="text-2xl font-semibold">
-                    Settings
-                </h1>
+                    <div class="bg-white p-4 py-6  rounded shadow-md">
+                        <div class="flex items-center">
+                            <div class="flex items-center mb-4 gap-1">
+                                <label for="status">Status: </label>
+                                <select id="status" class="bg-gray-100 px-2 py-1 rounded mr-4">
+                                    <option>
+                                        Select
+                                    </option>
+                                    <option>
+                                        In-Stock
+                                    </option>
+                                    <option>
+                                        Out-of-Stock
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="flex items-center mb-4 gap-1">
+                                <label for="category">Category : </label>
+                                <select id="category" class="bg-gray-100 px-2 py-1 rounded mr-4">
+                                    <option>
+                                        Select
+                                    </option>
+                                    <option>
+                                        Small
+                                    </option>
+                                    <option>
+                                        Medium
+                                    </option>
+                                    <option>
+                                        Large
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- table -->
+                        <div class="overflow-x-auto">
+                            <table class="w-full table-fixed text-left border-collapse">
+                                <thead>
+                                    <tr class="text-gray-600">
+                                        <th class="py-2 w-32">First Name</th>
+                                        <th class="py-2 w-32">Last Name</th>
+                                        <th class="py-2 w-40">Email</th>
+                                        <th class="py-2 w-32">Phone</th>
+                                        <th class="py-2 w-32">Booking Date</th>
+                                        <th class="py-2 w-16">Months</th>
+                                        <th class="py-2 w-32">Start Date</th>
+                                        <th class="py-2 w-32">End Date</th>
+                                        <th class="py-2 w-32">Total Amount</th>
+                                        <th class="py-2 w-32">Storage Name</th>
+                                        <th class="py-2 w-32">Area</th>
+                                        <th class="py-2 w-32">Price</th>
+                                        <th class="py-2 w-32">Booking Status</th>
+                                        <th class="py-2 w-32">Payment Method</th>
+                                        <th class="py-2 w-32">Payment Date</th>
+                                        <!-- <th class="py-2 w-32">Payment Status</th> -->
+                                        <!-- <th class="py-2">Action</th> -->
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php if (!empty($Approved)): ?>
+                                        <?php foreach ($Approved as $row): ?>
+                                            <tr class="border-b">
+                                                <td class="py-2 w-32 max-w-xs overflow-hidden truncate">
+                                                    <?php echo htmlspecialchars($row['firstname']); ?>
+                                                </td>
+                                                <td class="py-2 w-32 max-w-xs overflow-hidden truncate">
+                                                    <?php echo htmlspecialchars($row['lastname']); ?>
+                                                </td>
+                                                <td class="py-2 w-40 max-w-xs overflow-hidden truncate">
+                                                    <?php echo htmlspecialchars($row['email']); ?>
+                                                </td>
+                                                <td class="py-2 w-32 max-w-xs overflow-hidden truncate">
+                                                    <?php echo htmlspecialchars($row['phone']); ?>
+                                                </td>
+                                                <td class="py-2 w-32 max-w-xs overflow-hidden truncate">
+                                                    <?php echo htmlspecialchars($row['booking_date']); ?>
+                                                </td>
+                                                <td class="py-2 w-20 overflow-hidden truncate">
+                                                    <?php echo htmlspecialchars($row['months']); ?>
+                                                </td>
+                                                <td class="py-2 w-20 overflow-hidden truncate">
+                                                    <?php echo htmlspecialchars($row['start_date']); ?>
+                                                </td>
+                                                <td class="py-2 w-20 overflow-hidden truncate">
+                                                    <?php echo htmlspecialchars($row['end_date']); ?>
+                                                </td>
+                                                <td class="py-2 w-20 overflow-hidden truncate">
+                                                    <?php echo htmlspecialchars($row['total_amount']); ?>
+                                                </td>
+                                                <td class="py-2 w-20 overflow-hidden truncate">
+                                                    <?php echo htmlspecialchars($row['storage_name']); ?>
+                                                </td>
+                                                <td class="py-2 w-20 overflow-hidden truncate">
+                                                    <?php echo htmlspecialchars($row['area']); ?>
+                                                </td>
+                                                <td class="py-2 w-20 overflow-hidden truncate">
+                                                    <?php echo htmlspecialchars($row['price']); ?>
+                                                </td>
+                                                <td class="py-2 w-20 overflow-hidden truncate">
+                                                    <?php echo htmlspecialchars($row['booking_status']); ?>
+                                                </td>
+                                                <td class="py-2 w-20 overflow-hidden truncate">
+                                                    <?php echo htmlspecialchars($row['payment_method']); ?>
+                                                </td>
+                                                <td class="py-2 w-20 overflow-hidden truncate">
+                                                    <?php echo htmlspecialchars($row['payment_date']); ?>
+                                                </td>
+
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    <?php else: ?>
+                                        <tr>
+                                            <td colspan="16" class="py-2">No pending bookings found.</td>
+                                        </tr>
+                                    <?php endif; ?>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
             </div>
         </div>
+
+        <div id="settings" class="content-section hidden">
+            <h1 class="text-2xl font-semibold">
+                Settings
+            </h1>
+        </div>
+    </div>
     </div>
 
     <div class="fixed inset-0 flex items-center justify-center z-50 left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2"

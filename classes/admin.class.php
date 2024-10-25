@@ -172,6 +172,49 @@ class Admin
             ['status' => 'error', 'message' => 'Failed to approve booking'];
     }
 
+    public function getApprovedBooking()
+    {
+        $sql = "SELECT 
+        c.firstname, 
+        c.lastname, 
+        c.email, 
+        c.phone, 
+        b.id AS booking_id,
+        b.booking_date, 
+        b.months AS 'months',
+        b.start_date, 
+        b.end_date, 
+        b.total_amount, 
+        s.name AS storage_name, 
+        s.area, 
+        s.price, 
+        bs.status_name AS booking_status, 
+        p.payment_method, 
+        p.payment_date, 
+        ps.status_name AS payment_status
+    FROM booking b
+    JOIN customer c ON b.customer_id = c.id
+    JOIN storage s ON b.storage_id = s.id
+    JOIN booking_status bs ON b.booking_status_id = bs.id
+    LEFT JOIN payment p ON b.id = p.booking_id
+    LEFT JOIN payment_status ps ON p.payment_status_id = ps.id
+    WHERE bs.status_name = :status";
+
+        $stmt = $this->db->connect()->prepare($sql);
+
+        // Set the status value to 'Approved'
+        $APPROVED = 'Confirmed';
+
+        // Bind the status parameter
+        $stmt->bindParam(':status', $APPROVED);
+        $stmt->execute();
+
+        // Fetch all results as an associative array
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
+
 
     public function logout()
     {
