@@ -234,13 +234,13 @@ $bookmarkedStorage = $customerObj->getBookmarkedStorage();
             </div>
 
             <div id="rents-content" class="hidden-content">
-                <h1 class="text-2xl">Rents Content</h1>
+                <h1 class="text-2xl">Rented Storage</h1>
                 <p>This is the rents section.</p>
             </div>
 
             <div id="saved-content" class="hidden-content">
                 <div class="bg-white p-6 rounded-lg shadow ">
-                    <h1 class="text-2xl mb-4">Saved Content</h1>
+                    <h1 class="text-2xl mb-4">Saved Storages</h1>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ">
                         <?php if (!empty($bookmarkedStorage)): ?>
                             <?php foreach ($bookmarkedStorage as $storage): ?>
