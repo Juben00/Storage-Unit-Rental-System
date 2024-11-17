@@ -240,8 +240,43 @@ class Customer
         }
     }
 
+    public function getBookings($customerId)
+    {
+        $sql = "SELECT 
+        b.id AS booking_id,
+        b.booking_date, 
+        b.months AS 'months',
+        b.start_date, 
+        b.end_date, 
+        b.total_amount, 
+        s.image,
+        s.name AS storage_name, 
+        s.area, 
+        s.price, 
+        bs.status_name AS booking_status, 
+        p.payment_method, 
+        p.payment_date, 
+        ps.status_name AS payment_status
+    FROM booking b
+    JOIN storage s ON b.storage_id = s.id
+    JOIN booking_status bs ON b.booking_status_id = bs.id
+    JOIN payment p ON b.id = p.booking_id
+    JOIN payment_status ps ON p.payment_status_id = ps.id
+    WHERE b.customer_id = :customer_id
+    ORDER BY b.id DESC;";
+        $stmt = $this->db->connect()->prepare($sql);
+        $stmt->bindParam(':customer_id', $customerId);
+
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return $result;
+
+    }
+
 }
 $customerObj = new Customer();
 
 // var_dump($customerObj->getSingleStorage(3));
-// var_dump($customerObj->getSingleStorage(4));
+// session_start();
+// var_dump($customerObj->getBookings($_SESSION['customer']['id']));

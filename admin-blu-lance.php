@@ -990,6 +990,8 @@ if (isset($_SESSION['customer']['role_name'])) {
 
                 document.getElementById('feedbackMessage').innerText = feedbackMessage;
                 document.getElementById('modal').style.display = 'flex';
+                // Reload the page to update the table
+                window.location.reload();
             } catch (error) {
                 document.getElementById('feedbackMessage').innerText = 'An error occurred while Approving the request.';
                 document.getElementById('modal').style.display = 'flex';

@@ -164,13 +164,41 @@ class Admin
 
     public function approvePendingBook($id)
     {
-        $sql = "UPDATE booking SET booking_status_id = 2 WHERE id = :id";
-        $stmt = $this->db->connect()->prepare($sql);
-        $stmt->bindParam(':id', $id);
-        return $stmt->execute() ?
-            ['status' => 'success', 'message' => 'Booking approved successfully'] :
-            ['status' => 'error', 'message' => 'Failed to approve booking'];
+        try {
+            // Begin a transaction
+            $conn = $this->db->connect();
+            $conn->beginTransaction();
+
+            // Update booking status
+            $updateBookingSql = "UPDATE booking SET booking_status_id = 2 WHERE id = :id";
+            $stmt = $conn->prepare($updateBookingSql);
+            $stmt->bindParam(':id', $id);
+            $stmt->execute();
+
+            // Update payment status
+            $updatePaymentSql = "UPDATE payment SET payment_status_id = 2 WHERE booking_id = :id";
+            $stmt = $conn->prepare($updatePaymentSql);
+            $stmt->bindParam(':id', $id);
+            $stmt->execute();
+
+            // Commit the transaction
+            $conn->commit();
+
+            return [
+                'status' => 'success',
+                'message' => 'Booking and payment statuses updated successfully'
+            ];
+        } catch (Exception $e) {
+            // Rollback the transaction in case of an error
+            $conn->rollBack();
+            error_log("Error approving booking: " . $e->getMessage());
+            return [
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ];
+        }
     }
+
 
     public function getApprovedBooking()
     {

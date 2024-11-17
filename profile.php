@@ -15,7 +15,7 @@ if (!isset($_SESSION['customer']['role_name'])) {
 $id = $_GET['userId'];
 $profile = $customerObj->getUserInfo($id);
 $bookmarkedStorage = $customerObj->getBookmarkedStorage();
-
+$rentedStorage = $customerObj->getBookings($id);
 
 
 ?>
@@ -234,8 +234,85 @@ $bookmarkedStorage = $customerObj->getBookmarkedStorage();
             </div>
 
             <div id="rents-content" class="hidden-content">
-                <h1 class="text-2xl">Rented Storage</h1>
-                <p>This is the rents section.</p>
+                <div class="bg-white p-6 rounded-lg shadow ">
+                    <h1 class="text-2xl mb-4">Rented Storage</h1>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ">
+                        <?php if (!empty($rentedStorage)): ?>
+                            <?php foreach ($rentedStorage as $storage): ?>
+                                <a class="border p-2 bg-neutral-100 shadow-md relative"
+                                    href="unit.php?id=<?php echo htmlspecialchars($storage['booking_id']); ?>">
+                                    <?php
+                                    // Decode the JSON image field
+                                    $images = json_decode($storage['image'], true); // Assuming `image` is stored in JSON
+                                    $firstImage = !empty($images) ? $images[0] : ''; // Get the first image
+                            
+                                    // Determine the booking status tag
+                                    $currentDate = date('Y-m-d');
+                                    $statusTag = '';
+                                    $tagColor = '';
+
+                                    if ($currentDate > $storage['end_date']) {
+                                        $statusTag = 'Ended';
+                                        $tagColor = 'text-red-500';
+                                    } elseif ($currentDate < $storage['start_date']) {
+                                        $statusTag = 'Not Started';
+                                        $tagColor = 'text-green-500';
+                                    } else {
+                                        $statusTag = 'Ongoing';
+                                        $tagColor = 'text-yellow-500';
+                                    }
+                                    ?>
+                                    <span
+                                        class="<?= $tagColor ?> absolute right-3 top-3 border text-xs border-neutral-600 bg-neutral-700 px-2 py-1 font-semibold rounded-full">
+                                        <h1><?= $statusTag ?></h1>
+                                    </span>
+
+                                    <?php if ($firstImage): ?>
+                                        <img alt="<?php echo htmlspecialchars($storage['storage_name']); ?>"
+                                            class="w-full h-64 object-cover" src="./<?php echo htmlspecialchars($firstImage); ?>"
+                                            width="400" height="400" />
+                                    <?php else: ?>
+                                        <img alt="No Image" class="w-8 h-8 mr-2" height="30"
+                                            src="./image/bg-storage-removebg-preview.png" width="30" />
+                                    <?php endif; ?>
+
+                                    <div class="text-sm mt-2 flex items-center">
+                                        <span class="flex-1">
+                                            <?php echo htmlspecialchars($storage['storage_name']); ?>
+                                            <span class="text-xs">
+                                                (<?php echo htmlspecialchars($storage['area']); ?> sqm)
+                                            </span>
+                                        </span>
+                                        <span class="text-xs text-gray-500">
+                                            Booking Status: <?php echo htmlspecialchars($storage['booking_status']); ?>
+                                        </span>
+                                    </div>
+                                    <p class="text-red-500 font-semibold">
+                                        ₱<?php echo htmlspecialchars(number_format($storage['price'], 0)); ?>
+                                        <?php if (!empty($storage['total_amount'])): ?>
+                                            <span class="text-gray-500">
+                                                Total: ₱<?php echo htmlspecialchars(number_format($storage['total_amount'], 0)); ?>
+                                            </span>
+                                        <?php endif; ?>
+                                    </p>
+                                    <div class="text-sm text-gray-500 mt-2">
+                                        Payment: <?php echo htmlspecialchars($storage['payment_method']); ?> |
+                                        Status: <?php echo htmlspecialchars($storage['payment_status']); ?>
+                                        <br />
+                                        Booked on:
+                                        <?php echo htmlspecialchars(date('M d, Y', strtotime($storage['booking_date']))); ?>
+                                        <br />
+                                        Duration: <?php echo htmlspecialchars($storage['months']); ?> months
+                                        (<?php echo htmlspecialchars($storage['start_date']); ?> -
+                                        <?php echo htmlspecialchars($storage['end_date']); ?>)
+                                    </div>
+                                </a>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <p>No storage units found.</p>
+                        <?php endif; ?>
+                    </div>
+                </div>
             </div>
 
             <div id="saved-content" class="hidden-content">
