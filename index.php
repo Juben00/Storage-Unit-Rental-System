@@ -135,7 +135,7 @@ $Storages = $customerObj->getAllStorage();
                             ?>
                             <?php if ($firstImage): ?>
                                 <img alt="<?php echo htmlspecialchars($storage['name']); ?>" class="w-full h-64 object-cover"
-                                    src="<?php echo htmlspecialchars($firstImage); ?>" width="400" height="400" />
+                                    src="./<?php echo htmlspecialchars($firstImage); ?>" width="400" height="400" />
                             <?php else: ?>
                                 <img alt="No Image" class="w-8 h-8 mr-2" height="30" src="./image/bg-storage-removebg-preview.png"
                                     width="30" />

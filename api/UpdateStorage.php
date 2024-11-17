@@ -16,38 +16,39 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $description = clean_input($_POST["u_description"]);
     $area = clean_input($_POST['u_area']);
 
-    // Check if a new image was uploaded
-    if (!empty($_FILES['u_image']['name'][0])) {
-        $uploadedImages = []; // Array to store newly uploaded images
-        foreach ($_FILES['u_image']['tmp_name'] as $key => $tmp_name) {
-            // Check if the file is a valid image before attempting to upload
-            if (getimagesize($tmp_name) !== false) {
-                // Prepare file data
-                $fileData = [
-                    'tmp_name' => $tmp_name,
-                    'name' => $_FILES['u_image']['name'][$key]
-                ];
+    if (empty($_FILES['u_image']['name'][0])) {
+        $imageErr[] = 'At least one image is required.';
+    } else {
+        $uploadedImages = [];
+        $allowedType = ['jpg', 'jpeg', 'png'];
+        $uploadDir = '/storageImages/';
 
-                // Call uploadImage with the single file data
-                $uploadResult = uploadImage($fileData['tmp_name']);
+        foreach ($_FILES['u_image']['name'] as $key => $image) {
+            $imageFileType = strtolower(pathinfo($image, PATHINFO_EXTENSION));
 
-                if (strpos($uploadResult, "Upload failed:") === false) {
-                    // If upload was successful, add the secure URL to the uploaded images array
-                    $uploadedImages[] = $uploadResult;
+            // Validate each image
+            if (!in_array($imageFileType, $allowedType)) {
+                $imageErr[] = "File " . $_FILES['u_image']['name'][$key] . " has an invalid format. Only jpg, jpeg, and png are allowed.";
+            } else {
+                // Generate a unique target path for each image
+                $targetImage = $uploadDir . uniqid() . '.' . $imageFileType;
+
+                // Move the uploaded file to the target directory
+                if (move_uploaded_file($_FILES['u_image']['tmp_name'][$key], '..' . $targetImage)) {
+                    $uploadedImages[] = $targetImage; // Save the file path for future use
                 } else {
-                    // Log the error message or handle the failed upload
-                    error_log("Failed to upload image: " . $uploadResult);
+                    $imageErr[] = "Failed to upload image: " . $_FILES['u_image']['name'][$key];
                 }
             }
         }
 
-        // Merge existing images with new uploads
-        $existingImages = json_decode($_POST['existing_image'], true);
-        $imageArray = array_merge($existingImages, $uploadedImages);
-        $image = json_encode($imageArray); // Encode back to JSON for storing
-    } else {
-        // If no new images were uploaded, use the existing images
-        $image = $_POST['existing_image'];
+        // Check if any images were successfully uploaded
+        if (!empty($uploadedImages)) {
+            // Convert the array of uploaded file paths into a JSON-encoded string
+            $image = json_encode($uploadedImages);
+        } else {
+            $imageErr[] = "No images were successfully uploaded.";
+        }
     }
 
     // Validate input fields

@@ -219,7 +219,7 @@ class Customer
             $bookingId = $this->db->connect()->lastInsertId();
 
             $sqlPayment = "INSERT INTO payment (booking_id, account_number, payment_method, payment_status_id) 
-                       VALUES (:booking_id, :account_number, :payment_method, :payment_status_id);";
+                       VALUES (:booking_id, :a, :payment_method, :payment_status_id);";
 
             $stmtPayment = $this->db->connect()->prepare($sqlPayment);
             $stmtPayment->bindParam(':booking_id', $bookingId);

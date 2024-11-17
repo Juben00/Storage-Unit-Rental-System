@@ -80,9 +80,9 @@ $feedbackMessage = "";
             <div class="w-full lg:w-1/2 p-4 lg:p-8 flex flex-col shadow-lg relative">
                 <!-- Main Image (First Image from Array) -->
                 <?php if (!empty($storage['images'])): ?>
-                    <a class="mb-4 w-full h-auto" href="<?php echo htmlspecialchars($storage['images'][0]); ?>"
+                    <a class="mb-4 w-full h-auto" href="./<?php echo htmlspecialchars($storage['images'][0]); ?>"
                         target="_blank">
-                        <img src="<?php echo htmlspecialchars($storage['images'][0]); ?>" alt="Main Image"
+                        <img src="./<?php echo htmlspecialchars($storage['images'][0]); ?>" alt="Main Image"
                             class="w-full h-64 sm:h-96 lg:h-[520px] object-cover rounded-lg">
                     </a>
 
@@ -90,8 +90,8 @@ $feedbackMessage = "";
                     <div class="flex justify-start space-x-4 overflow-x-auto">
                         <?php foreach ($storage['images'] as $index => $image): ?>
                             <?php if ($index > 0): // Skip the first image, already displayed ?>
-                                <a href="<?php echo htmlspecialchars($image); ?>" target="_blank" class="flex-shrink-0 w-[200px]">
-                                    <img src="<?php echo htmlspecialchars($image); ?>" alt="Thumbnail <?php echo $index; ?>"
+                                <a href="./<?php echo htmlspecialchars($image); ?>" target="_blank" class="flex-shrink-0 w-[200px]">
+                                    <img src="./<?php echo htmlspecialchars($image); ?>" alt="Thumbnail <?php echo $index; ?>"
                                         class="h-20 sm:h-32 w-full object-cover rounded-lg">
                                 </a>
                             <?php endif; ?>

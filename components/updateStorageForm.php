@@ -54,7 +54,7 @@
         </span>
     </div>
 
-    <input type="submit" value="Add Storage"
+    <input type="submit" value="Update Storage"
         class="w-full bg-blue-600 text-white py-2 rounded-lg text-center font-semibold hover:bg-blue-700" />
 </form>
 

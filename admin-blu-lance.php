@@ -427,7 +427,7 @@ if (isset($_SESSION['customer']['role_name'])) {
                                                 ?>
                                                 <?php if ($firstImage): ?>
                                                     <img alt="Product Image" class="w-8 h-8 mr-2" height="30"
-                                                        src="<?php echo htmlspecialchars($firstImage); ?>" width="30" />
+                                                        src="./<?php echo htmlspecialchars($firstImage); ?>" width="30" />
                                                 <?php else: ?>
                                                     <img alt="No Image" class="w-8 h-8 mr-2" height="30"
                                                         src="./images/bg-storage-removebg-preview.png" width="30" />
@@ -858,7 +858,7 @@ if (isset($_SESSION['customer']['role_name'])) {
             existingImages.forEach((imgUrl, index) => {
                 const imgTag = `
             <div class="relative w-20">
-                <img src="${imgUrl}" alt="Storage Image" class="w-20 h-20 inline-block mr-2">
+                <img src="./${imgUrl}" alt="Storage Image" class="w-20 h-20 inline-block mr-2">
                 <button type="button" class="absolute top-1 right-1 text-red-500" onclick="removeImage(${index})">
                     <svg width="10px" height="10px" viewBox="0 0 512 512" fill="#FF0000">
                         <g>
@@ -885,7 +885,7 @@ if (isset($_SESSION['customer']['role_name'])) {
             existingImages.forEach((imgUrl, idx) => {
                 const imgTag = `
             <div class="relative w-20">
-                <img src="${imgUrl}" alt="Storage Image" class="w-20 h-20 inline-block mr-2">
+                <img src="./${imgUrl}" alt="Storage Image" class="w-20 h-20 inline-block mr-2">
                 <button type="button" class="absolute top-1 right-1 text-red-500" onclick="removeImage(${idx})">
                     <svg width="10px" height="10px" viewBox="0 0 512 512" fill="#FF0000">
                         <g>

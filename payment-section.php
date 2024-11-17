@@ -66,7 +66,7 @@ $feedbackMessage = "";
                 <h2 class="text-2xl font-bold mb-2">Selected Storage</h2>
                 <div class="bg-white p-4 rounded-lg shadow-md mb-2">
                     <?php if (!empty($storage['images'])): ?>
-                        <img src="<?php echo $storage['images'][0]; ?>" alt="Storage Image"
+                        <img src="./<?php echo $storage['images'][0]; ?>" alt="Storage Image"
                             class="w-full h-48 object-cover rounded-md mb-4">
                     <?php else: ?>
                         <img src="/placeholder.svg?height=150&width=150" alt="Placeholder Image" class="w-full h-48
@@ -199,7 +199,7 @@ $feedbackMessage = "";
                 document.getElementById('modal').style.display = 'flex';
             } catch (error) {
                 console.error('Error:', error);
-                document.getElementById('feedbackMessage').innerHTML = 'An error occurred while processing your request.';
+                document.getElementById('feedbackMessage').innerHTML = error;
                 document.getElementById('modal').style.display = 'flex';
             }
 

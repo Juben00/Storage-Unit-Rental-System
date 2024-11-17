@@ -15,28 +15,39 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $category = clean_input($_POST["storageCategory"]);
     $price = clean_input($_POST["storagePrice"]);
 
-    // Check if images were uploaded
-    if (!empty($_FILES['storageImages']['name'][0])) {
+    if (empty($_FILES['storageImages']['name'][0])) {
+        $imageErr[] = 'At least one image is required.';
+    } else {
         $uploadedImages = [];
+        $allowedType = ['jpg', 'jpeg', 'png'];
+        $uploadDir = '/storageImages/';
 
-        // Loop through each uploaded file and upload to Cloudinary
-        for ($i = 0; $i < count($_FILES['storageImages']['name']); $i++) {
-            $imageTmpName = $_FILES['storageImages']['tmp_name'][$i];
+        foreach ($_FILES['storageImages']['name'] as $key => $image) {
+            $imageFileType = strtolower(pathinfo($image, PATHINFO_EXTENSION));
 
-            try {
-                // Upload to Cloudinary and store the URL
-                $result = uploadImage($imageTmpName);
-                $uploadedImages[] = $result;
-            } catch (Exception $e) {
-                echo "Error uploading image: " . $e->getMessage();
-                continue; // Skip the current image and continue with the next one
+            // Validate each image
+            if (!in_array($imageFileType, $allowedType)) {
+                $imageErr[] = "File " . $_FILES['storageImages']['name'][$key] . " has an invalid format. Only jpg, jpeg, and png are allowed.";
+            } else {
+                // Generate a unique target path for each image
+                $targetImage = $uploadDir . uniqid() . '.' . $imageFileType;
+
+                // Move the uploaded file to the target directory
+                if (move_uploaded_file($_FILES['storageImages']['tmp_name'][$key], '..' . $targetImage)) {
+                    $uploadedImages[] = $targetImage; // Save the file path for future use
+                } else {
+                    $imageErr[] = "Failed to upload image: " . $_FILES['storageImages']['name'][$key];
+                }
             }
         }
 
-        // Join URLs into a comma-separated string or store as JSON array
-        $image = json_encode($uploadedImages);
-    } else {
-        $imageErr = "Please upload at least one image.";
+        // Check if any images were successfully uploaded
+        if (!empty($uploadedImages)) {
+            // Convert the array of uploaded file paths into a JSON-encoded string
+            $image = json_encode($uploadedImages);
+        } else {
+            $imageErr[] = "No images were successfully uploaded.";
+        }
     }
 
     // Validate input fields
