@@ -199,27 +199,37 @@ class Customer
 
     public function bookStorage($customerId, $storageId, $months, $startDate, $endDate, $totalAmount, $accountNumber, $paymentMethod)
     {
-        $sqlBooking = "INSERT INTO booking (customer_id, storage_id, months, start_date, end_date, total_amount, booking_status_id) 
-                   VALUES (:customer_id, :storage_id, :months, :start_date, :end_date, :total_amount, :booking_status_id);";
+        // Start the transaction
+        $this->db->connect()->beginTransaction();
 
-        $stmtBooking = $this->db->connect()->prepare($sqlBooking);
-        $stmtBooking->bindParam(':customer_id', $customerId);
-        $stmtBooking->bindParam(':storage_id', $storageId);
-        $stmtBooking->bindParam(':months', $months);
-        $stmtBooking->bindParam(':start_date', $startDate);
-        $stmtBooking->bindParam(':end_date', $endDate);
-        $stmtBooking->bindParam(':total_amount', $totalAmount);
+        try {
+            // SQL for booking
+            $sqlBooking = "INSERT INTO booking (customer_id, storage_id, months, start_date, end_date, total_amount, booking_status_id) 
+                       VALUES (:customer_id, :storage_id, :months, :start_date, :end_date, :total_amount, :booking_status_id);";
 
-        // Assuming '1' is the ID for 'Pending' status in the booking_status table
-        $bookingStatusId = 1;
-        $stmtBooking->bindParam(':booking_status_id', $bookingStatusId);
+            $stmtBooking = $this->db->connect()->prepare($sqlBooking);
+            $stmtBooking->bindParam(':customer_id', $customerId);
+            $stmtBooking->bindParam(':storage_id', $storageId);
+            $stmtBooking->bindParam(':months', $months);
+            $stmtBooking->bindParam(':start_date', $startDate);
+            $stmtBooking->bindParam(':end_date', $endDate);
+            $stmtBooking->bindParam(':total_amount', $totalAmount);
 
-        if ($stmtBooking->execute()) {
+            // Assuming '1' is the ID for 'Pending' status in the booking_status table
+            $bookingStatusId = 1;
+            $stmtBooking->bindParam(':booking_status_id', $bookingStatusId);
+
+            // Execute the booking query
+            if (!$stmtBooking->execute()) {
+                throw new Exception('Storage booking failed');
+            }
+
             // Get the last inserted booking ID
             $bookingId = $this->db->connect()->lastInsertId();
 
+            // SQL for payment
             $sqlPayment = "INSERT INTO payment (booking_id, account_number, payment_method, payment_status_id) 
-                       VALUES (:booking_id, :a, :payment_method, :payment_status_id);";
+                       VALUES (:booking_id, :account_number, :payment_method, :payment_status_id);";
 
             $stmtPayment = $this->db->connect()->prepare($sqlPayment);
             $stmtPayment->bindParam(':booking_id', $bookingId);
@@ -230,15 +240,24 @@ class Customer
             $paymentStatusId = 1;
             $stmtPayment->bindParam(':payment_status_id', $paymentStatusId);
 
-            if ($stmtPayment->execute()) {
-                return ['status' => 'success', 'message' => 'Storage booked and payment recorded successfully!'];
-            } else {
-                return ['status' => 'error', 'message' => 'Payment recording failed'];
+            // Execute the payment query
+            if (!$stmtPayment->execute()) {
+                throw new Exception('Payment recording failed');
             }
-        } else {
-            return ['status' => 'error', 'message' => 'Storage booking failed'];
+
+            // If both queries succeed, commit the transaction
+            $this->db->connect()->commit();
+
+            return ['status' => 'success', 'message' => 'Storage booked and payment recorded successfully!'];
+
+        } catch (Exception $e) {
+            // Rollback the transaction if an error occurs
+            $this->db->connect()->rollBack();
+
+            return ['status' => 'error', 'message' => $e->getMessage()];
         }
     }
+
 
     public function getBookings($customerId)
     {
@@ -272,6 +291,16 @@ class Customer
 
         return $result;
 
+    }
+
+    public function getBookedDates($StorageID)
+    {
+        $sql = "SELECT start_date, end_date FROM booking WHERE storage_id = :storage_id;";
+        $stmt = $this->db->connect()->prepare($sql);
+        $stmt->bindParam(':storage_id', $StorageID);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
     }
 
 }

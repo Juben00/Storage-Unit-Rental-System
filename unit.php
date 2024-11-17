@@ -26,6 +26,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['id'])) {
     exit();
 }
 
+$getBookedDate = $customerObj->getBookedDates($idparam);
+$bookedDates = json_encode($getBookedDate);
+
 $isLoginPop = false;
 $feedbackMessage = "";
 
@@ -363,6 +366,8 @@ $feedbackMessage = "";
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
+            // Get the start and end dates from the PHP variables
+            const bookedDates = <?php echo ($bookedDates); ?>; // Make sure bookedDates is an array
             const currentYear = new Date().getFullYear();
             const currentMonth = new Date().getMonth(); // Month is 0-indexed
             const currentDay = new Date().getDate();
@@ -396,17 +401,20 @@ $feedbackMessage = "";
                     button.addEventListener('click', () => showDays(index));
                     monthSelection.appendChild(button);
 
-                    // Disable previous months only if the selected year is the current year
+                    // Disable past months if the selected year is the current year
                     if (selectedYear === currentYear && index < currentMonth) {
                         button.disabled = true;
+                        button.classList.add('cursor-not-allowed', 'bg-gray-200');
+                    }
+
+                    // Allow past months but show them as disabled
+                    if (selectedYear < currentYear || (selectedYear === currentYear && index < currentMonth)) {
                         button.classList.add('cursor-not-allowed', 'bg-gray-200');
                     }
                 });
             }
 
-
             yearSelection.addEventListener('change', createMonthButtons);
-
 
             function showDays(monthIndex) {
                 daySelection.innerHTML = ''; // Clear previous days
@@ -419,13 +427,36 @@ $feedbackMessage = "";
                     button.classList.add('p-2', 'text-xs', 'rounded', 'bg-gray-100', 'hover:bg-gray-300');
                     button.dataset.day = i;
 
+                    const currentDate = new Date(selectedYear, monthIndex, i);
+
+                    // Disable dates in the past
+                    if (currentDate < new Date()) {
+                        button.disabled = true;
+                        button.classList.add('cursor-not-allowed', 'bg-gray-200');
+                    }
+
+                    // Disable previous days only if the selected year is the current year
                     if (selectedYear === currentYear && monthIndex === currentMonth && i < currentDay) {
                         button.disabled = true;
                         button.classList.add('cursor-not-allowed', 'bg-gray-200');
                     }
+
+                    // Disable days that fall within booked dates
+                    bookedDates.forEach(booking => {
+                        const bookedStartDate = new Date(booking.start_date);
+                        const bookedEndDate = new Date(booking.end_date);
+
+                        // Check if the current day falls between the booked start and end date
+                        if (currentDate >= bookedStartDate && currentDate <= bookedEndDate) {
+                            button.disabled = true;
+                            button.classList.add('cursor-not-allowed', 'bg-red-300', 'text-white', 'font-bold'); // Add styles for booked dates
+                        }
+                    });
+
                     button.addEventListener('click', () => confirmBooking(selectedYear, monthIndex, i));
                     daySelection.appendChild(button);
                 }
+
                 daySelection.classList.remove('opacity-0', 'pointer-events-none');
             }
 
@@ -459,14 +490,16 @@ $feedbackMessage = "";
                 bookingLink.classList.add('bg-blue-600', 'hover:bg-blue-700');
             }
 
-            // yearSelection.addEventListener('focus', () => {
+            // Initialize the month buttons
             createMonthButtons();
             monthSelection.classList.remove('opacity-0', 'pointer-events-none');
             daySelection.classList.add('opacity-0', 'pointer-events-none'); // Reset day selection
             bookingConfirmation.classList.add('opacity-0', 'pointer-events-none'); // Hide confirmation message
-            // });
         });
     </script>
+
+
+
 
 </body>
 
