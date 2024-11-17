@@ -263,8 +263,9 @@ $rentedStorage = $customerObj->getBookings($id);
                                     }
                                     ?>
                                     <span
-                                        class="<?= $tagColor ?> absolute right-3 top-3 border text-xs border-neutral-600 bg-neutral-700 px-2 py-1 font-semibold rounded-full">
-                                        <h1><?= $statusTag ?></h1>
+                                        class="<?php echo ($storage['booking_status'] == "Pending") ? "text-neutral-50" : $tagColor ?> absolute right-3 top-3 border text-xs border-neutral-600 bg-neutral-700 px-2 py-1 font-semibold rounded-full">
+                                        <h1><?php echo ($storage['booking_status'] == "Pending") ? "For Approval" : $statusTag ?>
+                                        </h1>
                                     </span>
 
                                     <?php if ($firstImage): ?>
