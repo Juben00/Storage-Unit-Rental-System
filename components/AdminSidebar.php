@@ -37,8 +37,17 @@
                     <i class="fas fa-check-circle"></i>
                     <p>Approved Requests</p>
                 </a>
+                <a class="navlink flex items-center px-6 py-2 gap-2 text-gray-700" data-target="closed-req" href="#">
+                    <i class="fas fa-archive"></i>
+                    <p>Closed Requests</p>
+                </a>
             </div>
         </div>
+
+        <a class="navlink flex items-center px-6 py-2 gap-2 text-gray-700" data-target="statistics" href="#">
+            <i class="fas fa-chart-bar"></i>
+            <p>Statistics</p>
+        </a>
 
         <a class="navlink flex items-center px-6 py-2 gap-2 text-gray-700" data-target="settings" href="#">
             <i class="fas fa-cog"></i>

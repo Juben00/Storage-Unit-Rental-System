@@ -18,6 +18,9 @@ $isLoginPop = false;
 $feedbackMessage = "";
 $Storages = [];
 $Storages = $customerObj->getAllStorage();
+$Storages = array_filter($Storages, function ($storage) {
+    return $storage['status'] !== 'disabled';
+});
 
 
 

@@ -1,6 +1,7 @@
 <?php
 require_once './classes/admin.class.php';
 require_once './sanitize.php';
+
 $adminObj = new Admin();
 session_start();
 
@@ -15,9 +16,15 @@ $Customer = $adminObj->getAllCustomers();
 $Storage = $adminObj->getAllStorage();
 $Pending = $adminObj->getPendingBooking();
 $Approved = $adminObj->getApprovedBooking();
+$Closed = $adminObj->getClosedBooking(); // Add this line to fetch closed bookings
+$CustomerBookingCount = $adminObj->getCustomerBookingCount();
+$MonthlyEarnings = $adminObj->getMonthlyEarnings();
+$SalesData = $adminObj->getSalesData();
+$InventoryData = $adminObj->getInventoryData();
 $totalStorage = count($Storage);
 $totalCustomers = count($Customer);
 $totalApproved = count($Approved);
+$totalClosed = count($Closed); // Add this line to count closed requests
 
 
 if (isset($_SESSION['customer']['role_name'])) {
@@ -206,14 +213,14 @@ if (isset($_SESSION['customer']['role_name'])) {
 
                     </div>
                     <!-- Graph 1 -->
-                    <!-- <div class="col-span-2 bg-white p-4 rounded-lg shadow-md">
+                    <div class="col-span-2 bg-white p-4 rounded-lg shadow-md">
                         <div class="flex justify-between items-center ">
                             <div class="flex items-center">
                                 <i class="fas fa-chart-line text-gray-500 text-2xl mr-2">
                                 </i>
                                 <div>
                                     <p class="text-gray-500">
-                                        Evolución de Ventas
+                                        Sales Evolution
                                     </p>
                                 </div>
                             </div>
@@ -224,16 +231,16 @@ if (isset($_SESSION['customer']['role_name'])) {
                             <canvas id="salesChart">
                             </canvas>
                         </div>
-                    </div> -->
+                    </div>
                     <!-- Graph 2 -->
-                    <!-- <div class="bg-white p-4 rounded-lg shadow-md">
+                    <div class="bg-white p-4 rounded-lg shadow-md">
                         <div class="flex justify-between items-center mb-4">
                             <div class="flex items-center">
                                 <i class="fas fa-boxes text-gray-500 text-2xl mr-2">
                                 </i>
                                 <div>
                                     <p class="text-gray-500">
-                                        Inventario
+                                        Inventory
                                     </p>
                                 </div>
                             </div>
@@ -244,7 +251,7 @@ if (isset($_SESSION['customer']['role_name'])) {
                             <canvas id="inventoryChart">
                             </canvas>
                         </div>
-                    </div> -->
+                    </div>
                 </div>
             </div>
 
@@ -320,9 +327,17 @@ if (isset($_SESSION['customer']['role_name'])) {
                                                 <?php echo htmlspecialchars($cust['email']); ?>
                                             </td>
                                             <td class="py-2">
-                                                <button class="p-2 border-2 border-blue-500 rounded-md font-semibold">
-                                                    Restrict
-                                                </button>
+                                                <?php if ($cust['status'] === 'Restricted'): ?>
+                                                    <button class="p-2 border-2 border-green-500 rounded-md font-semibold"
+                                                        onclick="unrestrictUser(<?php echo htmlspecialchars($cust['id']); ?>)">
+                                                        Unrestrict
+                                                    </button>
+                                                <?php else: ?>
+                                                    <button class="p-2 border-2 border-blue-500 rounded-md font-semibold"
+                                                        onclick="restrictUser(<?php echo htmlspecialchars($cust['id']); ?>)">
+                                                        Restrict
+                                                    </button>
+                                                <?php endif; ?>
                                                 <button class="p-2 border-2 border-red-500 rounded-md font-semibold"
                                                     onclick="deleteCustomer(<?php echo htmlspecialchars($cust['id']); ?>)">
                                                     Delete
@@ -448,21 +463,28 @@ if (isset($_SESSION['customer']['role_name'])) {
                                             <td class="py-2 truncate"><?php echo htmlspecialchars($item['status_name']); ?></td>
                                             <!-- Updated status name -->
                                             <td class="py-2">
-                                                <button
-                                                    class="p-2 border-2 border-red-500 w-[70px] rounded-md font-semibold shadow-md"
-                                                    onclick="disableStorage(<?php echo htmlspecialchars($item['id']); ?>)">Disable
-                                                </button>
+                                                <?php if ($item['status_name'] === 'Disabled'): ?>
+                                                    <button
+                                                        class="p-2 border-2 border-green-500 w-[70px] rounded-md font-semibold shadow-md"
+                                                        onclick="enableStorage(<?php echo htmlspecialchars($item['id']); ?>)">Enable
+                                                    </button>
+                                                <?php else: ?>
+                                                    <button
+                                                        class="p-2 border-2 border-red-500 w-[70px] rounded-md font-semibold shadow-md"
+                                                        onclick="disableStorage(<?php echo htmlspecialchars($item['id']); ?>)">Disable
+                                                    </button>
+                                                <?php endif; ?>
                                                 <button
                                                     class="p-2 border-2 border-orange-500 w-[70px] rounded-md font-semibold shadow-md"
                                                     onclick="populateForm({
-                                id: '<?php echo htmlspecialchars($item['id']); ?>',
-                                name: '<?php echo htmlspecialchars(addslashes($item['name'])); ?>',
-                                description: '<?php echo htmlspecialchars(addslashes($item['description'])); ?>',
-                                area: '<?php echo htmlspecialchars($item['area']); ?>',
-                                category: '<?php echo htmlspecialchars($item['category_id']); ?>', 
-                                price: '<?php echo htmlspecialchars($item['price']); ?>',
-                                image: '<?php echo htmlspecialchars(addslashes($item['image'])); ?>'
-                            })">
+        id: '<?php echo htmlspecialchars($item['id']); ?>',
+        name: '<?php echo htmlspecialchars(addslashes($item['name'])); ?>',
+        description: '<?php echo htmlspecialchars(addslashes($item['description'])); ?>',
+        area: '<?php echo htmlspecialchars($item['area']); ?>',
+        category: '<?php echo htmlspecialchars($item['category_id']); ?>', 
+        price: '<?php echo htmlspecialchars($item['price']); ?>',
+        image: '<?php echo htmlspecialchars(addslashes($item['image'])); ?>'
+    })">
                                                     Edit
                                                 </button>
                                                 <button
@@ -478,6 +500,7 @@ if (isset($_SESSION['customer']['role_name'])) {
                                     </tr>
                                 <?php endif; ?>
                             </tbody>
+
                         </table>
 
                     </div>
@@ -763,370 +786,671 @@ if (isset($_SESSION['customer']['role_name'])) {
                                 </tbody>
                             </table>
                         </div>
-
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div id="settings" class="content-section hidden">
-            <h1 class="text-2xl font-semibold">
-                Settings
-            </h1>
-        </div>
-    </div>
-    </div>
-
-    <div class="fixed inset-0 flex items-center justify-center z-50 left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2"
-        id="modal" style="display:none;"> <!-- Modal is hidden initially -->
-        <div class="bg-white rounded-lg overflow-hidden shadow-2xl border-blue-500 border-2 z-10 max-w-sm mx-auto">
-            <div class="p-5">
-                <h2 class="text-lg font-semibold">Feedback</h2>
-                <p id="feedbackMessage" class="mt-2"></p> <!-- Display feedback message here -->
-                <div class="mt-4">
-                    <button id="popupbutt" class="bg-blue-500 text-white font-semibold py-2 px-4 rounded">
-                        Close
-                    </button>
+            <div id="settings" class="content-section hidden">
+                <h1 class="text-2xl font-semibold">
+                    Settings
+                </h1>
+            </div>
+            <div id="closed-req" class="content-section hidden">
+                <div class="flex-1 flex flex-col gap-6">
+                    <div class="flex justify-between items-center ">
+                        <h1 class="text-2xl font-semibold">
+                            Closed Requests
+                        </h1>
+                    </div>
+                    <div class="bg-white p-4 py-6  rounded shadow-md">
+                        <div class="overflow-x-auto">
+                            <table class="w-full table-fixed text-left border-collapse">
+                                <thead>
+                                    <tr class="text-gray-600">
+                                        <th class="py-2 w-32">First Name</th>
+                                        <th class="py-2 w-32">Last Name</th>
+                                        <th class="py-2 w-40">Email</th>
+                                        <th class="py-2 w-32">Phone</th>
+                                        <th class="py-2 w-32">Booking Date</th>
+                                        <th class="py-2 w-16">Months</th>
+                                        <th class="py-2 w-32">Start Date</th>
+                                        <th class="py-2 w-32">End Date</th>
+                                        <th class="py-2 w-32">Total Amount</th>
+                                        <th class="py-2 w-32">Storage Name</th>
+                                        <th class="py-2 w-32">Area</th>
+                                        <th class="py-2 w-32">Price</th>
+                                        <th class="py-2 w-32">Booking Status</th>
+                                        <th class="py-2 w-32">Payment Method</th>
+                                        <th class="py-2 w-32">Payment Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php if (!empty($Closed)): ?>
+                                        <?php foreach ($Closed as $row): ?>
+                                            <tr class="border-b">
+                                                <td class="py-2 w-32 max-w-xs overflow-hidden truncate">
+                                                    <?php echo htmlspecialchars($row['firstname']); ?>
+                                                </td>
+                                                <td class="py-2 w-32 max-w-xs overflow-hidden truncate">
+                                                    <?php echo htmlspecialchars($row['lastname']); ?>
+                                                </td>
+                                                <td class="py-2 w-40 max-w-xs overflow-hidden truncate">
+                                                    <?php echo htmlspecialchars($row['email']); ?>
+                                                </td>
+                                                <td class="py-2 w-32 max-w-xs overflow-hidden truncate">
+                                                    <?php echo htmlspecialchars($row['phone']); ?>
+                                                </td>
+                                                <td class="py-2 w-32 max-w-xs overflow-hidden truncate">
+                                                    <?php echo htmlspecialchars($row['booking_date']); ?>
+                                                </td>
+                                                <td class="py-2 w-20 overflow-hidden truncate">
+                                                    <?php echo htmlspecialchars($row['months']); ?>
+                                                </td>
+                                                <td class="py-2 w-20 overflow-hidden truncate">
+                                                    <?php echo htmlspecialchars($row['start_date']); ?>
+                                                </td>
+                                                <td class="py-2 w-20 overflow-hidden truncate">
+                                                    <?php echo htmlspecialchars($row['end_date']); ?>
+                                                </td>
+                                                <td class="py-2 w-20 overflow-hidden truncate">
+                                                    <?php echo htmlspecialchars($row['total_amount']); ?>
+                                                </td>
+                                                <td class="py-2 w-20 overflow-hidden truncate">
+                                                    <?php echo htmlspecialchars($row['storage_name']); ?>
+                                                </td>
+                                                <td class="py-2 w-20 overflow-hidden truncate">
+                                                    <?php echo htmlspecialchars($row['area']); ?>
+                                                </td>
+                                                <td class="py-2 w-20 overflow-hidden truncate">
+                                                    <?php echo htmlspecialchars($row['price']); ?>
+                                                </td>
+                                                <td class="py-2 w-20 overflow-hidden truncate">
+                                                    <?php echo htmlspecialchars($row['booking_status']); ?>
+                                                </td>
+                                                <td class="py-2 w-20 overflow-hidden truncate">
+                                                    <?php echo htmlspecialchars($row['payment_method']); ?>
+                                                </td>
+                                                <td class="py-2 w-20 overflow-hidden truncate">
+                                                    <?php echo htmlspecialchars($row['payment_date']); ?>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    <?php else: ?>
+                                        <tr>
+                                            <td colspan="15" class="py-2">No closed bookings found.</td>
+                                        </tr>
+                                    <?php endif; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js">
-    </script>
+            <div id="statistics" class="content-section hidden">
+                <div class="flex-1 flex flex-col gap-6">
+                    <div class="flex justify-between items-center">
+                        <h1 class="text-2xl font-semibold">Statistics</h1>
+                    </div>
+                    <div class="bg-white p-4 py-6 rounded shadow-md">
+                        <h2 class="text-xl font-semibold mb-4">Customer Booking Count</h2>
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="text-gray-600">
+                                    <th class="py-2">Storage Name</th>
+                                    <th class="py-2">Booking Count</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php if (!empty($CustomerBookingCount)): ?>
+                                    <?php foreach ($CustomerBookingCount as $row): ?>
+                                        <tr class="border-b">
+                                            <td class="py-2"><?php echo htmlspecialchars($row['storage_name']); ?></td>
+                                            <td class="py-2"><?php echo htmlspecialchars($row['booking_count']); ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr>
+                                        <td colspan="2" class="py-2 text-center">No bookings found.</td>
+                                    </tr>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="bg-white p-4 py-6 rounded shadow-md">
+                        <h2 class="text-xl font-semibold mb-4">Monthly Earnings</h2>
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="text-gray-600">
+                                    <th class="py-2">Storage Name</th>
+                                    <th class="py-2">Month</th>
+                                    <th class="py-2">Total Earnings</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php if (!empty($MonthlyEarnings)): ?>
+                                    <?php foreach ($MonthlyEarnings as $row): ?>
+                                        <tr class="border-b" onclick="showRentDetails(<?php echo ($row['storage_id']); ?>)">
+                                            <td class="py-2"><?php echo htmlspecialchars($row['storage_name']); ?></td>
+                                            <td class="py-2">
+                                                <?php echo htmlspecialchars(date('F', mktime(0, 0, 0, $row['month'], 10))); ?>
+                                            </td>
+                                            <td class="py-2">
+                                                <?php echo htmlspecialchars(number_format($row['total_earnings'], 2)); ?>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr>
+                                        <td colspan="3" class="py-2 text-center">No earnings found.</td>
+                                    </tr>
+                                <?php endif; ?>
 
-    <script>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="rentDetails" class="bg-white p-4 py-6 rounded shadow-md hidden">
+                        <h2 class="text-xl font-semibold mb-4">Rent Details</h2>
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="text-gray-600">
+                                    <th class="py-2">First Name</th>
+                                    <th class="py-2">Last Name</th>
+                                    <th class="py-2">Start Date</th>
+                                    <th class="py-2">End Date</th>
+                                </tr>
+                            </thead>
+                            <tbody id="rentDetailsBody">
+                                <!-- Rent details will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
 
-        document.getElementById('updateStorageFormParent').addEventListener('dblclick', (event) => {
-            if (event.target === document.getElementById('updateStorageFormParent')) {
-                document.getElementById('updateStorageFormParent').classList.add('hidden');
-            }
-        });
+            <div class="fixed inset-0 flex items-center justify-center z-50 left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2"
+                id="modal" style="display:none;"> <!-- Modal is hidden initially -->
+                <div
+                    class="bg-white rounded-lg overflow-hidden shadow-2xl border-blue-500 border-2 z-10 max-w-sm mx-auto">
+                    <div class="p-5">
+                        <h2 class="text-lg font-semibold">Feedback</h2>
+                        <p id="feedbackMessage" class="mt-2"></p> <!-- Display feedback message here -->
+                        <div class="mt-4">
+                            <button id="popupbutt" class="bg-blue-500 text-white font-semibold py-2 px-4 rounded">
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-        document.getElementById('updateStorageForm').addEventListener('submit', async (event) => {
-            event.preventDefault();
-            const formData = new FormData(event.target);
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-            // Debugging: Log the form data
-            for (const [key, value] of formData.entries()) {
-                console.log(key, value);
-            }
+            <script>
 
-            try {
-                const response = await fetch('./api/UpdateStorage.php', {
-                    method: 'POST',
-                    body: formData
+                document.getElementById('updateStorageFormParent').addEventListener('dblclick', (event) => {
+                    if (event.target === document.getElementById('updateStorageFormParent')) {
+                        document.getElementById('updateStorageFormParent').classList.add('hidden');
+                    }
                 });
 
-                const data = await response.json();
-                console.log(data);
+                document.getElementById('updateStorageForm').addEventListener('submit', async (event) => {
+                    event.preventDefault();
+                    const formData = new FormData(event.target);
 
-                let feedbackMessage = data.status === 'success' ? data.message : data.message;
+                    // Debugging: Log the form data
+                    for (const [key, value] of formData.entries()) {
+                        console.log(key, value);
+                    }
 
-                if (data.status === 'success') {
-                    // Close the modal
-                    document.getElementById('updateStorageFormParent').classList.add('hidden');
-                }
+                    try {
+                        const response = await fetch('./api/UpdateStorage.php', {
+                            method: 'POST',
+                            body: formData
+                        });
 
-                document.getElementById('feedbackMessage').innerText = feedbackMessage;
-                document.getElementById('modal').style.display = 'flex';
+                        const data = await response.json();
+                        console.log(data);
 
-            } catch (error) {
-                console.error('Error:', error);
-                document.getElementById('feedbackMessage').innerText = 'An error occurred while updating the storage item.';
-                document.getElementById('modal').style.display = 'flex';
-            }
-        });
+                        let feedbackMessage = data.status === 'success' ? data.message : data.message;
 
-        function populateForm(item) {
-            // Show the form
-            document.getElementById('updateStorageFormParent').classList.remove('hidden');
+                        if (data.status === 'success') {
+                            // Close the modal
+                            document.getElementById('updateStorageFormParent').classList.add('hidden');
+                        }
 
-            // Populate form fields
-            document.getElementById('u_id').value = item.id;
-            document.getElementById('u_storageName').value = item.name;
-            document.getElementById('u_description').value = item.description;
-            document.getElementById('u_area').value = item.area;
-            document.getElementById('u_category').value = item.category; // Ensure this matches the category ID
-            document.getElementById('u_price').value = item.price;
+                        document.getElementById('feedbackMessage').innerText = feedbackMessage;
+                        document.getElementById('modal').style.display = 'flex';
 
-            // Handle existing images
-            let existingImages = JSON.parse(item.image || '[]'); // Default to empty array if no images
-            let imagePreview = document.getElementById('imagePreview');
-            imagePreview.innerHTML = ''; // Clear previous images
+                    } catch (error) {
+                        console.error('Error:', error);
+                        document.getElementById('feedbackMessage').innerText = 'An error occurred while updating the storage item.';
+                        document.getElementById('modal').style.display = 'flex';
+                    }
+                });
 
-            existingImages.forEach((imgUrl, index) => {
-                const imgTag = `
+                function populateForm(item) {
+                    // Show the form
+                    document.getElementById('updateStorageFormParent').classList.remove('hidden');
+
+                    // Populate form fields
+                    document.getElementById('u_id').value = item.id;
+                    document.getElementById('u_storageName').value = item.name;
+                    document.getElementById('u_description').value = item.description;
+                    document.getElementById('u_area').value = item.area;
+                    document.getElementById('u_category').value = item.category; // Ensure this matches the category ID
+                    document.getElementById('u_price').value = item.price;
+
+                    // Handle existing images
+                    let existingImages = JSON.parse(item.image || '[]'); // Default to empty array if no images
+                    let imagePreview = document.getElementById('imagePreview');
+                    imagePreview.innerHTML = ''; // Clear previous images
+
+                    existingImages.forEach((imgUrl, index) => {
+                        const imgTag = `
             <div class="relative w-20">
                 <img src="./${imgUrl}" alt="Storage Image" class="w-20 h-20 inline-block mr-2">
                 <button type="button" class="absolute top-1 right-1 text-red-500" onclick="removeImage(${index})">
                     <svg width="10px" height="10px" viewBox="0 0 512 512" fill="#FF0000">
                         <g>
-                            <polygon points="328.96 30.2933333 298.666667 0 164.48 134.4 30.2933333 0 0 30.2933333 134.4 164.48 0 298.666667 30.2933333 328.96 164.48 194.56 298.666667 328.96 328.96 298.666667 194.56 164.48"></polygon>
+                            <polygon points="328.96 30.2933333 298.666667 0 164.48 134.4 30.2933333 0 0 30.2933333 134.4 164.48 0 298.666667 30.2933333 328.96 164.48 194.56 298.666667 328.96 328.96 298.666667 194.56"></polygon>
                         </g>
                     </svg>
                 </button>
             </div>`;
-                imagePreview.innerHTML += imgTag;
-            });
+                        imagePreview.innerHTML += imgTag;
+                    });
 
-            // Set the existing images in a hidden input
-            document.getElementById('existing_image').value = JSON.stringify(existingImages);
-        }
+                    // Set the existing images in a hidden input
+                    document.getElementById('existing_image').value = JSON.stringify(existingImages);
+                }
 
-        // Remove image function adjusted
-        function removeImage(index) {
-            let existingImages = JSON.parse(document.getElementById('existing_image').value);
-            existingImages.splice(index, 1); // Remove the selected image
-            document.getElementById('existing_image').value = JSON.stringify(existingImages); // Update hidden input
+                // Remove image function adjusted
+                function removeImage(index) {
+                    let existingImages = JSON.parse(document.getElementById('existing_image').value);
+                    existingImages.splice(index, 1); // Remove the selected image
+                    document.getElementById('existing_image').value = JSON.stringify(existingImages); // Update hidden input
 
-            // Update the displayed images by clearing and repopulating
-            document.getElementById('imagePreview').innerHTML = '';
-            existingImages.forEach((imgUrl, idx) => {
-                const imgTag = `
+                    // Update the displayed images by clearing and repopulating
+                    document.getElementById('imagePreview').innerHTML = '';
+                    existingImages.forEach((imgUrl, idx) => {
+                        const imgTag = `
             <div class="relative w-20">
                 <img src="./${imgUrl}" alt="Storage Image" class="w-20 h-20 inline-block mr-2">
                 <button type="button" class="absolute top-1 right-1 text-red-500" onclick="removeImage(${idx})">
                     <svg width="10px" height="10px" viewBox="0 0 512 512" fill="#FF0000">
                         <g>
-                            <polygon points="328.96 30.2933333 298.666667 0 164.48 134.4 30.2933333 0 0 30.2933333 134.4 164.48 0 298.666667 30.2933333 328.96 164.48 194.56 298.666667 328.96 328.96 298.666667 194.56 164.48"></polygon>
+                            <polygon points="328.96 30.2933333 298.666667 0 164.48 134.4 30.2933333 0 0 30.2933333 134.4 164.48 0 298.666667 30.2933333 328.96 164.48 194.56 298.666667 328.96 328.96 298.666667 194.56"></polygon>
                         </g>
                     </svg>
                 </button>
             </div>`;
-                document.getElementById('imagePreview').innerHTML += imgTag;
-            });
-        }
-
-
-        document.getElementById('u_image').addEventListener('change', function (event) {
-            const files = event.target.files;
-            const previewDiv = document.getElementById('imagePreview');
-            previewDiv.innerHTML = ''; // Clear previous previews
-
-            for (let i = 0; i < files.length; i++) {
-                const file = files[i];
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    const img = document.createElement('img');
-                    img.src = e.target.result;
-                    img.className = "w-20 h-20 object-cover mr-2"; // Tailwind styling for preview
-                    previewDiv.appendChild(img);
-                }
-                reader.readAsDataURL(file);
-            }
-        });
-
-        async function deleteStorage(id) {
-            if (confirm('Are you sure you want to delete this storage item?')) {
-                try {
-                    let response = await fetch(`./api/DeleteStorage.php?id=${id}`, {
-                        method: 'GET',
+                        document.getElementById('imagePreview').innerHTML += imgTag;
                     });
-                    let data = await response.json();
-                    let feedbackMessage = '';
-
-                    if (data.status === 'success') {
-                        feedbackMessage = data.message;
-                        // Remove the deleted row from the table
-                        document.querySelector(`#storage-row-${id}`).remove();
-                    } else {
-                        feedbackMessage = data.message;
-                    }
-
-                    document.getElementById('feedbackMessage').innerText = feedbackMessage;
-                    document.getElementById('modal').style.display = 'flex';
-
-                } catch (error) {
-                    document.getElementById('feedbackMessage').innerText = 'An error occurred while deleting the storage item.';
-                    document.getElementById('modal').style.display = 'flex';
                 }
-            }
-        }
 
-        async function deleteCustomer(id) {
-            if (confirm('Are you sure you want to delete this storage item?')) {
-                try {
-                    let response = await fetch(`./api/deleteCustomer.php?id=${id}`, {
-                        method: 'GET',
+
+                document.getElementById('u_image').addEventListener('change', function (event) {
+                    const files = event.target.files;
+                    const previewDiv = document.getElementById('imagePreview');
+                    previewDiv.innerHTML = ''; // Clear previous previews
+
+                    for (let i = 0; i < files.length; i++) {
+                        const file = files[i];
+                        const reader = new FileReader();
+                        reader.onload = function (e) {
+                            const img = document.createElement('img');
+                            img.src = e.target.result;
+                            img.className = "w-20 h-20 object-cover mr-2"; // Tailwind styling for preview
+                            previewDiv.appendChild(img);
+                        }
+                        reader.readAsDataURL(file);
+                    }
+                });
+
+                async function deleteStorage(id) {
+                    if (confirm('Are you sure you want to delete this storage item?')) {
+                        try {
+                            let response = await fetch(`./api/DeleteStorage.php?id=${id}`, {
+                                method: 'GET',
+                            });
+                            let data = await response.json();
+                            let feedbackMessage = '';
+
+                            if (data.status === 'success') {
+                                feedbackMessage = data.message;
+                                // Remove the deleted row from the table
+                                document.querySelector(`#storage-row-${id}`).remove();
+                            } else {
+                                feedbackMessage = data.message;
+                            }
+
+                            document.getElementById('feedbackMessage').innerText = feedbackMessage;
+                            document.getElementById('modal').style.display = 'flex';
+
+                        } catch (error) {
+                            document.getElementById('feedbackMessage').innerText = 'An error occurred while deleting the storage item.';
+                            document.getElementById('modal').style.display = 'flex';
+                        }
+                    }
+                }
+
+                async function deleteCustomer(id) {
+                    if (confirm('Are you sure you want to delete this storage item?')) {
+                        try {
+                            let response = await fetch(`./api/deleteCustomer.php?id=${id}`, {
+                                method: 'GET',
+                            });
+                            let data = await response.json();
+                            let feedbackMessage = '';
+
+                            if (data.status === 'success') {
+                                feedbackMessage = data.message;
+                            } else {
+                                feedbackMessage = data.message;
+                            }
+
+                            document.getElementById('feedbackMessage').innerText = feedbackMessage;
+                            document.getElementById('modal').style.display = 'flex';
+
+                        } catch (error) {
+                            document.getElementById('feedbackMessage').innerText = 'An error occurred while deleting the Customer item.';
+                            document.getElementById('modal').style.display = 'flex';
+                        }
+                    }
+                }
+
+                async function approveBook(id) {
+                    try {
+                        const response = await fetch(`./api/approveBook.php`, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({ id: id }), // Send the ID in the body of the POST request
+                        });
+
+                        let data = await response.json();
+                        let feedbackMessage = '';
+
+                        if (data.status === 'success') {
+                            feedbackMessage = data.message;
+                        } else {
+                            feedbackMessage = data.message;
+                        }
+
+                        document.getElementById('feedbackMessage').innerText = feedbackMessage;
+                        document.getElementById('modal').style.display = 'flex';
+                        // Reload the page to update the table
+                        window.location.reload();
+                    } catch (error) {
+                        document.getElementById('feedbackMessage').innerText = 'An error occurred while Approving the request.';
+                        document.getElementById('modal').style.display = 'flex';
+                    }
+                }
+
+                const popbutton = document.getElementById('popupbutt');
+
+                popbutton.addEventListener("click", () => {
+                    document.getElementById('modal').style.display = 'none';
+                    if (document.getElementById('feedbackMessage').innerText === 'Signup successful!') {
+                        loginModal.classList.remove('hidden');
+                        loginModal.classList.add('flex');
+                        signupModal.classList.add('hidden');
+                        signupModal.classList.remove('flex');
+                    } else if (document.getElementById('feedbackMessage').innerText === 'Logged In successfully!') {
+                        window.location.reload();
+                    } else if (document.getElementById('feedbackMessage').innerText === 'Storage added successfully') {
+                        window.location.reload();
+                    } else if (document.getElementById('feedbackMessage').innerText === 'Storage updated successfully') {
+                        window.location.reload();
+                    } else if (document.getElementById('feedbackMessage').innerText === 'Customer deleted successfully') {
+                        window.location.reload();
+                    }
+                });
+                // JavaScript to switch content based on sidebar click
+                document.addEventListener("DOMContentLoaded", function () {
+                    const links = document.querySelectorAll('.navlink');
+                    const contentSections = document.querySelectorAll('.content-section');
+
+                    links.forEach(link => {
+                        link.addEventListener('click', (e) => {
+                            e.preventDefault(); // Prevent default anchor behavior
+
+                            // Remove active class from all links
+                            links.forEach(l => l.classList.remove('border-l-4', 'border-blue-500', 'bg-slate-200', 'font-semibold'));
+
+                            const targetId = link.getAttribute('data-target');
+                            console.log(targetId);
+
+                            // Hide all sections
+                            contentSections.forEach(section => {
+                                section.classList.add('hidden');
+                            });
+
+                            // Show the selected section
+                            const targetSection = document.getElementById(targetId);
+                            targetSection.classList.remove('hidden');
+
+                            // Add active class to the clicked link
+                            link.classList.add('border-l-4', 'border-blue-500', 'bg-slate-200', 'font-semibold');
+
+                        });
                     });
-                    let data = await response.json();
-                    let feedbackMessage = '';
+                });
 
-                    if (data.status === 'success') {
-                        feedbackMessage = data.message;
-                    } else {
-                        feedbackMessage = data.message;
-                    }
 
-                    document.getElementById('feedbackMessage').innerText = feedbackMessage;
-                    document.getElementById('modal').style.display = 'flex';
+                const salesData = <?php echo json_encode($SalesData); ?>;
+                const inventoryData = <?php echo json_encode($InventoryData); ?>;
 
-                } catch (error) {
-                    document.getElementById('feedbackMessage').innerText = 'An error occurred while deleting the Customer item.';
-                    document.getElementById('modal').style.display = 'flex';
-                }
-            }
-        }
-
-        async function approveBook(id) {
-            try {
-                const response = await fetch(`./api/approveBook.php`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
+                const salesCtx = document.getElementById('salesChart').getContext('2d');
+                const salesChart = new Chart(salesCtx, {
+                    type: 'line',
+                    data: {
+                        labels: salesData.labels,
+                        datasets: [{
+                            label: 'Sales',
+                            data: salesData.current,
+                            borderColor: 'blue',
+                            fill: false
+                        }]
                     },
-                    body: JSON.stringify({ id: id }), // Send the ID in the body of the POST request
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
                 });
 
-                let data = await response.json();
-                let feedbackMessage = '';
+                const inventoryCtx = document.getElementById('inventoryChart').getContext('2d');
+                const inventoryChart = new Chart(inventoryCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: inventoryData.labels,
+                        datasets: [{
+                            data: inventoryData.data,
+                            backgroundColor: ['blue', 'red', 'orange', 'gray']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false
+                    }
+                });
 
-                if (data.status === 'success') {
-                    feedbackMessage = data.message;
-                } else {
-                    feedbackMessage = data.message;
+                const addStorage = document.getElementById('addStorageForm');
+
+                addStorage.addEventListener('submit', async (event) => {
+                    event.preventDefault();
+                    const formData = new FormData(event.target);
+
+                    try {
+                        const response = await fetch('./api/addStorage.php', {
+                            method: 'POST',
+                            body: formData
+                        });
+                        const data = await response.json();
+                        let feedbackMessage = '';
+
+                        if (data.status === 'success') {
+                            feedbackMessage = data.message;
+                        } else {
+                            feedbackMessage = data.message;
+                        }
+
+                        document.getElementById('feedbackMessage').innerText = feedbackMessage;
+                        document.getElementById('modal').style.display = 'flex';
+
+
+                    } catch (error) {
+                        console.error('Error:', error);
+                        document.getElementById('feedbackMessage').innerText = 'An error occurred while processing your request.';
+                        document.getElementById('modal').style.display = 'flex';
+                    }
+                    document.getElementById('addStorageForm').reset();
+                });
+
+                async function showRentDetails(storageId) {
+                    try {
+                        const response = await fetch(`./api/getStorageRentDetails.php?storage_id=${storageId}`);
+                        const data = await response.json();
+                        const rentDetailsBody = document.getElementById('rentDetailsBody');
+                        rentDetailsBody.innerHTML = '';
+
+                        if (data.length > 0) {
+                            data.forEach(row => {
+                                const tr = document.createElement('tr');
+                                tr.classList.add('border-b');
+                                tr.innerHTML = `
+                                    <td class="py-2">${row.firstname}</td>
+                                    <td class="py-2">${row.lastname}</td>
+                                    <td class="py-2">${row.start_date}</td>
+                                    <td class="py-2">${row.end_date}</td>
+                                `;
+                                rentDetailsBody.appendChild(tr);
+                            });
+                        } else {
+                            rentDetailsBody.innerHTML = '<tr><td colspan="4" class="py-2 text-center">No rent details found.</td></tr>';
+                        }
+
+                        document.getElementById('rentDetails').classList.remove('hidden');
+                    } catch (error) {
+                        console.error('Error fetching rent details:', error);
+                    }
                 }
 
-                document.getElementById('feedbackMessage').innerText = feedbackMessage;
-                document.getElementById('modal').style.display = 'flex';
-                // Reload the page to update the table
-                window.location.reload();
-            } catch (error) {
-                document.getElementById('feedbackMessage').innerText = 'An error occurred while Approving the request.';
-                document.getElementById('modal').style.display = 'flex';
-            }
-        }
+                async function disableStorage(id) {
+                    if (confirm('Are you sure you want to disable this storage item?')) {
+                        let feedbackMessage = ''; // Initialize feedbackMessage
 
-        const popbutton = document.getElementById('popupbutt');
+                        try {
+                            let response = await fetch(`./api/DisableStorage.php?id=${id}`, {
+                                method: 'GET',
+                            });
 
-        popbutton.addEventListener("click", () => {
-            document.getElementById('modal').style.display = 'none';
-            if (document.getElementById('feedbackMessage').innerText === 'Signup successful!') {
-                loginModal.classList.remove('hidden');
-                loginModal.classList.add('flex');
-                signupModal.classList.add('hidden');
-                signupModal.classList.remove('flex');
-            } else if (document.getElementById('feedbackMessage').innerText === 'Logged In successfully!') {
-                window.location.reload();
-            } else if (document.getElementById('feedbackMessage').innerText === 'Storage added successfully') {
-                window.location.reload();
-            } else if (document.getElementById('feedbackMessage').innerText === 'Storage updated successfully') {
-                window.location.reload();
-            } else if (document.getElementById('feedbackMessage').innerText === 'Customer deleted successfully') {
-                window.location.reload();
-            }
-        });
-        // JavaScript to switch content based on sidebar click
-        document.addEventListener("DOMContentLoaded", function () {
-            const links = document.querySelectorAll('.navlink');
-            const contentSections = document.querySelectorAll('.content-section');
+                            let data = await response.json();
 
-            links.forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault(); // Prevent default anchor behavior
+                            if (data.status === 'success') {
+                                feedbackMessage = data.message;
+                                // Remove the disabled row from the table
+                                document.querySelector(`#storage-row-${id}`).remove();
+                            } else {
+                                feedbackMessage = data.message;
+                            }
+                        } catch (error) {
+                            feedbackMessage = 'An error occurred while disabling the storage. Please try again later.';
+                        }
 
-                    // Remove active class from all links
-                    links.forEach(l => l.classList.remove('border-l-4', 'border-blue-500', 'bg-slate-200', 'font-semibold'));
-
-                    const targetId = link.getAttribute('data-target');
-                    console.log(targetId);
-
-                    // Hide all sections
-                    contentSections.forEach(section => {
-                        section.classList.add('hidden');
-                    });
-
-                    // Show the selected section
-                    const targetSection = document.getElementById(targetId);
-                    targetSection.classList.remove('hidden');
-
-                    // Add active class to the clicked link
-                    link.classList.add('border-l-4', 'border-blue-500', 'bg-slate-200', 'font-semibold');
-
-                });
-            });
-        });
-
-
-        // const salesCtx = document.getElementById('salesChart').getContext('2d');
-        // const salesChart = new Chart(salesCtx, {
-        //     type: 'line',
-        //     data: {
-        //         labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
-        //         datasets: [{
-        //             label: 'Progreso actual',
-        //             data: [20, 40, 60, 50, 70, 80],
-        //             borderColor: 'blue',
-        //             fill: false
-        //         }, {
-        //             label: 'Progreso Ideal',
-        //             data: [30, 50, 70, 60, 80, 90],
-        //             borderColor: 'lightblue',
-        //             borderDash: [5, 5],
-        //             fill: false
-        //         }]
-        //     },
-        //     options: {
-        //         responsive: true,
-        //         maintainAspectRatio: false,
-        //         scales: {
-        //             y: {
-        //                 beginAtZero: true,
-        //                 max: 100
-        //             }
-        //         }
-        //     }
-        // });
-
-        // const inventoryCtx = document.getElementById('inventoryChart').getContext('2d');
-        // const inventoryChart = new Chart(inventoryCtx, {
-        //     type: 'doughnut',
-        //     data: {
-        //         labels: ['Stock', 'Defectuosos', 'Agotados', 'Obsoletos'],
-        //         datasets: [{
-        //             data: [65, 10, 20, 5],
-        //             backgroundColor: ['blue', 'red', 'orange', 'gray']
-        //         }]
-        //     },
-        //     options: {
-        //         responsive: true,
-        //         maintainAspectRatio: false
-        //     }
-        // });
-
-        const addStorage = document.getElementById('addStorageForm');
-
-        addStorage.addEventListener('submit', async (event) => {
-            event.preventDefault();
-            const formData = new FormData(event.target);
-
-            try {
-                const response = await fetch('./api/addStorage.php', {
-                    method: 'POST',
-                    body: formData
-                });
-                const data = await response.json();
-                let feedbackMessage = '';
-
-                if (data.status === 'success') {
-                    feedbackMessage = data.message;
-                } else {
-                    feedbackMessage = data.message;
+                        // Display feedback message in the modal
+                        document.getElementById('feedbackMessage').innerText = feedbackMessage;
+                        document.getElementById('modal').style.display = 'flex';
+                    }
                 }
 
-                document.getElementById('feedbackMessage').innerText = feedbackMessage;
-                document.getElementById('modal').style.display = 'flex';
+                async function enableStorage(id) {
+                    if (confirm('Are you sure you want to enable this storage item?')) {
+                        let feedbackMessage = ''; // Initialize feedbackMessage
+
+                        try {
+                            let response = await fetch(`./api/EnableStorage.php?id=${id}`, {
+                                method: 'GET',
+                            });
+
+                            let data = await response.json();
+
+                            if (data.status === 'success') {
+                                feedbackMessage = data.message;
+                                // Reload the page to update the table
+                                window.location.reload();
+                            } else {
+                                feedbackMessage = data.message;
+                            }
+                        } catch (error) {
+                            feedbackMessage = 'An error occurred while enabling the storage. Please try again later.';
+                        }
+
+                        // Display feedback message in the modal
+                        document.getElementById('feedbackMessage').innerText = feedbackMessage;
+                        document.getElementById('modal').style.display = 'flex';
+                    }
+                }
 
 
-            } catch (error) {
-                console.error('Error:', error);
-                document.getElementById('feedbackMessage').innerText = 'An error occurred while processing your request.';
-                document.getElementById('modal').style.display = 'flex';
-            }
-            document.getElementById('addStorageForm').reset();
-        });
-    </script>
+                async function restrictUser(id) {
+                    if (confirm('Are you sure you want to restrict this user?')) {
+                        try {
+                            let response = await fetch(`./api/RestrictUser.php?id=${id}`, {
+                                method: 'GET',
+                            });
+                            let data = await response.json();
+                            let feedbackMessage = '';
+
+                            if (data.status === 'success') {
+                                feedbackMessage = data.message;
+                            } else {
+                                feedbackMessage = data.message;
+                            }
+
+                            document.getElementById('feedbackMessage').innerText = feedbackMessage;
+                            document.getElementById('modal').style.display = 'flex';
+
+                        } catch (error) {
+                            document.getElementById('feedbackMessage').innerText = 'An error occurred while restricting the user.';
+                            document.getElementById('modal').style.display = 'flex';
+                        }
+                    }
+                }
+
+                async function unrestrictUser(id) {
+                    if (confirm('Are you sure you want to unrestrict this user?')) {
+                        try {
+                            let response = await fetch(`./api/UnrestrictUser.php?id=${id}`, {
+                                method: 'GET',
+                            });
+                            let data = await response.json();
+                            let feedbackMessage = '';
+
+                            if (data.status === 'success') {
+                                feedbackMessage = data.message;
+                            } else {
+                                feedbackMessage = data.message;
+                            }
+
+                            document.getElementById('feedbackMessage').innerText = feedbackMessage;
+                            document.getElementById('modal').style.display = 'flex';
+
+                        } catch (error) {
+                            document.getElementById('feedbackMessage').innerText = 'An error occurred while unrestricting the user.';
+                            document.getElementById('modal').style.display = 'flex';
+                        }
+                    }
+                }
+
+            </script>
 </body>
 
 

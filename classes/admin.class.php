@@ -98,7 +98,7 @@ class Admin
         $sql = "SELECT s.*, c.name AS category_name, st.status_name 
             FROM storage s 
             JOIN category c ON s.category_id = c.id 
-            JOIN status st ON s.status_id = st.id;";
+            JOIN status st ON s.status_id = st.id;"; // Include all storage items
 
         $stmt = $this->db->connect()->prepare($sql);
         $stmt->execute();
@@ -243,6 +243,123 @@ class Admin
         return $result;
     }
 
+    public function getClosedBooking()
+    {
+        $sql = "SELECT 
+        c.firstname, 
+        c.lastname, 
+        c.email, 
+        c.phone, 
+        b.id AS booking_id,
+        b.booking_date, 
+        b.months AS 'months',
+        b.start_date, 
+        b.end_date, 
+        b.total_amount, 
+        s.name AS storage_name, 
+        s.area, 
+        s.price, 
+        bs.status_name AS booking_status, 
+        p.payment_method, 
+        p.payment_date, 
+        ps.status_name AS payment_status
+    FROM booking b
+    JOIN customer c ON b.customer_id = c.id
+    JOIN storage s ON b.storage_id = s.id
+    JOIN booking_status bs ON b.booking_status_id = bs.id
+    LEFT JOIN payment p ON b.id = p.booking_id
+    LEFT JOIN payment_status ps ON p.payment_status_id = ps.id
+    WHERE bs.status_name = :status";
+
+        $stmt = $this->db->connect()->prepare($sql);
+
+        // Set the status value to 'Closed'
+        $CLOSED = 'Closed';
+
+        // Bind the status parameter
+        $stmt->bindParam(':status', $CLOSED);
+        $stmt->execute();
+
+        // Fetch all results as an associative array
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
+
+    public function getCustomerBookingCount()
+    {
+        $sql = "SELECT s.name AS storage_name, COUNT(b.id) AS booking_count
+                FROM booking b
+                JOIN storage s ON b.storage_id = s.id
+                GROUP BY s.name";
+        $stmt = $this->db->connect()->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getMonthlyEarnings()
+    {
+        $sql = "SELECT s.id AS storage_id, s.name AS storage_name, MONTH(b.booking_date) AS month, SUM(b.total_amount) AS total_earnings
+                FROM booking b
+                JOIN storage s ON b.storage_id = s.id
+                GROUP BY s.name, MONTH(b.booking_date)";
+        $stmt = $this->db->connect()->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getStorageRentDetails($storageId)
+    {
+        $sql = "SELECT c.firstname, c.lastname, b.start_date, b.end_date
+                FROM booking b
+                JOIN customer c ON b.customer_id = c.id
+                WHERE b.storage_id = :storage_id";
+        $stmt = $this->db->connect()->prepare($sql);
+        $stmt->bindParam(':storage_id', $storageId);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getSalesData()
+    {
+        $sql = "SELECT MONTH(booking_date) AS month, SUM(total_amount) AS total
+                FROM booking
+                GROUP BY MONTH(booking_date)";
+        $stmt = $this->db->connect()->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $labels = [];
+        $current = [];
+
+        foreach ($result as $row) {
+            $labels[] = date('F', mktime(0, 0, 0, $row['month'], 10));
+            $current[] = $row['total'];
+        }
+
+        return ['labels' => $labels, 'current' => $current];
+    }
+
+    public function getInventoryData()
+    {
+        $sql = "SELECT status_name, COUNT(*) AS count
+                FROM storage
+                JOIN status ON storage.status_id = status.id
+                GROUP BY status_name";
+        $stmt = $this->db->connect()->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $labels = [];
+        $data = [];
+
+        foreach ($result as $row) {
+            $labels[] = $row['status_name'];
+            $data[] = $row['count'];
+        }
+
+        return ['labels' => $labels, 'data' => $data];
+    }
 
     public function logout()
     {
@@ -250,9 +367,53 @@ class Admin
         return ['status' => 'success', 'message' => 'Logged Out successfully!'];
     }
 
+    public function disableStorage($id)
+    {
+        $sql = "UPDATE storage SET status_id = 2 WHERE id = :id"; // Assuming '2' is the ID for 'Disabled' status
+        $stmt = $this->db->connect()->prepare($sql);
+        $stmt->bindParam(':id', $id);
 
+        if ($stmt->execute()) {
+            return ['status' => 'success', 'message' => 'Storage disabled successfully'];
+        } else {
+            return ['status' => 'error', 'message' => 'Failed to disable storage'];
+        }
+    }
 
+    public function enableStorage($id)
+    {
+        $sql = "UPDATE storage SET status_id = 1 WHERE id = :id"; // Assuming '1' is the ID for 'Enabled' status
+        $stmt = $this->db->connect()->prepare($sql);
+        $stmt->bindParam(':id', $id);
 
+        if ($stmt->execute()) {
+            return ['status' => 'success', 'message' => 'Storage enabled successfully'];
+        } else {
+            return ['status' => 'error', 'message' => 'Failed to enable storage'];
+        }
+    }
+
+    public function restrictUser($id)
+    {
+        $sql = "UPDATE customer SET status = 'Restricted' WHERE id = :id";
+        $stmt = $this->db->connect()->prepare($sql);
+        $stmt->bindParam(':id', $id);
+
+        return $stmt->execute() ?
+            ['status' => 'success', 'message' => 'User restricted successfully'] :
+            ['status' => 'error', 'message' => 'Failed to restrict user'];
+    }
+
+    public function unrestrictUser($id)
+    {
+        $sql = "UPDATE customer SET status = 'Active' WHERE id = :id";
+        $stmt = $this->db->connect()->prepare($sql);
+        $stmt->bindParam(':id', $id);
+
+        return $stmt->execute() ?
+            ['status' => 'success', 'message' => 'User unrestricted successfully'] :
+            ['status' => 'error', 'message' => 'Failed to unrestrict user'];
+    }
 
 }
 $adminObj = new Admin();

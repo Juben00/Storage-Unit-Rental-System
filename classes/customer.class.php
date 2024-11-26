@@ -89,6 +89,10 @@ class Customer
             if ($stmt->execute()) {
                 if ($stmt->rowCount() > 0) {
                     $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                    // Check if the user is restricted
+                    if ($row['status'] === 'Restricted') {
+                        return ['status' => 'error', 'message' => 'Your account is restricted. Please contact support.'];
+                    }
                     // Verify the password
                     if (password_verify($this->password, $row['password'])) {
                         session_regenerate_id(true); // Prevent session fixation attacks
@@ -119,10 +123,11 @@ class Customer
 
     public function getAllStorage($category = "")
     {
-        $sql = "SELECT s.*, c.name AS category_name, st.status_name 
+        $sql = "SELECT s.*, c.name AS category_name, st.status_name AS status
             FROM storage s 
             JOIN category c ON s.category_id = c.id 
-            JOIN status st ON s.status_id = st.id WHERE (c.id LIKE CONCAT('%', :cat, '%'));";
+            JOIN status st ON s.status_id = st.id 
+            WHERE st.status_name != 'Disabled' AND (c.id LIKE CONCAT('%', :cat, '%'));";
         $stmt = $this->db->connect()->prepare($sql);
         $stmt->bindParam(':cat', $category);
         $stmt->execute();
