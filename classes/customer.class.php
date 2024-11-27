@@ -391,6 +391,18 @@ class Customer
         return $result['count'] == 0;
     }
 
+    public function getReviews($storageId)
+    {
+        $sql = "SELECT r.review, r.rating, CONCAT(c.firstname, ' ', c.lastname) AS user_name 
+                FROM reviews r 
+                JOIN customer c ON r.userId = c.id 
+                WHERE r.storage_id = :storage_id;";
+        $stmt = $this->db->connect()->prepare($sql);
+        $stmt->bindParam(':storage_id', $storageId);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 }
 $customerObj = new Customer();
 

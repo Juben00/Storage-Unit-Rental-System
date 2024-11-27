@@ -26,8 +26,8 @@ $rentedStorage = $customerObj->getBookings($id);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="./output.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
     <link rel="icon" href="./images/logo white transparent.png">
     <style>
         .hidden-content {
@@ -64,7 +64,7 @@ $rentedStorage = $customerObj->getBookings($id);
 <body class="bg-gray-100">
     <div class="flex h-screen">
         <!-- Sidebar -->
-        <div class="w-1/5 bg-white sm:p-4 border-2 flex flex-col relative" id="sidebar">
+        <div class="w-1/5 bg-white sm:p-4 border-r-2 flex flex-col relative" id="sidebar">
             <button class="text-white z-50 bg-blue-500 p-2 rounded absolute top-2 right-2" id="toggle-button"
                 onclick="toggleSidebar()">
                 <span class="toggle-text">
@@ -84,7 +84,7 @@ $rentedStorage = $customerObj->getBookings($id);
 
             <div class="" id="proflinks">
                 <ul>
-                    <a class="mb-1 rounded-xl cursor-pointer flex items-center gap-2 hover:bg-slate-400 py-2 px-1 duration-150"
+                    <a class="mb-1 rounded-xl cursor-pointer flex items-center gap-2 hover:bg-blue-500 hover:text-white py-2 px-1 duration-150"
                         href="index.php">
                         <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
@@ -100,7 +100,7 @@ $rentedStorage = $customerObj->getBookings($id);
                             Home
                         </span>
                     </a>
-                    <li class="mb-1 rounded-xl cursor-pointer flex items-center gap-2 hover:bg-slate-400 py-2 px-1 duration-150"
+                    <li class="mb-1 rounded-xl cursor-pointer flex items-center gap-2 hover:bg-blue-500 hover:text-white py-2 px-1 duration-150"
                         onclick="showContent('profile-content')">
                         <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
@@ -113,7 +113,7 @@ $rentedStorage = $customerObj->getBookings($id);
                         </svg>
                         <span class="sidebar-text">Profile</span>
                     </li>
-                    <li class="mb-1 rounded-xl cursor-pointer flex items-center gap-2 hover:bg-slate-400 py-2 px-1 duration-150"
+                    <li class="mb-1 rounded-xl cursor-pointer flex items-center gap-2 hover:bg-blue-500 hover:text-white py-2 px-1 duration-150"
                         onclick="showContent('rents-content')">
                         <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
@@ -123,7 +123,7 @@ $rentedStorage = $customerObj->getBookings($id);
                         </svg>
                         <span class="sidebar-text">Rents</span>
                     </li>
-                    <li class="mb-1 rounded-xl cursor-pointer flex items-center gap-2 hover:bg-slate-400 py-2 px-1 duration-150"
+                    <li class="mb-1 rounded-xl cursor-pointer flex items-center gap-2 hover:bg-blue-500 hover:text-white py-2 px-1 duration-150"
                         onclick="showContent('saved-content')">
                         <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
@@ -134,7 +134,7 @@ $rentedStorage = $customerObj->getBookings($id);
                         <span class="sidebar-text">Saved</span>
                     </li>
                     <li
-                        class="mb-1 rounded-xl cursor-pointer flex items-center gap-2 hover:bg-slate-400 py-2 px-1 duration-150">
+                        class="mb-1 rounded-xl cursor-pointer flex items-center gap-2 hover:bg-blue-500 hover:text-white py-2 px-1 duration-150">
                         <svg viewBox="0 0 24 24" height="20" width="20" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                             <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -164,77 +164,75 @@ $rentedStorage = $customerObj->getBookings($id);
         <div class="flex-1 p-4 lg:p-8 h-screen overflow-y-scroll">
 
             <div id="profile-content" class="active-content">
-                <div class="bg-white p-6 rounded-lg shadow ">
-                    <h2 class="text-xl font-semibold mb-4"> Profile Picture </h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h2 class="text-2xl font-semibold mb-4">Profile Picture</h2>
                     <div class="flex items-center mb-6">
                         <img alt="Profile picture of a person" class="w-16 h-16 rounded-full mr-4" height="100"
                             src="./images/OIP.jpg" width="100" />
                         <div class="flex flex-col gap-2 md:flex-row">
-                            <button class="bg-blue-500 text-white lg:px-4 lg:py-2 p-2 rounded"> Change picture </button>
-                            <button class="bg-red-500 text-white lg:px-4 lg:py-2 p-2 rounded"> Delete picture </button>
+                            <button class="bg-blue-500 text-white lg:px-4 lg:py-2 p-2 rounded">Change picture</button>
+                            <button class="bg-red-500 text-white lg:px-4 lg:py-2 p-2 rounded">Delete picture</button>
                         </div>
                     </div>
                     <div class="mb-4 flex items-center gap-2">
                         <span class="w-full">
-                            <label class="block text-gray-700 mb-2"> First Name </label>
+                            <label class="block text-gray-700 mb-2">First Name</label>
                             <input class="w-full border rounded px-4 py-2" type="text"
-                                value="<?php echo htmlentities($profile['firstname']) ?>" />
+                                value="<?php echo htmlspecialchars($profile['firstname']) ?>" />
                         </span>
                         <span class="w-full">
-                            <label class="block text-gray-700 mb-2"> Last Name </label>
+                            <label class="block text-gray-700 mb-2">Last Name</label>
                             <input class="w-full border rounded px-4 py-2" type="text"
-                                value="<?php echo htmlentities($profile['lastname']) ?>" />
+                                value="<?php echo htmlspecialchars($profile['lastname']) ?>" />
                         </span>
                     </div>
                     <div class="mb-4 flex items-center gap-2">
                         <span class="w-full">
-                            <label class="block text-gray-700 mb-2"> Birthdate </label>
+                            <label class="block text-gray-700 mb-2">Birthdate</label>
                             <input class="w-full border rounded px-4 py-2" type="date"
-                                value="<?php echo htmlentities($profile['birthdate']) ?>" />
+                                value="<?php echo htmlspecialchars($profile['birthdate']) ?>" />
                         </span>
                         <span class="w-full">
-                            <label class="block text-gray-700 mb-2"> Sex </label>
+                            <label class="block text-gray-700 mb-2">Sex</label>
                             <input class="w-full border rounded px-4 py-2" type="text"
-                                value="<?php echo htmlentities($profile['sex']) ?>" />
+                                value="<?php echo htmlspecialchars($profile['sex']) ?>" />
                         </span>
                     </div>
                     <div class="mb-4 flex items-center gap-2">
                         <span class="w-full">
-                            <label class="block text-gray-700 mb-2"> Email </label>
-                            <input class="w-full border rounded px-4 py-2 " type="text"
-                                value="<?php echo htmlentities($profile['email']) ?>" />
+                            <label class="block text-gray-700 mb-2">Email</label>
+                            <input class="w-full border rounded px-4 py-2" type="text"
+                                value="<?php echo htmlspecialchars($profile['email']) ?>" />
                         </span>
                         <span class="w-full">
-                            <label class="block text-gray-700 mb-2"> Phone Number</label>
+                            <label class="block text-gray-700 mb-2">Phone Number</label>
                             <input class="w-full border rounded px-4 py-2" type="text"
-                                value="<?php echo htmlentities($profile['phone']) ?>" />
+                                value="<?php echo htmlspecialchars($profile['phone']) ?>" />
                         </span>
                     </div>
                     <div class="mb-4">
-                        <label class="block text-gray-700 mb-2">
-                            Address
-                        </label>
-                        <input class="w-full border rounded px-4 py-2 " type="text"
-                            value="<?php echo htmlentities($profile['address']) ?>" />
+                        <label class="block text-gray-700 mb-2">Address</label>
+                        <input class="w-full border rounded px-4 py-2" type="text"
+                            value="<?php echo htmlspecialchars($profile['address']) ?>" />
                     </div>
                     <div class="mb-4 flex items-center gap-2">
                         <span class="w-full">
-                            <label class="block text-gray-700 mb-2"> Password </label>
-                            <input class="w-full border rounded px-4 py-2 " type="password"
+                            <label class="block text-gray-700 mb-2">Password</label>
+                            <input class="w-full border rounded px-4 py-2" type="password"
                                 placeholder="Input Password to update your data." />
                         </span>
                         <span class="w-full">
-                            <label class="block text-gray-700 mb-2"> Confirm password </label>
+                            <label class="block text-gray-700 mb-2">Confirm password</label>
                             <input class="w-full border rounded px-4 py-2" type="password"
                                 placeholder="Confirm Password to update your data." />
                         </span>
                     </div>
-                    <button class="bg-blue-500 text-slate-50 px-4 py-2 rounded"> Save changes </button>
+                    <button class="bg-blue-500 text-white px-4 py-2 rounded">Save changes</button>
                 </div>
             </div>
 
             <div id="rents-content" class="hidden-content">
-                <div class="bg-white p-6 rounded-lg shadow ">
+                <div class="bg-white p-6 rounded-lg shadow-lg">
                     <h1 class="text-2xl mb-4">Rented Storage</h1>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ">
                         <?php if (!empty($rentedStorage)): ?>
@@ -318,7 +316,7 @@ $rentedStorage = $customerObj->getBookings($id);
             </div>
 
             <div id="saved-content" class="hidden-content">
-                <div class="bg-white p-6 rounded-lg shadow ">
+                <div class="bg-white p-6 rounded-lg shadow-lg">
                     <h1 class="text-2xl mb-4">Saved Storages</h1>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ">
                         <?php if (!empty($bookmarkedStorage)): ?>

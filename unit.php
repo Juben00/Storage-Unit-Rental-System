@@ -32,6 +32,9 @@ $bookedDates = json_encode($getBookedDate);
 $isLoginPop = false;
 $feedbackMessage = "";
 
+// Fetch reviews for the storage unit
+$reviews = $customerObj->getReviews($idparam);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -263,6 +266,23 @@ $feedbackMessage = "";
                     class="w-full text-white mt-auto py-3 px-6 rounded-lg cursor-not-allowed bg-blue-400 transition duration-300">
                     Book This Storage
                 </a>
+
+                <!-- Reviews Section -->
+                <div class="mt-8">
+                    <h2 class="text-2xl font-bold mb-4">Reviews</h2>
+                    <?php if (!empty($reviews)): ?>
+                        <?php foreach ($reviews as $review): ?>
+                            <div class="mb-4 p-4 bg-white rounded-lg shadow">
+                                <p class="font-semibold"><?php echo htmlspecialchars($review['user_name']); ?></p>
+                                <p class="text-sm text-gray-600"><?php echo htmlspecialchars($review['review']); ?></p>
+                                <p class="text-sm text-yellow-500">Rating: <?php echo htmlspecialchars($review['rating']); ?>/5
+                                </p>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <p>No reviews available for this storage unit.</p>
+                    <?php endif; ?>
+                </div>
             </div>
     </main>
 
