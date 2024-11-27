@@ -226,7 +226,7 @@ class Admin
     JOIN booking_status bs ON b.booking_status_id = bs.id
     LEFT JOIN payment p ON b.id = p.booking_id
     LEFT JOIN payment_status ps ON p.payment_status_id = ps.id
-    WHERE bs.status_name = :status";
+    WHERE bs.status_name = :status AND b.end_date >= CURDATE()";
 
         $stmt = $this->db->connect()->prepare($sql);
 
@@ -269,7 +269,7 @@ class Admin
     JOIN booking_status bs ON b.booking_status_id = bs.id
     LEFT JOIN payment p ON b.id = p.booking_id
     LEFT JOIN payment_status ps ON p.payment_status_id = ps.id
-    WHERE bs.status_name = :status";
+    WHERE bs.status_name = :status OR b.end_date < CURDATE()";
 
         $stmt = $this->db->connect()->prepare($sql);
 
