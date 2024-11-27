@@ -403,6 +403,22 @@ class Customer
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function saveTestimonial($testimonial)
+    {
+        $sql = "INSERT INTO testimonials (content) VALUES (:content)";
+        $stmt = $this->db->connect()->prepare($sql);
+        $stmt->bindParam(':content', $testimonial);
+        return $stmt->execute();
+    }
+
+    public function getTestimonials()
+    {
+        $sql = "SELECT * FROM testimonials";
+        $stmt = $this->db->connect()->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 }
 $customerObj = new Customer();
 

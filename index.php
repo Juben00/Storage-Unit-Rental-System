@@ -22,8 +22,14 @@ $Storages = array_filter($Storages, function ($storage) {
     return $storage['status'] !== 'disabled';
 });
 
+$testimonials = $customerObj->getTestimonials();
 
-
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['testimonial'])) {
+    $testimonial = htmlspecialchars($_POST['testimonial']);
+    $customerObj->saveTestimonial($testimonial);
+    header('Location: index.php');
+    exit;
+}
 
 ?>
 
@@ -190,34 +196,16 @@ $Storages = array_filter($Storages, function ($storage) {
                         <h3 class="text-2xl font-bold mb-4">
                             What they say about us
                         </h3>
-                        <div class="flex items-start mb-4">
-                            <i class="fas fa-quote-left text-4xl text-blue-600 mr-4">
-                            </i>
-                            <p class="text-gray-600">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vehicula metus eu libero
-                                bibendum, pulvinar dapibus leo.
-                            </p>
-                        </div>
-                        <div class="flex items-center">
-                            <img alt="Person's face" class="rounded-full mr-4" height="50" src="./images/OIP.jpg"
-                                width="50" />
-                            <div>
-                                <p class="font-semibold">
-                                    John Doe
-                                </p>
-                                <p class="text-gray-600">
-                                    Customer
-                                </p>
+                        <?php foreach ($testimonials as $testimonial): ?>
+                            <div class="flex items-start mb-4">
+                                <i class="fas fa-quote-left text-4xl text-blue-600 mr-4"></i>
+                                <p class="text-gray-600"><?php echo htmlspecialchars($testimonial['content']); ?></p>
                             </div>
-                        </div>
-                        <div class="flex items-start mt-8">
-                            <i class="fas fa-quote-left text-4xl text-blue-600 mr-4">
-                            </i>
-                            <p class="text-gray-600">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vehicula metus eu libero
-                                bibendum, pulvinar dapibus leo.
-                            </p>
-                        </div>
+                        <?php endforeach; ?>
+                        <form method="POST" action="">
+                            <textarea name="testimonial" class="w-full p-2 border rounded" placeholder="Write your testimonial here..." required></textarea>
+                            <button type="submit" class="mt-2 px-4 py-2 bg-blue-600 text-white font-semibold rounded">Submit</button>
+                        </form>
                     </div>
                 </div>
         </section>
