@@ -453,6 +453,21 @@ $feedbackMessage = "";
                         }
                     });
 
+                    // Disable dates in gaps smaller than 30 days
+                    for (let j = 0; j < bookedDates.length - 1; j++) {
+                        const currentEndDate = new Date(bookedDates[j].end_date);
+                        const nextStartDate = new Date(bookedDates[j + 1].start_date);
+
+                        // Calculate the gap in days
+                        const gapInDays = (nextStartDate - currentEndDate) / (1000 * 60 * 60 * 24);
+
+                        // If the gap is less than 30 days, disable the dates in the gap
+                        if (gapInDays < 30 && currentDate > currentEndDate && currentDate < nextStartDate) {
+                            button.disabled = true;
+                            button.classList.add('cursor-not-allowed', 'bg-yellow-300', 'text-white', 'font-bold'); // Add styles for small gaps
+                        }
+                    }
+
                     button.addEventListener('click', () => confirmBooking(selectedYear, monthIndex, i));
                     daySelection.appendChild(button);
                 }
