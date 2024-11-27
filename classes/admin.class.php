@@ -426,6 +426,43 @@ class Admin
         return $result['total_sales'];
     }
 
+    public function getAllTestimonials()
+    {
+        $sql = "SELECT * FROM testimonials";
+        $stmt = $this->db->connect()->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function addTestimonial($name, $content, $status)
+    {
+        $sql = "INSERT INTO testimonials (name, content, status) VALUES (:name, :content, :status)";
+        $stmt = $this->db->connect()->prepare($sql);
+        $stmt->bindParam(':name', $name);
+        $stmt->bindParam(':content', $content);
+        $stmt->bindParam(':status', $status);
+        return $stmt->execute() ? ['status' => 'success', 'message' => 'Testimonial added successfully'] : ['status' => 'error', 'message' => 'Failed to add testimonial'];
+    }
+
+    public function updateTestimonial($id, $name, $content, $status)
+    {
+        $sql = "UPDATE testimonials SET name = :name, content = :content, status = :status WHERE id = :id";
+        $stmt = $this->db->connect()->prepare($sql);
+        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':name', $name);
+        $stmt->bindParam(':content', $content);
+        $stmt->bindParam(':status', $status);
+        return $stmt->execute() ? ['status' => 'success', 'message' => 'Testimonial updated successfully'] : ['status' => 'error', 'message' => 'Failed to update testimonial'];
+    }
+
+    public function deleteTestimonial($id)
+    {
+        $sql = "DELETE FROM testimonials WHERE id = :id";
+        $stmt = $this->db->connect()->prepare($sql);
+        $stmt->bindParam(':id', $id);
+        return $stmt->execute() ? ['status' => 'success', 'message' => 'Testimonial deleted successfully'] : ['status' => 'error', 'message' => 'Failed to delete testimonial'];
+    }
+
 }
 $adminObj = new Admin();
 

@@ -49,6 +49,11 @@
             <p>Statistics</p>
         </a>
 
+        <a class="navlink flex items-center px-6 py-2 gap-2 text-gray-700" data-target="testimonials" href="#">
+            <i class="fas fa-comments"></i>
+            <p>Testimonials</p>
+        </a>
+
         <a class="navlink flex items-center px-6 py-2 gap-2 text-gray-700" data-target="settings" href="#">
             <i class="fas fa-cog"></i>
             <p>Settings</p>

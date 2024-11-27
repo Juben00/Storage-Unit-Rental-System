@@ -26,6 +26,7 @@ $totalCustomers = count($Customer);
 $totalApproved = count($Approved);
 $totalClosed = count($Closed); // Add this line to count closed requests
 $totalSales = $adminObj->getTotalSales();
+$Testimonials = $adminObj->getAllTestimonials();
 
 
 if (isset($_SESSION['customer']['role_name'])) {
@@ -478,14 +479,14 @@ if (isset($_SESSION['customer']['role_name'])) {
                                                 <button
                                                     class="p-2 border-2 border-orange-500 w-[70px] rounded-md font-semibold shadow-md"
                                                     onclick="populateForm({
-        id: '<?php echo htmlspecialchars($item['id']); ?>',
-        name: '<?php echo htmlspecialchars(addslashes($item['name'])); ?>',
-        description: '<?php echo htmlspecialchars(addslashes($item['description'])); ?>',
-        area: '<?php echo htmlspecialchars($item['area']); ?>',
-        category: '<?php echo htmlspecialchars($item['category_id']); ?>', 
-        price: '<?php echo htmlspecialchars($item['price']); ?>',
-        image: '<?php echo htmlspecialchars(addslashes($item['image'])); ?>'
-    })">
+                            id: '<?php echo htmlspecialchars($item['id']); ?>',
+                            name: '<?php echo htmlspecialchars(addslashes($item['name'])); ?>',
+                            description: '<?php echo htmlspecialchars(addslashes($item['description'])); ?>',
+                            area: '<?php echo htmlspecialchars($item['area']); ?>',
+                            category: '<?php echo htmlspecialchars($item['category_id']); ?>', 
+                            price: '<?php echo htmlspecialchars($item['price']); ?>',
+                            image: '<?php echo htmlspecialchars(addslashes($item['image'])); ?>'
+                        })">
                                                     Edit
                                                 </button>
                                                 <button
@@ -791,11 +792,55 @@ if (isset($_SESSION['customer']['role_name'])) {
                 </div>
             </div>
 
+            <div id="testimonials" class="content-section hidden">
+                <div class="flex-1 flex flex-col gap-6">
+                    <div class="flex justify-between items-center">
+                        <h1 class="text-2xl font-semibold">Testimonials</h1>
+                        <a href="#addTestimonialForm" class="bg-blue-600 text-white px-4 py-2 rounded"
+                            id="addTestimonial">+ Add Testimonial</a>
+                    </div>
+
+                    <div class="bg-white p-4 py-6 rounded shadow-md">
+                        <table class="w-full text-left border-collapse overflow-scroll">
+                            <thead>
+                                <tr class="text-gray-600">
+                                    <th class="py-2">ID</th>
+                                    <th class="py-2">Content</th>
+                                    <th class="py-2">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php if (!empty($Testimonials)): ?>
+                                    <?php foreach ($Testimonials as $testimonial): ?>
+                                        <tr class="border-b">
+                                            <td class="py-2"><?php echo htmlspecialchars($testimonial['id']); ?></td>
+                                            <td class="py-2"><?php echo htmlspecialchars($testimonial['content']); ?></td>
+                                            <td class="py-2">
+                                                <button class="p-2 border-2 border-orange-500 rounded-md font-semibold"
+                                                    onclick="editTestimonial(<?php echo htmlspecialchars($testimonial['id']); ?>)">Edit</button>
+                                                <button class="p-2 border-2 border-red-500 rounded-md font-semibold"
+                                                    onclick="deleteTestimonial(<?php echo htmlspecialchars($testimonial['id']); ?>)">Delete</button>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr>
+                                        <td colspan="5" class="py-2 text-center">No testimonials found.</td>
+                                    </tr>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
             <div id="settings" class="content-section hidden">
                 <h1 class="text-2xl font-semibold">
                     Settings
                 </h1>
             </div>
+
             <div id="closed-req" class="content-section hidden">
                 <div class="flex-1 flex flex-col gap-6">
                     <div class="flex justify-between items-center ">
@@ -984,71 +1029,72 @@ if (isset($_SESSION['customer']['role_name'])) {
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
 
-            <script>
+        document.getElementById('updateStorageFormParent').addEventListener('dblclick', (event) => {
+            if (event.target === document.getElementById('updateStorageFormParent')) {
+                document.getElementById('updateStorageFormParent').classList.add('hidden');
+            }
+        });
 
-                document.getElementById('updateStorageFormParent').addEventListener('dblclick', (event) => {
-                    if (event.target === document.getElementById('updateStorageFormParent')) {
-                        document.getElementById('updateStorageFormParent').classList.add('hidden');
-                    }
+        document.getElementById('updateStorageForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+
+            // Debugging: Log the form data
+            for (const [key, value] of formData.entries()) {
+                console.log(key, value);
+            }
+
+            try {
+                const response = await fetch('./api/UpdateStorage.php', {
+                    method: 'POST',
+                    body: formData
                 });
 
-                document.getElementById('updateStorageForm').addEventListener('submit', async (event) => {
-                    event.preventDefault();
-                    const formData = new FormData(event.target);
+                const data = await response.json();
+                console.log(data);
 
-                    // Debugging: Log the form data
-                    for (const [key, value] of formData.entries()) {
-                        console.log(key, value);
-                    }
+                let feedbackMessage = data.status === 'success' ? data.message : data.message;
 
-                    try {
-                        const response = await fetch('./api/UpdateStorage.php', {
-                            method: 'POST',
-                            body: formData
-                        });
+                if (data.status === 'success') {
+                    // Close the modal
+                    document.getElementById('updateStorageFormParent').classList.add('hidden');
+                }
 
-                        const data = await response.json();
-                        console.log(data);
+                document.getElementById('feedbackMessage').innerText = feedbackMessage;
+                document.getElementById('modal').style.display = 'flex';
 
-                        let feedbackMessage = data.status === 'success' ? data.message : data.message;
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('feedbackMessage').innerText = 'An error occurred while updating the storage item.';
+                document.getElementById('modal').style.display = 'flex';
+            }
+        });
 
-                        if (data.status === 'success') {
-                            // Close the modal
-                            document.getElementById('updateStorageFormParent').classList.add('hidden');
-                        }
+        function populateForm(item) {
+            // Show the form
+            document.getElementById('updateStorageFormParent').classList.remove('hidden');
 
-                        document.getElementById('feedbackMessage').innerText = feedbackMessage;
-                        document.getElementById('modal').style.display = 'flex';
+            // Populate form fields
+            document.getElementById('u_id').value = item.id;
+            document.getElementById('u_storageName').value = item.name;
+            document.getElementById('u_description').value = item.description;
+            document.getElementById('u_area').value = item.area;
+            document.getElementById('u_category').value = item.category; // Ensure this matches the category ID
+            document.getElementById('u_price').value = item.price;
 
-                    } catch (error) {
-                        console.error('Error:', error);
-                        document.getElementById('feedbackMessage').innerText = 'An error occurred while updating the storage item.';
-                        document.getElementById('modal').style.display = 'flex';
-                    }
-                });
+            // Handle existing images
+            let existingImages = JSON.parse(item.image || '[]'); // Default to empty array if no images
+            let imagePreview = document.getElementById('imagePreview');
+            imagePreview.innerHTML = ''; // Clear previous images
 
-                function populateForm(item) {
-                    // Show the form
-                    document.getElementById('updateStorageFormParent').classList.remove('hidden');
-
-                    // Populate form fields
-                    document.getElementById('u_id').value = item.id;
-                    document.getElementById('u_storageName').value = item.name;
-                    document.getElementById('u_description').value = item.description;
-                    document.getElementById('u_area').value = item.area;
-                    document.getElementById('u_category').value = item.category; // Ensure this matches the category ID
-                    document.getElementById('u_price').value = item.price;
-
-                    // Handle existing images
-                    let existingImages = JSON.parse(item.image || '[]'); // Default to empty array if no images
-                    let imagePreview = document.getElementById('imagePreview');
-                    imagePreview.innerHTML = ''; // Clear previous images
-
-                    existingImages.forEach((imgUrl, index) => {
-                        const imgTag = `
+            existingImages.forEach((imgUrl, index) => {
+                const imgTag = `
             <div class="relative w-20">
                 <img src="./${imgUrl}" alt="Storage Image" class="w-20 h-20 inline-block mr-2">
                 <button type="button" class="absolute top-1 right-1 text-red-500" onclick="removeImage(${index})">
@@ -1059,23 +1105,23 @@ if (isset($_SESSION['customer']['role_name'])) {
                     </svg>
                 </button>
             </div>`;
-                        imagePreview.innerHTML += imgTag;
-                    });
+                imagePreview.innerHTML += imgTag;
+            });
 
-                    // Set the existing images in a hidden input
-                    document.getElementById('existing_image').value = JSON.stringify(existingImages);
-                }
+            // Set the existing images in a hidden input
+            document.getElementById('existing_image').value = JSON.stringify(existingImages);
+        }
 
-                // Remove image function adjusted
-                function removeImage(index) {
-                    let existingImages = JSON.parse(document.getElementById('existing_image').value);
-                    existingImages.splice(index, 1); // Remove the selected image
-                    document.getElementById('existing_image').value = JSON.stringify(existingImages); // Update hidden input
+        // Remove image function adjusted
+        function removeImage(index) {
+            let existingImages = JSON.parse(document.getElementById('existing_image').value);
+            existingImages.splice(index, 1); // Remove the selected image
+            document.getElementById('existing_image').value = JSON.stringify(existingImages); // Update hidden input
 
-                    // Update the displayed images by clearing and repopulating
-                    document.getElementById('imagePreview').innerHTML = '';
-                    existingImages.forEach((imgUrl, idx) => {
-                        const imgTag = `
+            // Update the displayed images by clearing and repopulating
+            document.getElementById('imagePreview').innerHTML = '';
+            existingImages.forEach((imgUrl, idx) => {
+                const imgTag = `
             <div class="relative w-20">
                 <img src="./${imgUrl}" alt="Storage Image" class="w-20 h-20 inline-block mr-2">
                 <button type="button" class="absolute top-1 right-1 text-red-500" onclick="removeImage(${idx})">
@@ -1086,401 +1132,432 @@ if (isset($_SESSION['customer']['role_name'])) {
                     </svg>
                 </button>
             </div>`;
-                        document.getElementById('imagePreview').innerHTML += imgTag;
+                document.getElementById('imagePreview').innerHTML += imgTag;
+            });
+        }
+
+
+        document.getElementById('u_image').addEventListener('change', function (event) {
+            const files = event.target.files;
+            const previewDiv = document.getElementById('imagePreview');
+            previewDiv.innerHTML = ''; // Clear previous previews
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.className = "w-20 h-20 object-cover mr-2"; // Tailwind styling for preview
+                    previewDiv.appendChild(img);
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        async function deleteStorage(id) {
+            if (confirm('Are you sure you want to delete this storage item?')) {
+                try {
+                    let response = await fetch(`./api/DeleteStorage.php?id=${id}`, {
+                        method: 'GET',
                     });
+                    let data = await response.json();
+                    let feedbackMessage = '';
+
+                    if (data.status === 'success') {
+                        feedbackMessage = data.message;
+                        // Remove the deleted row from the table
+                        document.querySelector(`#storage-row-${id}`).remove();
+                    } else {
+                        feedbackMessage = data.message;
+                    }
+
+                    document.getElementById('feedbackMessage').innerText = feedbackMessage;
+                    document.getElementById('modal').style.display = 'flex';
+
+                } catch (error) {
+                    document.getElementById('feedbackMessage').innerText = 'An error occurred while deleting the storage item.';
+                    document.getElementById('modal').style.display = 'flex';
                 }
+            }
+        }
 
-
-                document.getElementById('u_image').addEventListener('change', function (event) {
-                    const files = event.target.files;
-                    const previewDiv = document.getElementById('imagePreview');
-                    previewDiv.innerHTML = ''; // Clear previous previews
-
-                    for (let i = 0; i < files.length; i++) {
-                        const file = files[i];
-                        const reader = new FileReader();
-                        reader.onload = function (e) {
-                            const img = document.createElement('img');
-                            img.src = e.target.result;
-                            img.className = "w-20 h-20 object-cover mr-2"; // Tailwind styling for preview
-                            previewDiv.appendChild(img);
-                        }
-                        reader.readAsDataURL(file);
-                    }
-                });
-
-                async function deleteStorage(id) {
-                    if (confirm('Are you sure you want to delete this storage item?')) {
-                        try {
-                            let response = await fetch(`./api/DeleteStorage.php?id=${id}`, {
-                                method: 'GET',
-                            });
-                            let data = await response.json();
-                            let feedbackMessage = '';
-
-                            if (data.status === 'success') {
-                                feedbackMessage = data.message;
-                                // Remove the deleted row from the table
-                                document.querySelector(`#storage-row-${id}`).remove();
-                            } else {
-                                feedbackMessage = data.message;
-                            }
-
-                            document.getElementById('feedbackMessage').innerText = feedbackMessage;
-                            document.getElementById('modal').style.display = 'flex';
-
-                        } catch (error) {
-                            document.getElementById('feedbackMessage').innerText = 'An error occurred while deleting the storage item.';
-                            document.getElementById('modal').style.display = 'flex';
-                        }
-                    }
-                }
-
-                async function deleteCustomer(id) {
-                    if (confirm('Are you sure you want to delete this storage item?')) {
-                        try {
-                            let response = await fetch(`./api/deleteCustomer.php?id=${id}`, {
-                                method: 'GET',
-                            });
-                            let data = await response.json();
-                            let feedbackMessage = '';
-
-                            if (data.status === 'success') {
-                                feedbackMessage = data.message;
-                            } else {
-                                feedbackMessage = data.message;
-                            }
-
-                            document.getElementById('feedbackMessage').innerText = feedbackMessage;
-                            document.getElementById('modal').style.display = 'flex';
-
-                        } catch (error) {
-                            document.getElementById('feedbackMessage').innerText = 'An error occurred while deleting the Customer item.';
-                            document.getElementById('modal').style.display = 'flex';
-                        }
-                    }
-                }
-
-                async function approveBook(id) {
-                    try {
-                        const response = await fetch(`./api/approveBook.php`, {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json",
-                            },
-                            body: JSON.stringify({ id: id }), // Send the ID in the body of the POST request
-                        });
-
-                        let data = await response.json();
-                        let feedbackMessage = '';
-
-                        if (data.status === 'success') {
-                            feedbackMessage = data.message;
-                        } else {
-                            feedbackMessage = data.message;
-                        }
-
-                        document.getElementById('feedbackMessage').innerText = feedbackMessage;
-                        document.getElementById('modal').style.display = 'flex';
-                        // Reload the page to update the table
-                        window.location.reload();
-                    } catch (error) {
-                        document.getElementById('feedbackMessage').innerText = 'An error occurred while Approving the request.';
-                        document.getElementById('modal').style.display = 'flex';
-                    }
-                }
-
-                const popbutton = document.getElementById('popupbutt');
-
-                popbutton.addEventListener("click", () => {
-                    document.getElementById('modal').style.display = 'none';
-                    if (document.getElementById('feedbackMessage').innerText === 'Signup successful!') {
-                        loginModal.classList.remove('hidden');
-                        loginModal.classList.add('flex');
-                        signupModal.classList.add('hidden');
-                        signupModal.classList.remove('flex');
-                    } else if (document.getElementById('feedbackMessage').innerText === 'Logged In successfully!') {
-                        window.location.reload();
-                    } else if (document.getElementById('feedbackMessage').innerText === 'Storage added successfully') {
-                        window.location.reload();
-                    } else if (document.getElementById('feedbackMessage').innerText === 'Storage updated successfully') {
-                        window.location.reload();
-                    } else if (document.getElementById('feedbackMessage').innerText === 'Customer deleted successfully') {
-                        window.location.reload();
-                    }
-                });
-                // JavaScript to switch content based on sidebar click
-                document.addEventListener("DOMContentLoaded", function () {
-                    const links = document.querySelectorAll('.navlink');
-                    const contentSections = document.querySelectorAll('.content-section');
-
-                    links.forEach(link => {
-                        link.addEventListener('click', (e) => {
-                            e.preventDefault(); // Prevent default anchor behavior
-
-                            // Remove active class from all links
-                            links.forEach(l => l.classList.remove('border-l-4', 'border-blue-500', 'bg-slate-200', 'font-semibold'));
-
-                            const targetId = link.getAttribute('data-target');
-                            console.log(targetId);
-
-                            // Hide all sections
-                            contentSections.forEach(section => {
-                                section.classList.add('hidden');
-                            });
-
-                            // Show the selected section
-                            const targetSection = document.getElementById(targetId);
-                            targetSection.classList.remove('hidden');
-
-                            // Add active class to the clicked link
-                            link.classList.add('border-l-4', 'border-blue-500', 'bg-slate-200', 'font-semibold');
-
-                        });
+        async function deleteCustomer(id) {
+            if (confirm('Are you sure you want to delete this storage item?')) {
+                try {
+                    let response = await fetch(`./api/deleteCustomer.php?id=${id}`, {
+                        method: 'GET',
                     });
+                    let data = await response.json();
+                    let feedbackMessage = '';
+
+                    if (data.status === 'success') {
+                        feedbackMessage = data.message;
+                    } else {
+                        feedbackMessage = data.message;
+                    }
+
+                    document.getElementById('feedbackMessage').innerText = feedbackMessage;
+                    document.getElementById('modal').style.display = 'flex';
+
+                } catch (error) {
+                    document.getElementById('feedbackMessage').innerText = 'An error occurred while deleting the Customer item.';
+                    document.getElementById('modal').style.display = 'flex';
+                }
+            }
+        }
+
+        async function approveBook(id) {
+            try {
+                const response = await fetch(`./api/approveBook.php`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ id: id }), // Send the ID in the body of the POST request
                 });
 
+                let data = await response.json();
+                let feedbackMessage = '';
 
-                const salesData = <?php echo json_encode($SalesData); ?>;
+                if (data.status === 'success') {
+                    feedbackMessage = data.message;
+                } else {
+                    feedbackMessage = data.message;
+                }
 
-                const salesCtx = document.getElementById('salesChart').getContext('2d');
-                const salesChart = new Chart(salesCtx, {
-                    type: 'line',
-                    data: {
-                        labels: salesData.labels,
-                        datasets: [
-                            {
-                                label: 'Bookings',
-                                data: salesData.bookings,
-                                borderColor: 'green',
-                                fill: false,
-                                yAxisID: 'y1'
-                            },
-                            {
-                                label: 'Revenue',
-                                data: salesData.revenue,
-                                borderColor: 'blue',
-                                fill: false,
-                                yAxisID: 'y2'
-                            }
-                        ]
+                document.getElementById('feedbackMessage').innerText = feedbackMessage;
+                document.getElementById('modal').style.display = 'flex';
+                // Reload the page to update the table
+                window.location.reload();
+            } catch (error) {
+                document.getElementById('feedbackMessage').innerText = 'An error occurred while Approving the request.';
+                document.getElementById('modal').style.display = 'flex';
+            }
+        }
+
+        const popbutton = document.getElementById('popupbutt');
+
+        popbutton.addEventListener("click", () => {
+            document.getElementById('modal').style.display = 'none';
+            if (document.getElementById('feedbackMessage').innerText === 'Signup successful!') {
+                loginModal.classList.remove('hidden');
+                loginModal.classList.add('flex');
+                signupModal.classList.add('hidden');
+                signupModal.classList.remove('flex');
+            } else if (document.getElementById('feedbackMessage').innerText === 'Logged In successfully!') {
+                window.location.reload();
+            } else if (document.getElementById('feedbackMessage').innerText === 'Storage added successfully') {
+                window.location.reload();
+            } else if (document.getElementById('feedbackMessage').innerText === 'Storage updated successfully') {
+                window.location.reload();
+            } else if (document.getElementById('feedbackMessage').innerText === 'Customer deleted successfully') {
+                window.location.reload();
+            }
+        });
+        // JavaScript to switch content based on sidebar click
+        document.addEventListener("DOMContentLoaded", function () {
+            const links = document.querySelectorAll('.navlink');
+            const contentSections = document.querySelectorAll('.content-section');
+
+            links.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault(); // Prevent default anchor behavior
+
+                    // Remove active class from all links
+                    links.forEach(l => l.classList.remove('border-l-4', 'border-blue-500', 'bg-slate-200', 'font-semibold'));
+
+                    const targetId = link.getAttribute('data-target');
+                    console.log(targetId);
+
+                    // Hide all sections
+                    contentSections.forEach(section => {
+                        section.classList.add('hidden');
+                    });
+
+                    // Show the selected section
+                    const targetSection = document.getElementById(targetId);
+                    if (targetSection) {
+                        targetSection.classList.remove('hidden');
+                    }
+
+                    // Add active class to the clicked link
+                    link.classList.add('border-l-4', 'border-blue-500', 'bg-slate-200', 'font-semibold');
+                });
+            });
+        });
+
+
+        const salesData = <?php echo json_encode($SalesData); ?>;
+
+        const salesCtx = document.getElementById('salesChart').getContext('2d');
+        const salesChart = new Chart(salesCtx, {
+            type: 'line',
+            data: {
+                labels: salesData.labels,
+                datasets: [
+                    {
+                        label: 'Bookings',
+                        data: salesData.bookings,
+                        borderColor: 'green',
+                        fill: false,
+                        yAxisID: 'y1'
                     },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                            y1: {
-                                type: 'linear',
-                                position: 'left',
-                                beginAtZero: true,
-                                title: {
-                                    display: true,
-                                    text: 'Bookings'
-                                }
-                            },
-                            y2: {
-                                type: 'linear',
-                                position: 'right',
-                                beginAtZero: true,
-                                title: {
-                                    display: true,
-                                    text: 'Revenue'
-                                },
-                                grid: {
-                                    drawOnChartArea: false
-                                }
-                            }
+                    {
+                        label: 'Revenue',
+                        data: salesData.revenue,
+                        borderColor: 'blue',
+                        fill: false,
+                        yAxisID: 'y2'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y1: {
+                        type: 'linear',
+                        position: 'left',
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Bookings'
+                        }
+                    },
+                    y2: {
+                        type: 'linear',
+                        position: 'right',
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Revenue'
+                        },
+                        grid: {
+                            drawOnChartArea: false
                         }
                     }
+                }
+            }
+        });
+
+        const inventoryData = <?php echo json_encode($InventoryData); ?>;
+
+        const inventoryCtx = document.getElementById('inventoryChart').getContext('2d');
+        const inventoryChart = new Chart(inventoryCtx, {
+            type: 'doughnut',
+            data: {
+                labels: inventoryData.labels,
+                datasets: [{
+                    data: inventoryData.data,
+                    backgroundColor: ['blue', 'red', 'orange', 'gray']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+
+        const addStorage = document.getElementById('addStorageForm');
+
+        addStorage.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+
+            try {
+                const response = await fetch('./api/addStorage.php', {
+                    method: 'POST',
+                    body: formData
                 });
+                const data = await response.json();
+                let feedbackMessage = '';
 
-                const inventoryData = <?php echo json_encode($InventoryData); ?>;
+                if (data.status === 'success') {
+                    feedbackMessage = data.message;
+                } else {
+                    feedbackMessage = data.message;
+                }
 
-                const inventoryCtx = document.getElementById('inventoryChart').getContext('2d');
-                const inventoryChart = new Chart(inventoryCtx, {
-                    type: 'doughnut',
-                    data: {
-                        labels: inventoryData.labels,
-                        datasets: [{
-                            data: inventoryData.data,
-                            backgroundColor: ['blue', 'red', 'orange', 'gray']
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false
-                    }
-                });
-
-                const addStorage = document.getElementById('addStorageForm');
-
-                addStorage.addEventListener('submit', async (event) => {
-                    event.preventDefault();
-                    const formData = new FormData(event.target);
-
-                    try {
-                        const response = await fetch('./api/addStorage.php', {
-                            method: 'POST',
-                            body: formData
-                        });
-                        const data = await response.json();
-                        let feedbackMessage = '';
-
-                        if (data.status === 'success') {
-                            feedbackMessage = data.message;
-                        } else {
-                            feedbackMessage = data.message;
-                        }
-
-                        document.getElementById('feedbackMessage').innerText = feedbackMessage;
-                        document.getElementById('modal').style.display = 'flex';
+                document.getElementById('feedbackMessage').innerText = feedbackMessage;
+                document.getElementById('modal').style.display = 'flex';
 
 
-                    } catch (error) {
-                        console.error('Error:', error);
-                        document.getElementById('feedbackMessage').innerText = 'An error occurred while processing your request.';
-                        document.getElementById('modal').style.display = 'flex';
-                    }
-                    document.getElementById('addStorageForm').reset();
-                });
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('feedbackMessage').innerText = 'An error occurred while processing your request.';
+                document.getElementById('modal').style.display = 'flex';
+            }
+            document.getElementById('addStorageForm').reset();
+        });
 
-                async function showRentDetails(storageId) {
-                    try {
-                        const response = await fetch(`./api/getStorageRentDetails.php?storage_id=${storageId}`);
-                        const data = await response.json();
-                        const rentDetailsBody = document.getElementById('rentDetailsBody');
-                        rentDetailsBody.innerHTML = '';
+        async function showRentDetails(storageId) {
+            try {
+                const response = await fetch(`./api/getStorageRentDetails.php?storage_id=${storageId}`);
+                const data = await response.json();
+                const rentDetailsBody = document.getElementById('rentDetailsBody');
+                rentDetailsBody.innerHTML = '';
 
-                        if (data.length > 0) {
-                            data.forEach(row => {
-                                const tr = document.createElement('tr');
-                                tr.classList.add('border-b');
-                                tr.innerHTML = `
+                if (data.length > 0) {
+                    data.forEach(row => {
+                        const tr = document.createElement('tr');
+                        tr.classList.add('border-b');
+                        tr.innerHTML = `
                                     <td class="py-2">${row.firstname}</td>
                                     <td class="py-2">${row.lastname}</td>
                                     <td class="py-2">${row.start_date}</td>
                                     <td class="py-2">${row.end_date}</td>
                                 `;
-                                rentDetailsBody.appendChild(tr);
-                            });
-                        } else {
-                            rentDetailsBody.innerHTML = '<tr><td colspan="4" class="py-2 text-center">No rent details found.</td></tr>';
-                        }
-
-                        document.getElementById('rentDetails').classList.remove('hidden');
-                    } catch (error) {
-                        console.error('Error fetching rent details:', error);
-                    }
+                        rentDetailsBody.appendChild(tr);
+                    });
+                } else {
+                    rentDetailsBody.innerHTML = '<tr><td colspan="4" class="py-2 text-center">No rent details found.</td></tr>';
                 }
 
-                async function disableStorage(id) {
-                    if (confirm('Are you sure you want to disable this storage item?')) {
-                        let feedbackMessage = ''; // Initialize feedbackMessage
+                document.getElementById('rentDetails').classList.remove('hidden');
+            } catch (error) {
+                console.error('Error fetching rent details:', error);
+            }
+        }
 
-                        try {
-                            let response = await fetch(`./api/DisableStorage.php?id=${id}`, {
-                                method: 'GET',
-                            });
+        async function disableStorage(id) {
+            if (confirm('Are you sure you want to disable this storage item?')) {
+                let feedbackMessage = ''; // Initialize feedbackMessage
 
-                            let data = await response.json();
+                try {
+                    let response = await fetch(`./api/DisableStorage.php?id=${id}`, {
+                        method: 'GET',
+                    });
 
-                            if (data.status === 'success') {
-                                feedbackMessage = data.message;
-                                // Remove the disabled row from the table
-                                document.querySelector(`#storage-row-${id}`).remove();
-                            } else {
-                                feedbackMessage = data.message;
-                            }
-                        } catch (error) {
-                            feedbackMessage = 'An error occurred while disabling the storage. Please try again later.';
-                        }
+                    let data = await response.json();
 
-                        // Display feedback message in the modal
-                        document.getElementById('feedbackMessage').innerText = feedbackMessage;
-                        document.getElementById('modal').style.display = 'flex';
+                    if (data.status === 'success') {
+                        feedbackMessage = data.message;
+                        // Remove the disabled row from the table
+                        document.querySelector(`#storage-row-${id}`).remove();
+                    } else {
+                        feedbackMessage = data.message;
                     }
+                } catch (error) {
+                    feedbackMessage = 'An error occurred while disabling the storage. Please try again later.';
                 }
 
-                async function enableStorage(id) {
-                    if (confirm('Are you sure you want to enable this storage item?')) {
-                        let feedbackMessage = ''; // Initialize feedbackMessage
+                // Display feedback message in the modal
+                document.getElementById('feedbackMessage').innerText = feedbackMessage;
+                document.getElementById('modal').style.display = 'flex';
+            }
+        }
 
-                        try {
-                            let response = await fetch(`./api/EnableStorage.php?id=${id}`, {
-                                method: 'GET',
-                            });
+        async function enableStorage(id) {
+            if (confirm('Are you sure you want to enable this storage item?')) {
+                let feedbackMessage = ''; // Initialize feedbackMessage
 
-                            let data = await response.json();
+                try {
+                    let response = await fetch(`./api/EnableStorage.php?id=${id}`, {
+                        method: 'GET',
+                    });
 
-                            if (data.status === 'success') {
-                                feedbackMessage = data.message;
-                                // Reload the page to update the table
-                                window.location.reload();
-                            } else {
-                                feedbackMessage = data.message;
-                            }
-                        } catch (error) {
-                            feedbackMessage = 'An error occurred while enabling the storage. Please try again later.';
-                        }
+                    let data = await response.json();
 
-                        // Display feedback message in the modal
-                        document.getElementById('feedbackMessage').innerText = feedbackMessage;
-                        document.getElementById('modal').style.display = 'flex';
+                    if (data.status === 'success') {
+                        feedbackMessage = data.message;
+                        // Reload the page to update the table
+                        window.location.reload();
+                    } else {
+                        feedbackMessage = data.message;
                     }
+                } catch (error) {
+                    feedbackMessage = 'An error occurred while enabling the storage. Please try again later.';
                 }
 
+                // Display feedback message in the modal
+                document.getElementById('feedbackMessage').innerText = feedbackMessage;
+                document.getElementById('modal').style.display = 'flex';
+            }
+        }
 
-                async function restrictUser(id) {
-                    if (confirm('Are you sure you want to restrict this user?')) {
-                        try {
-                            let response = await fetch(`./api/RestrictUser.php?id=${id}`, {
-                                method: 'GET',
-                            });
-                            let data = await response.json();
-                            let feedbackMessage = '';
 
-                            if (data.status === 'success') {
-                                feedbackMessage = data.message;
-                            } else {
-                                feedbackMessage = data.message;
-                            }
+        async function restrictUser(id) {
+            if (confirm('Are you sure you want to restrict this user?')) {
+                try {
+                    let response = await fetch(`./api/RestrictUser.php?id=${id}`, {
+                        method: 'GET',
+                    });
+                    let data = await response.json();
+                    let feedbackMessage = '';
 
-                            document.getElementById('feedbackMessage').innerText = feedbackMessage;
-                            document.getElementById('modal').style.display = 'flex';
-
-                        } catch (error) {
-                            document.getElementById('feedbackMessage').innerText = 'An error occurred while restricting the user.';
-                            document.getElementById('modal').style.display = 'flex';
-                        }
+                    if (data.status === 'success') {
+                        feedbackMessage = data.message;
+                    } else {
+                        feedbackMessage = data.message;
                     }
+
+                    document.getElementById('feedbackMessage').innerText = feedbackMessage;
+                    document.getElementById('modal').style.display = 'flex';
+
+                } catch (error) {
+                    document.getElementById('feedbackMessage').innerText = 'An error occurred while restricting the user.';
+                    document.getElementById('modal').style.display = 'flex';
                 }
+            }
+        }
 
-                async function unrestrictUser(id) {
-                    if (confirm('Are you sure you want to unrestrict this user?')) {
-                        try {
-                            let response = await fetch(`./api/UnrestrictUser.php?id=${id}`, {
-                                method: 'GET',
-                            });
-                            let data = await response.json();
-                            let feedbackMessage = '';
+        async function unrestrictUser(id) {
+            if (confirm('Are you sure you want to unrestrict this user?')) {
+                try {
+                    let response = await fetch(`./api/UnrestrictUser.php?id=${id}`, {
+                        method: 'GET',
+                    });
+                    let data = await response.json();
+                    let feedbackMessage = '';
 
-                            if (data.status === 'success') {
-                                feedbackMessage = data.message;
-                            } else {
-                                feedbackMessage = data.message;
-                            }
-
-                            document.getElementById('feedbackMessage').innerText = feedbackMessage;
-                            document.getElementById('modal').style.display = 'flex';
-
-                        } catch (error) {
-                            document.getElementById('feedbackMessage').innerText = 'An error occurred while unrestricting the user.';
-                            document.getElementById('modal').style.display = 'flex';
-                        }
+                    if (data.status === 'success') {
+                        feedbackMessage = data.message;
+                    } else {
+                        feedbackMessage = data.message;
                     }
-                }
 
-            </script>
+                    document.getElementById('feedbackMessage').innerText = feedbackMessage;
+                    document.getElementById('modal').style.display = 'flex';
+
+                } catch (error) {
+                    document.getElementById('feedbackMessage').innerText = 'An error occurred while unrestricting the user.';
+                    document.getElementById('modal').style.display = 'flex';
+                }
+            }
+        }
+
+        async function deleteTestimonial(id) {
+            if (confirm('Are you sure you want to delete this testimonial?')) {
+                try {
+                    let response = await fetch(`./api/deleteTestimonial.php?id=${id}`, {
+                        method: 'GET',
+                    });
+                    let data = await response.json();
+                    let feedbackMessage = '';
+
+                    if (data.status === 'success') {
+                        feedbackMessage = data.message;
+                        window.location.reload();
+                    } else {
+                        feedbackMessage = data.message;
+                    }
+
+                    document.getElementById('feedbackMessage').innerText = feedbackMessage;
+                    document.getElementById('modal').style.display = 'flex';
+
+                } catch (error) {
+                    document.getElementById('feedbackMessage').innerText = 'An error occurred while deleting the testimonial.';
+                    document.getElementById('modal').style.display = 'flex';
+                }
+            }
+        }
+
+        async function editTestimonial(id) {
+            // Implement the logic to edit a testimonial
+        }
+
+    </script>
 </body>
 
 
