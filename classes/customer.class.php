@@ -308,6 +308,89 @@ class Customer
         return $result;
     }
 
+    public function getBookingDetails($bookingId)
+    {
+        $sql = "SELECT 
+                    b.*, 
+                    bs.status_name AS booking_status, 
+                    p.payment_method, 
+                    p.payment_status_id, 
+                    ps.status_name AS payment_status 
+                FROM booking b
+                JOIN booking_status bs ON b.booking_status_id = bs.id
+                JOIN payment p ON b.id = p.booking_id
+                JOIN payment_status ps ON p.payment_status_id = ps.id
+                WHERE b.id = :booking_id;";
+        $stmt = $this->db->connect()->prepare($sql);
+        $stmt->bindParam(':booking_id', $bookingId);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function getStorageDetails($storageId)
+    {
+        $sql = "SELECT 
+                    s.*, 
+                    s.id AS sid,
+                    c.name AS category_name, 
+                    st.status_name 
+                FROM storage s
+                JOIN category c ON s.category_id = c.id
+                JOIN status st ON s.status_id = st.id
+                WHERE s.id = :storage_id;";
+        $stmt = $this->db->connect()->prepare($sql);
+        $stmt->bindParam(':storage_id', $storageId);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function saveReview($storageId, $userId, $rating, $review)
+    {
+        $sql = "INSERT INTO reviews (storage_id, userId, rating, review) VALUES (:storage_id, :userId, :rating, :review)";
+        $stmt = $this->db->connect()->prepare($sql);
+        $stmt->bindParam(':storage_id', $storageId);
+        $stmt->bindParam(':userId', $userId);
+        $stmt->bindParam(':rating', $rating);
+        $stmt->bindParam(':review', $review);
+        return $stmt->execute();
+    }
+
+    public function getAvailableDates($storageId)
+    {
+        $sql = "SELECT start_date, end_date FROM booking WHERE storage_id = :storage_id;";
+        $stmt = $this->db->connect()->prepare($sql);
+        $stmt->bindParam(':storage_id', $storageId);
+        $stmt->execute();
+        $bookedDates = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $availableDates = [];
+        foreach ($bookedDates as $dates) {
+            $availableDates[] = [
+                'start_date' => $dates['start_date'],
+                'end_date' => $dates['end_date']
+            ];
+        }
+        return $availableDates;
+    }
+
+    public function isDateRangeAvailable($storageId, $startDate, $endDate)
+    {
+        $sql = "SELECT COUNT(*) as count FROM booking 
+                WHERE storage_id = :storage_id 
+                AND ((start_date BETWEEN :start_date AND :end_date) 
+                OR (end_date BETWEEN :start_date AND :end_date) 
+                OR (:start_date BETWEEN start_date AND end_date) 
+                OR (:end_date BETWEEN start_date AND end_date));";
+        $stmt = $this->db->connect()->prepare($sql);
+        $stmt->bindParam(':storage_id', $storageId);
+        $stmt->bindParam(':start_date', $startDate);
+        $stmt->bindParam(':end_date', $endDate);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $result['count'] == 0;
+    }
+
 }
 $customerObj = new Customer();
 

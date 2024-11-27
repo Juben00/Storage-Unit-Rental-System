@@ -25,6 +25,7 @@ $totalStorage = count($Storage);
 $totalCustomers = count($Customer);
 $totalApproved = count($Approved);
 $totalClosed = count($Closed); // Add this line to count closed requests
+$totalSales = $adminObj->getTotalSales();
 
 
 if (isset($_SESSION['customer']['role_name'])) {
@@ -180,10 +181,10 @@ if (isset($_SESSION['customer']['role_name'])) {
                                 </i>
                                 <div>
                                     <p class="text-gray-500">
-                                        Sales
+                                        Total sales
                                     </p>
                                     <p class="text-2xl font-semibold">
-                                        3 480.00
+                                        <?php echo number_format($totalSales, 2); ?>
                                     </p>
                                 </div>
                             </div>
@@ -1241,30 +1242,59 @@ if (isset($_SESSION['customer']['role_name'])) {
 
 
                 const salesData = <?php echo json_encode($SalesData); ?>;
-                const inventoryData = <?php echo json_encode($InventoryData); ?>;
 
                 const salesCtx = document.getElementById('salesChart').getContext('2d');
                 const salesChart = new Chart(salesCtx, {
                     type: 'line',
                     data: {
                         labels: salesData.labels,
-                        datasets: [{
-                            label: 'Sales',
-                            data: salesData.current,
-                            borderColor: 'blue',
-                            fill: false
-                        }]
+                        datasets: [
+                            {
+                                label: 'Bookings',
+                                data: salesData.bookings,
+                                borderColor: 'green',
+                                fill: false,
+                                yAxisID: 'y1'
+                            },
+                            {
+                                label: 'Revenue',
+                                data: salesData.revenue,
+                                borderColor: 'blue',
+                                fill: false,
+                                yAxisID: 'y2'
+                            }
+                        ]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
                         scales: {
-                            y: {
-                                beginAtZero: true
+                            y1: {
+                                type: 'linear',
+                                position: 'left',
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Bookings'
+                                }
+                            },
+                            y2: {
+                                type: 'linear',
+                                position: 'right',
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Revenue'
+                                },
+                                grid: {
+                                    drawOnChartArea: false
+                                }
                             }
                         }
                     }
                 });
+
+                const inventoryData = <?php echo json_encode($InventoryData); ?>;
 
                 const inventoryCtx = document.getElementById('inventoryChart').getContext('2d');
                 const inventoryChart = new Chart(inventoryCtx, {

@@ -322,7 +322,7 @@ class Admin
 
     public function getSalesData()
     {
-        $sql = "SELECT MONTH(booking_date) AS month, SUM(total_amount) AS total
+        $sql = "SELECT MONTH(booking_date) AS month, COUNT(id) AS booking_count, SUM(total_amount) AS total
                 FROM booking
                 GROUP BY MONTH(booking_date)";
         $stmt = $this->db->connect()->prepare($sql);
@@ -330,14 +330,16 @@ class Admin
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         $labels = [];
-        $current = [];
+        $bookings = [];
+        $revenue = [];
 
         foreach ($result as $row) {
             $labels[] = date('F', mktime(0, 0, 0, $row['month'], 10));
-            $current[] = $row['total'];
+            $bookings[] = $row['booking_count'];
+            $revenue[] = $row['total'];
         }
 
-        return ['labels' => $labels, 'current' => $current];
+        return ['labels' => $labels, 'bookings' => $bookings, 'revenue' => $revenue];
     }
 
     public function getInventoryData()
@@ -413,6 +415,15 @@ class Admin
         return $stmt->execute() ?
             ['status' => 'success', 'message' => 'User unrestricted successfully'] :
             ['status' => 'error', 'message' => 'Failed to unrestrict user'];
+    }
+
+    public function getTotalSales()
+    {
+        $sql = "SELECT SUM(total_amount) AS total_sales FROM booking";
+        $stmt = $this->db->connect()->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['total_sales'];
     }
 
 }

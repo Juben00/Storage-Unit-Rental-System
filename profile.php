@@ -240,7 +240,7 @@ $rentedStorage = $customerObj->getBookings($id);
                         <?php if (!empty($rentedStorage)): ?>
                             <?php foreach ($rentedStorage as $storage): ?>
                                 <a class="border p-2 bg-neutral-100 shadow-md relative"
-                                    href="unit.php?id=<?php echo htmlspecialchars($storage['booking_id']); ?>">
+                                    href="storage_details.php?booking_id=<?php echo htmlspecialchars($storage['booking_id']); ?>">
                                     <?php
                                     // Decode the JSON image field
                                     $images = json_decode($storage['image'], true); // Assuming `image` is stored in JSON
@@ -269,6 +269,7 @@ $rentedStorage = $customerObj->getBookings($id);
                                     </span>
 
                                     <?php if ($firstImage): ?>
+                                        <?php $firstImage = ltrim($firstImage, '/'); // Remove leading slash if present ?>
                                         <img alt="<?php echo htmlspecialchars($storage['storage_name']); ?>"
                                             class="w-full h-64 object-cover" src="./<?php echo htmlspecialchars($firstImage); ?>"
                                             width="400" height="400" />
