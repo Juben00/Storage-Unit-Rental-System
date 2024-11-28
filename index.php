@@ -25,10 +25,19 @@ $Storages = array_filter($Storages, function ($storage) {
 $testimonials = $customerObj->getTestimonials();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['testimonial'])) {
-    $testimonial = htmlspecialchars($_POST['testimonial']);
-    $customerObj->saveTestimonial($testimonial);
-    header('Location: index.php');
-    exit;
+    if (!isset($_SESSION['customer']['id'])) {
+        echo "<script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    document.getElementById('loginModal').classList.remove('hidden');
+                    document.getElementById('loginModal').classList.add('flex');
+                });
+              </script>";
+    } else {
+        $testimonial = htmlspecialchars($_POST['testimonial']);
+        $customerObj->saveTestimonial($testimonial);
+        header('Location: index.php');
+        exit;
+    }
 }
 
 ?>
@@ -203,8 +212,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['testimonial'])) {
                             </div>
                         <?php endforeach; ?>
                         <form method="POST" action="">
-                            <textarea name="testimonial" class="w-full p-2 border rounded" placeholder="Write your testimonial here..." required></textarea>
-                            <button type="submit" class="mt-2 px-4 py-2 bg-blue-600 text-white font-semibold rounded">Submit</button>
+                            <textarea name="testimonial" class="w-full p-2 border rounded"
+                                placeholder="Write your testimonial here..." required></textarea>
+                            <button type="submit"
+                                class="mt-2 px-4 py-2 bg-blue-600 text-white font-semibold rounded">Submit</button>
                         </form>
                     </div>
                 </div>
