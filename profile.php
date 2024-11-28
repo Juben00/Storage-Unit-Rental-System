@@ -152,7 +152,7 @@ $rentedStorage = $customerObj->getBookings($id);
                                 </path>
                             </g>
                         </svg>
-                        <a class="sidebar-text" href="logout.php">
+                        <a class="sidebar-text" href="./logout.php">
                             Logout
                         </a>
                     </li>
@@ -165,14 +165,10 @@ $rentedStorage = $customerObj->getBookings($id);
 
             <div id="profile-content" class="active-content">
                 <div class="bg-white p-6 rounded-lg shadow-lg">
-                    <h2 class="text-2xl font-semibold mb-4">Profile Picture</h2>
+                    <h2 class="text-2xl font-semibold mb-4">Profile</h2>
                     <div class="flex items-center mb-6">
                         <img alt="Profile picture of a person" class="w-16 h-16 rounded-full mr-4" height="100"
                             src="./images/OIP.jpg" width="100" />
-                        <div class="flex flex-col gap-2 md:flex-row">
-                            <button class="bg-blue-500 text-white lg:px-4 lg:py-2 p-2 rounded">Change picture</button>
-                            <button class="bg-red-500 text-white lg:px-4 lg:py-2 p-2 rounded">Delete picture</button>
-                        </div>
                     </div>
                     <div class="mb-4 flex items-center gap-2">
                         <span class="w-full">
