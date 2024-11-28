@@ -796,8 +796,6 @@ if (isset($_SESSION['customer']['role_name'])) {
                 <div class="flex-1 flex flex-col gap-6">
                     <div class="flex justify-between items-center">
                         <h1 class="text-2xl font-semibold">Testimonials</h1>
-                        <a href="#addTestimonialForm" class="bg-blue-600 text-white px-4 py-2 rounded"
-                            id="addTestimonial">+ Add Testimonial</a>
                     </div>
 
                     <div class="bg-white p-4 py-6 rounded shadow-md">
@@ -816,8 +814,13 @@ if (isset($_SESSION['customer']['role_name'])) {
                                             <td class="py-2"><?php echo htmlspecialchars($testimonial['id']); ?></td>
                                             <td class="py-2"><?php echo htmlspecialchars($testimonial['content']); ?></td>
                                             <td class="py-2">
-                                                <button class="p-2 border-2 border-orange-500 rounded-md font-semibold"
-                                                    onclick="editTestimonial(<?php echo htmlspecialchars($testimonial['id']); ?>)">Edit</button>
+                                                <?php if ($testimonial['status'] === 'Visible'): ?>
+                                                    <button class="p-2 border-2 border-orange-500 rounded-md font-semibold"
+                                                        onclick="toggleTestimonialVisibility(<?php echo htmlspecialchars($testimonial['id']); ?>, 'Hidden')">Hide</button>
+                                                <?php else: ?>
+                                                    <button class="p-2 border-2 border-green-500 rounded-md font-semibold"
+                                                        onclick="toggleTestimonialVisibility(<?php echo htmlspecialchars($testimonial['id']); ?>, 'Visible')">Show</button>
+                                                <?php endif; ?>
                                                 <button class="p-2 border-2 border-red-500 rounded-md font-semibold"
                                                     onclick="deleteTestimonial(<?php echo htmlspecialchars($testimonial['id']); ?>)">Delete</button>
                                             </td>
@@ -825,7 +828,7 @@ if (isset($_SESSION['customer']['role_name'])) {
                                     <?php endforeach; ?>
                                 <?php else: ?>
                                     <tr>
-                                        <td colspan="5" class="py-2 text-center">No testimonials found.</td>
+                                        <td colspan="3" class="py-2 text-center">No testimonials found.</td>
                                     </tr>
                                 <?php endif; ?>
                             </tbody>
@@ -1555,6 +1558,34 @@ if (isset($_SESSION['customer']['role_name'])) {
 
         async function editTestimonial(id) {
             // Implement the logic to edit a testimonial
+        }
+
+        async function toggleTestimonialVisibility(id, status) {
+            try {
+                let response = await fetch(`./api/toggleTestimonialVisibility.php`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ id: id, status: status }),
+                });
+                let data = await response.json();
+                let feedbackMessage = '';
+
+                if (data.status === 'success') {
+                    feedbackMessage = data.message;
+                    window.location.reload();
+                } else {
+                    feedbackMessage = data.message;
+                }
+
+                document.getElementById('feedbackMessage').innerText = feedbackMessage;
+                document.getElementById('modal').style.display = 'flex';
+
+            } catch (error) {
+                document.getElementById('feedbackMessage').innerText = 'An error occurred while updating the testimonial visibility.';
+                document.getElementById('modal').style.display = 'flex';
+            }
         }
 
     </script>

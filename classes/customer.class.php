@@ -413,7 +413,7 @@ class Customer
 
     public function getTestimonials()
     {
-        $sql = "SELECT * FROM testimonials";
+        $sql = "SELECT * FROM testimonials WHERE status = 'Visible';";
         $stmt = $this->db->connect()->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);

@@ -463,6 +463,17 @@ class Admin
         return $stmt->execute() ? ['status' => 'success', 'message' => 'Testimonial deleted successfully'] : ['status' => 'error', 'message' => 'Failed to delete testimonial'];
     }
 
+    public function toggleTestimonialVisibility($id, $status)
+    {
+        $sql = "UPDATE testimonials SET status = :status WHERE id = :id";
+        $stmt = $this->db->connect()->prepare($sql);
+        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':status', $status);
+        return $stmt->execute() ?
+            ['status' => 'success', 'message' => 'Testimonial visibility updated successfully'] :
+            ['status' => 'error', 'message' => 'Failed to update testimonial visibility'];
+    }
+
 }
 $adminObj = new Admin();
 
